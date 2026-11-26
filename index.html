@@ -1711,6 +1711,13 @@
             <option value="MEB-SAM 1">MEB-SAM 1</option>
             <option value="MEB-SAM 2">MEB-SAM 2</option>
             <option value="MARS">MARS</option>
+            <option value="Cosma 2">Cosma 2</option>
+            <option value="GW2">GW2</option>
+            <option value="Cosma 3">Cosma 3</option>
+            <option value="Cosma 4">Cosma 4</option>
+            <option value="KGIS MAU">KGIS MAU</option>
+            <option value="GW1">GW1</option>
+            <option value="GW3">GW3</option>
 </select>
         </div>
       </div>
@@ -3166,10 +3173,11 @@
                 renderSecondPane();
                 showToast('OPM-Screenshot #2 eingefügt');
               } else {
-                state2.extraItems.push({ id: Date.now() + Math.random(), kind: 'image', name: 'Zusatzfoto', dataUrl });
+                const tTopic = getSelectedExtraTopic(2);
+                state2.extraItems.push({ id: Date.now() + Math.random(), kind: 'image', name: 'Zusatzfoto', dataUrl, targetTopic: tTopic });
                 saveState2();
                 renderSecondPane();
-                showToast('Zusatzfoto #2 eingefügt');
+                showToast(tTopic ? `Foto #2 unter ${tTopic} eingefügt` : 'Zusatzfoto #2 eingefügt');
               }
             });
           } else {
@@ -3304,7 +3312,14 @@
     'MARS': 'https://teams.microsoft.com/l/chat/19%3Adde8dd2c392b4e1c8589e5b1067aa7a7%40thread.v2/conversations?context=%7B%22contextType%22%3A%22chat%22%7D',
     'MQB-A0': 'https://teams.microsoft.com/l/chat/19%3Afddcce2eb6504bee8018ee6b95d344dd%40thread.v2/conversations?context=%7B%22contextType%22%3A%22chat%22%7D',
     'MEB-SAM 1': 'https://teams.microsoft.com/l/chat/19%3Acbc2815fb9fb4b56b3622a9d2d5f522c%40thread.v2/conversations?context=%7B%22contextType%22%3A%22chat%22%7D',
-    'MEB-SAM 2': 'https://teams.microsoft.com/l/chat/19%3A948dda35978c4f3f96d9f502d3a20d93%40thread.v2/conversations?context=%7B%22contextType%22%3A%22chat%22%7D'
+    'MEB-SAM 2': 'https://teams.microsoft.com/l/chat/19%3A948dda35978c4f3f96d9f502d3a20d93%40thread.v2/conversations?context=%7B%22contextType%22%3A%22chat%22%7D',
+    'Cosma 2': 'https://teams.microsoft.com/l/chat/19%3A89d652ceda2e4473a7bf5ccfc7279a4e%40thread.v2/conversations?context=%7B%22contextType%22%3A%22chat%22%7D',
+    'GW2': 'https://teams.microsoft.com/l/chat/19%3A25bde08767014bbcb1fe5f4e5c09b444%40thread.v2/conversations?context=%7B%22contextType%22%3A%22chat%22%7D',
+    'Cosma 3': 'https://teams.microsoft.com/l/chat/19%3Acbe60a14ad7643f081fc85b7860ccdfe%40thread.v2/conversations?context=%7B%22contextType%22%3A%22chat%22%7D',
+    'Cosma 4': 'https://teams.microsoft.com/l/chat/19%3A6cdc0e5fb0314b1b82ef5f6fcee87af3%40thread.v2/conversations?context=%7B%22contextType%22%3A%22chat%22%7D',
+    'KGIS MAU': 'https://teams.microsoft.com/l/chat/19%3Ae46950ecdbfe456488a567c6a2586a8d%40thread.v2/conversations?context=%7B%22contextType%22%3A%22chat%22%7D',
+    'GW1': 'https://teams.microsoft.com/l/chat/19%3Ad78e0ef0aaf746eebfbf98c3a02dd78c%40thread.v2/conversations?context=%7B%22contextType%22%3A%22chat%22%7D',
+    'GW3': 'https://teams.microsoft.com/l/chat/19%3Aac6923668c90494c80a845488dae2588%40thread.v2/conversations?context=%7B%22contextType%22%3A%22chat%22%7D'
   };
 
   function resolveTeamsUrlForLine(lineVal) {
@@ -3417,6 +3432,8 @@
   let selectedTopicKey2 = null;
   let pasteTarget2 = 'extra';
   let editingEntryId2 = null;
+  let ictSubmenuOpen2 = false;
+  let analysenSubmenuOpen2 = false;
 
   let state2 = (() => {
     try {
@@ -3583,15 +3600,110 @@
         renderSecondPane();
       });
 
+      function setIctSubmenuState2(open) {
+        ictSubmenuOpen2 = Boolean(open);
+        const sub = document.getElementById('ict-submenu-2');
+        if (sub) sub.classList.toggle('open', ictSubmenuOpen2);
+        if (!ictSubmenuOpen2) {
+          document.getElementById('ict-suggest-pin-btn-2')?.classList.remove('active');
+        } else {
+          const ta = document.getElementById('entry-input-2');
+          if (ta && !ta.value.trim()) {
+            ta.placeholder = 'ICT: Vorschlag "Pin gewechselt" wählen oder Fehler + Maßnahme eingeben';
+          }
+        }
+      }
+
+      function setAnalysenSubmenuState2(open) {
+        analysenSubmenuOpen2 = Boolean(open);
+        const sub = document.getElementById('analysen-submenu-2');
+        if (sub) sub.classList.toggle('open', analysenSubmenuOpen2);
+        if (!analysenSubmenuOpen2) {
+          document.getElementById('analysen-suggest-eingeschleust-btn-2')?.classList.remove('active');
+        } else {
+          const ta = document.getElementById('entry-input-2');
+          if (ta && !ta.value.trim()) {
+            ta.placeholder = 'Analysen: Vorschlag "Alles eingeschleust" wählen oder Punkt eingeben';
+          }
+        }
+      }
+
+      function applyIctPinSuggestion2(appendArrow = false) {
+        const ta = document.getElementById('entry-input-2');
+        if (!ta) return;
+        if (selectedTopicKey2 !== 'ICT') {
+          selectedTopicKey2 = 'ICT';
+          updateTopicChipUI2();
+          const sub2 = document.getElementById('sonstiges-submenu-2');
+          if (sub2) sub2.classList.remove('open');
+          ta.style.display = '';
+          const arr2 = document.getElementById('insert-arrow-btn-2');
+          if (arr2) arr2.style.display = '';
+        }
+        const current = ta.value.trim();
+        if (appendArrow && current) {
+          const base = current.replace(/\s*(→|->)\s*$/, '');
+          ta.value = `${base} → Pin gewechselt`;
+        } else if (!current) {
+          ta.value = '[Fehlercode/Pinbezeichnung eintragen] → Pin gewechselt';
+        } else if (!/\bPin gewechselt\b/i.test(current)) {
+          const base = current.replace(/\s*(→|->)\s*$/, '');
+          ta.value = `${base} → Pin gewechselt`;
+        }
+        ta.placeholder = 'Bitte Fehlercode/Pinbezeichnung eintragen (z. B. 1#2344 → Pin gewechselt)';
+        document.getElementById('ict-suggest-pin-btn-2')?.classList.toggle('active', !appendArrow);
+        ta.focus();
+        const bracketMatch = ta.value.match(/^\[[^\]]+\]/);
+        if (bracketMatch) {
+          ta.setSelectionRange(0, bracketMatch[0].length);
+        } else {
+          ta.setSelectionRange(ta.value.length, ta.value.length);
+        }
+        showToast('Bitte Fehlercode/Pinbezeichnung vor "Pin gewechselt" eintragen');
+      }
+
+      function applyAnalysenSuggestion2(appendArrow = false) {
+        const ta = document.getElementById('entry-input-2');
+        if (!ta) return;
+        if (selectedTopicKey2 !== 'Analysen') {
+          selectedTopicKey2 = 'Analysen';
+          updateTopicChipUI2();
+          const sub2 = document.getElementById('sonstiges-submenu-2');
+          if (sub2) sub2.classList.remove('open');
+          ta.style.display = '';
+          const arr2 = document.getElementById('insert-arrow-btn-2');
+          if (arr2) arr2.style.display = '';
+        }
+        const current = ta.value.trim();
+        if (appendArrow && current) {
+          const base = current.replace(/\s*(→|->)\s*$/, '');
+          ta.value = `${base} → Alles eingeschleust`;
+        } else if (!current) {
+          ta.value = 'Alles eingeschleust';
+        } else if (!/\bAlles eingeschleust\b/i.test(current)) {
+          const base = current.replace(/\s*(→|->)\s*$/, '');
+          ta.value = `${base} → Alles eingeschleust`;
+        }
+        document.getElementById('analysen-suggest-eingeschleust-btn-2')?.classList.toggle('active', !appendArrow);
+        ta.focus();
+        ta.setSelectionRange(ta.value.length, ta.value.length);
+        showToast('Vorschlag "Alles eingeschleust" übernommen');
+      }
+
       document.getElementById('topic-chips-container-2')?.addEventListener('click', (e) => {
         const btn = e.target.closest('.topic-chip');
         if (!btn || !btn.dataset.topic) return;
         if (btn.dataset.topic === 'KBV') {
+          setIctSubmenuState2(false);
+          setAnalysenSubmenuState2(false);
           addKbvAndScrollToEntries(2);
           return;
         }
-        selectedTopicKey2 = (selectedTopicKey2 === btn.dataset.topic) ? null : btn.dataset.topic;
+        const willSelect = selectedTopicKey2 !== btn.dataset.topic;
+        selectedTopicKey2 = willSelect ? btn.dataset.topic : null;
         updateTopicChipUI2();
+        setIctSubmenuState2(willSelect && selectedTopicKey2 === 'ICT');
+        setAnalysenSubmenuState2(willSelect && selectedTopicKey2 === 'Analysen');
         const isSonst2 = selectedTopicKey2 === 'Sonstiges';
         const sub2 = document.getElementById('sonstiges-submenu-2');
         const ta = document.getElementById('entry-input-2');
@@ -3610,9 +3722,18 @@
         showToast(selectedTopicKey2 ? `Thema gewählt: ${selectedTopicKey2}` : 'Thema zurückgesetzt');
       });
 
+      document.getElementById('close-ict-submenu-btn-2')?.addEventListener('click', () => setIctSubmenuState2(false));
+      document.getElementById('ict-suggest-pin-btn-2')?.addEventListener('click', () => applyIctPinSuggestion2(false));
+      document.getElementById('ict-append-pin-btn-2')?.addEventListener('click', () => applyIctPinSuggestion2(true));
+      document.getElementById('close-analysen-submenu-btn-2')?.addEventListener('click', () => setAnalysenSubmenuState2(false));
+      document.getElementById('analysen-suggest-eingeschleust-btn-2')?.addEventListener('click', () => applyAnalysenSuggestion2(false));
+      document.getElementById('analysen-append-eingeschleust-btn-2')?.addEventListener('click', () => applyAnalysenSuggestion2(true));
+
       document.getElementById('reset-topic-btn-2')?.addEventListener('click', () => {
         selectedTopicKey2 = null;
         updateTopicChipUI2();
+        setIctSubmenuState2(false);
+        setAnalysenSubmenuState2(false);
         const sub2 = document.getElementById('sonstiges-submenu-2');
         const ta = document.getElementById('entry-input-2');
         const arr2 = document.getElementById('insert-arrow-btn-2');
@@ -3674,21 +3795,18 @@
             msInp?.focus();
             return;
           }
-          const lines = measureRaw.split('\n').map(l => l.trim()).filter(Boolean);
+          const cleanText = normalizeArrows(measureRaw.replace(/\s*\r?\n+\s*/g, ' '));
           let added = 0;
-          for (const l of lines) {
-            const cleanText = normalizeArrows(l);
-            if (cleanText) {
-              state2.entries.push({
-                id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-                topic: stationRaw,
-                emoji: '🔵',
-                section: 'tech',
-                isCustomTopic: true,
-                text: cleanText
-              });
-              added++;
-            }
+          if (cleanText) {
+            state2.entries.push({
+              id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+              topic: stationRaw,
+              emoji: '🔵',
+              section: 'tech',
+              isCustomTopic: true,
+              text: cleanText
+            });
+            added++;
           }
           if (stInp) stInp.value = '';
           if (msInp) msInp.value = '';
@@ -4012,8 +4130,15 @@
     }
 
     contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">\n        <span>Schicht &amp; Datum</span>\n        <span id="auto-shift-hint-2" style="color:var(--primary); font-weight:600;">Auto</span>\n      </div>\n      <div style="display:flex; flex-direction:column; gap:8px;">\n        <div class="shift-grid">\n          <select id="shift-select-2">\n            <option value="AUTO">Automatisch (Uhrzeit)</option>\n            <option value="Frühschicht">Frühschicht (06:00–14:30)</option>\n            <option value="Spätschicht">Spätschicht (14:30–23:00)</option>\n            <option value="Nachtschicht">Nachtschicht (23:00–06:00)</option>\n          </select>\n          <input type="date" id="shift-date-2" />\n        </div>\n        <select id="shift-line-select-2" aria-label="Linie auswählen">\n          <option value="">— Linie (optional) —</option>\n          <option value="ICAS">ICAS</option>\n          <option value="MRA 2.1">MRA 2.1</option>\n          <option value="MRA KL">MRA KL</option>\n          <option value="MQB-A0">MQB-A0</option>\n          <option value="MQB-A">MQB-A</option>\n          <option value="MEB-SAM 1">MEB-SAM 1</option>
-          <option value="MEB-SAM 2">MEB-SAM 2</option>\n          <option value="MARS">MARS</option>\n
-</select>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">1. Thema anklicken &amp; Fehler + Maßnahme eintragen</div>\n\n      <div class="quick-topics" id="topic-chips-container-2">\n        <button type="button" class="topic-chip" data-topic="ICT">🔴 ICT</button>\n        <button type="button" class="topic-chip" data-topic="Flasher">🔴 Flasher</button>\n        <button type="button" class="topic-chip" data-topic="EP">🔴 EP</button>\n        <button type="button" class="topic-chip" data-topic="VP">🔴 VP</button>\n        <button type="button" class="topic-chip" data-topic="HF">🔴 HF</button>\n        <button type="button" class="topic-chip" data-topic="AOI">⚫ AOI</button>\n        <button type="button" class="topic-chip" data-topic="AXI">⚫ AXI</button>\n        <button type="button" class="topic-chip" data-topic="Pin Insertion">🟠 Pin In</button>\n        <button type="button" class="topic-chip" data-topic="Fräse">🟣 Fräse</button>\n        <button type="button" class="topic-chip" data-topic="HGN">🟡 HGN</button>\n        <button type="button" class="topic-chip" data-topic="Verpackplatz">🟡 Verpack</button>\n        <button type="button" class="topic-chip" data-topic="Roboterzelle">🟡 Roboter</button>\n        <button type="button" class="topic-chip" data-topic="AGV">🟤 AGV</button>\n        <button type="button" class="topic-chip" data-topic="KB">🔵 KB</button>\n        <button type="button" class="topic-chip" data-topic="Lötstation">⚪ Lötstation</button>\n        <button type="button" class="topic-chip" data-topic="Orga">🟢 Orga</button>\n        <button type="button" class="topic-chip" data-topic="Analysen">🟢 Analysen</button>\n        <button type="button" class="topic-chip" data-topic="Material und Qualifizierung">📦 Material/Quali</button>\n        <button type="button" class="topic-chip" data-topic="KBV">🟢 KBV</button>\n        <button type="button" class="topic-chip" data-topic="Sonstiges">🔵 Sonstiges</button>\n      </div>\n\n      <div class="active-topic-banner">\n        <span>Gewähltes Thema: <strong id="selected-topic-label-2">Kein Thema gewählt</strong></span>\n        <button type="button" class="secondary" id="reset-topic-btn-2" style="padding:4px 9px; font-size:0.75rem;">Reset</button>\n      </div>\n\n      <div id="sonstiges-submenu-2" class="sonstiges-submenu" role="region" aria-label="Sonstiges Eingabefelder">\n        <div class="sonstiges-submenu-header">\n          <span>🔵 Sonstiges – Station/Modul &amp; Abstellmaßnahme:</span>\n          <button type="button" class="secondary" id="close-sonstiges-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="sonstiges-field-group">\n          <input type="text" id="sonstiges-station-input-2" class="sonstiges-input" lang="de" spellcheck="true" placeholder="1. Station / Modul (wird fette Überschrift in SZ & Check)..." />\n          <textarea id="sonstiges-measure-input-2" class="sonstiges-input" rows="2" lang="de" spellcheck="true" placeholder="2. Fehler / Abstellmaßnahme eingeben..."></textarea>\n        </div>\n      </div>\n\n      <textarea id="entry-input-2" rows="2" lang="de" spellcheck="true" autocorrect="on" autocapitalize="sentences" placeholder="Nur Fehler und Abstellmaßnahme eingeben (z. B. 1#2344 -> Pin gewechselt)"></textarea>\n\n      <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;">\n        <button type="button" class="secondary" id="insert-arrow-btn-2" style="padding:6px 10px; font-size:0.78rem;">+ → Pfeil einfügen</button>\n        <button type="button" class="secondary" id="append-last-btn-2" style="padding:6px 10px; font-size:0.78rem;">↳ An letzten Punkt anhängen</button>\n      </div>\n\n      <div style="margin-top:10px;">\n        <button type="button" id="add-entry-btn-2" style="width:100%;">+ Eintrag zur Schicht hinzufügen</button>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">\n        <span>2. OPM-Monitor Screenshot (nach OPM:)</span>\n        <span id="opm-status-label-2" style="color:var(--primary); font-weight:600;">Fehlt noch</span>\n      </div>\n\n      <div id="opm-paste-box-2" tabindex="0" class="drop-box">\n        <div style="font-size:0.88rem; font-weight:700; color:#0f172a;">🖥️ OPM-Screenshot hier einfügen (Strg+V / Cmd+V)</div>\n        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:3px;">\n          Wird nach Enter unter <strong>OPM:</strong> in die Schichtzusammenfassung einkopiert (ohne Link).\n        </div>\n        <div style="display:flex; gap:8px; justify-content:center; margin-top:8px; flex-wrap:wrap;">\n          <button type="button" class="secondary" id="paste-opm-btn-2" style="padding:6px 11px; font-size:0.78rem;">📋 OPM aus Zwischenablage</button>\n          <button type="button" class="secondary" id="pick-opm-btn-2" style="padding:6px 11px; font-size:0.78rem;">🖼️ OPM-Bild wählen</button>\n        </div>\n        <input type="file" id="opm-file-input-2" accept="image/*" style="display:none;" />\n        <div id="opm-preview-wrap-2"></div>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">\n        <span>3. Zusatzfotos / Infos (ganz unten)</span>\n        <span id="extra-count-label-2" style="color:var(--primary); font-weight:600;">0 Elemente</span>\n      </div>\n\n      <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px; flex-wrap:wrap;">\n        <label for="extra-target-topic-2" style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Zuordnung (optional):</label>\n        <select id="extra-target-topic-2" style="flex:1; min-width:190px; padding:8px 11px; font-size:0.86rem; border-radius:12px;">\n          <option value="">Ganz unten unter 🟢 Fotos/Infos (Standard)</option>\n          <option value="ICT">🔴 ICT</option>\n          <option value="Flasher">🔴 Flasher</option>\n          <option value="EP">🔴 EP</option>\n          <option value="VP">🔴 VP</option>\n          <option value="HF">🔴 HF</option>\n          <option value="AOI">⚫ AOI</option>\n          <option value="AXI">⚫ AXI</option>\n          <option value="Pin Insertion">🟠 Pin Insertion</option>\n          <option value="Fräse">🟣 Fräse</option>\n          <option value="HGN">🟡 HGN</option>\n          <option value="Verpackplatz">🟡 Verpackplatz</option>\n          <option value="Roboterzelle">🟡 Roboterzelle</option>\n          <option value="AGV">🟤 AGV</option>\n          <option value="KB">🔵 KB</option>\n          <option value="Lötstation">⚪ Lötstation</option>\n          <option value="Orga">🟢 Orga</option>\n          <option value="Analysen">🟢 Analysen</option>\n          <option value="Material und Qualifizierung">📦 Material und Qualifizierung</option>\n          <option value="KBV">🟢 KBV</option>
+          <option value="MEB-SAM 2">MEB-SAM 2</option>\n          <option value="MARS">MARS</option>
+          <option value="Cosma 2">Cosma 2</option>
+          <option value="GW2">GW2</option>
+          <option value="Cosma 3">Cosma 3</option>
+          <option value="Cosma 4">Cosma 4</option>
+          <option value="KGIS MAU">KGIS MAU</option>
+          <option value="GW1">GW1</option>
+          <option value="GW3">GW3</option>
+</select>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">1. Thema anklicken &amp; Fehler + Maßnahme eintragen</div>\n\n      <div class="quick-topics" id="topic-chips-container-2">\n        <button type="button" class="topic-chip" data-topic="ICT">🔴 ICT</button>\n        <button type="button" class="topic-chip" data-topic="Flasher">🔴 Flasher</button>\n        <button type="button" class="topic-chip" data-topic="EP">🔴 EP</button>\n        <button type="button" class="topic-chip" data-topic="VP">🔴 VP</button>\n        <button type="button" class="topic-chip" data-topic="HF">🔴 HF</button>\n        <button type="button" class="topic-chip" data-topic="AOI">⚫ AOI</button>\n        <button type="button" class="topic-chip" data-topic="AXI">⚫ AXI</button>\n        <button type="button" class="topic-chip" data-topic="Pin Insertion">🟠 Pin In</button>\n        <button type="button" class="topic-chip" data-topic="Fräse">🟣 Fräse</button>\n        <button type="button" class="topic-chip" data-topic="HGN">🟡 HGN</button>\n        <button type="button" class="topic-chip" data-topic="Verpackplatz">🟡 Verpack</button>\n        <button type="button" class="topic-chip" data-topic="Roboterzelle">🟡 Roboter</button>\n        <button type="button" class="topic-chip" data-topic="AGV">🟤 AGV</button>\n        <button type="button" class="topic-chip" data-topic="KB">🔵 KB</button>\n        <button type="button" class="topic-chip" data-topic="Lötstation">⚪ Lötstation</button>\n        <button type="button" class="topic-chip" data-topic="Orga">🟢 Orga</button>\n        <button type="button" class="topic-chip" data-topic="Analysen">🟢 Analysen</button>\n        <button type="button" class="topic-chip" data-topic="Material und Qualifizierung">📦 Material/Quali</button>\n        <button type="button" class="topic-chip" data-topic="KBV">🟢 KBV</button>\n        <button type="button" class="topic-chip" data-topic="Sonstiges">🔵 Sonstiges</button>\n      </div>\n\n      <div id="ict-submenu-2" class="ict-submenu" role="region" aria-label="ICT Vorschläge">\n        <div class="ict-submenu-header">\n          <span>🔴 ICT Untermenü – Vorauswahl / Vorschlag:</span>\n          <button type="button" class="secondary" id="close-ict-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="ict-submenu-actions">\n          <button type="button" class="ict-suggestion-chip" id="ict-suggest-pin-btn-2" data-suggestion="Pin gewechselt">💡 Vorschlag: Pin gewechselt</button>\n          <button type="button" class="ict-suggestion-chip" id="ict-append-pin-btn-2" data-append-suggestion="Pin gewechselt">+ → Pin gewechselt</button>\n        </div>\n      </div>\n\n      <div id="analysen-submenu-2" class="analysen-submenu" role="region" aria-label="Analysen Vorschläge">\n        <div class="analysen-submenu-header">\n          <span>🟢 Analysen Untermenü – Vorauswahl / Vorschlag:</span>\n          <button type="button" class="secondary" id="close-analysen-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="analysen-submenu-actions">\n          <button type="button" class="analysen-suggestion-chip" id="analysen-suggest-eingeschleust-btn-2" data-suggestion="Alles eingeschleust">💡 Vorschlag: Alles eingeschleust</button>\n          <button type="button" class="analysen-suggestion-chip" id="analysen-append-eingeschleust-btn-2" data-append-suggestion="Alles eingeschleust">+ → Alles eingeschleust</button>\n        </div>\n      </div>\n\n      <div class="active-topic-banner">\n        <span>Gewähltes Thema: <strong id="selected-topic-label-2">Kein Thema gewählt</strong></span>\n        <button type="button" class="secondary" id="reset-topic-btn-2" style="padding:4px 9px; font-size:0.75rem;">Reset</button>\n      </div>\n\n      <div id="sonstiges-submenu-2" class="sonstiges-submenu" role="region" aria-label="Sonstiges Eingabefelder">\n        <div class="sonstiges-submenu-header">\n          <span>🔵 Sonstiges – Station/Modul &amp; Abstellmaßnahme:</span>\n          <button type="button" class="secondary" id="close-sonstiges-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="sonstiges-field-group">\n          <input type="text" id="sonstiges-station-input-2" class="sonstiges-input" lang="de" spellcheck="true" placeholder="1. Station / Modul (wird fette Überschrift in SZ & Check)..." />\n          <textarea id="sonstiges-measure-input-2" class="sonstiges-input" rows="2" lang="de" spellcheck="true" placeholder="2. Fehler / Abstellmaßnahme eingeben..."></textarea>\n        </div>\n      </div>\n\n      <textarea id="entry-input-2" rows="2" lang="de" spellcheck="true" autocorrect="on" autocapitalize="sentences" placeholder="Nur Fehler und Abstellmaßnahme eingeben (z. B. 1#2344 -> Pin gewechselt)"></textarea>\n\n      <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;">\n        <button type="button" class="secondary" id="insert-arrow-btn-2" style="padding:6px 10px; font-size:0.78rem;">+ → Pfeil einfügen</button>\n        <button type="button" class="secondary" id="append-last-btn-2" style="padding:6px 10px; font-size:0.78rem;">↳ An letzten Punkt anhängen</button>\n      </div>\n\n      <div style="margin-top:10px;">\n        <button type="button" id="add-entry-btn-2" style="width:100%;">+ Eintrag zur Schicht hinzufügen</button>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">\n        <span>2. OPM-Monitor Screenshot (nach OPM:)</span>\n        <span id="opm-status-label-2" style="color:var(--primary); font-weight:600;">Fehlt noch</span>\n      </div>\n\n      <div id="opm-paste-box-2" tabindex="0" class="drop-box">\n        <div style="font-size:0.88rem; font-weight:700; color:#0f172a;">🖥️ OPM-Screenshot hier einfügen (Strg+V / Cmd+V)</div>\n        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:3px;">\n          Wird nach Enter unter <strong>OPM:</strong> in die Schichtzusammenfassung einkopiert (ohne Link).\n        </div>\n        <div style="display:flex; gap:8px; justify-content:center; margin-top:8px; flex-wrap:wrap;">\n          <button type="button" class="secondary" id="paste-opm-btn-2" style="padding:6px 11px; font-size:0.78rem;">📋 OPM aus Zwischenablage</button>\n          <button type="button" class="secondary" id="pick-opm-btn-2" style="padding:6px 11px; font-size:0.78rem;">🖼️ OPM-Bild wählen</button>\n        </div>\n        <input type="file" id="opm-file-input-2" accept="image/*" style="display:none;" />\n        <div id="opm-preview-wrap-2"></div>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">\n        <span>3. Zusatzfotos / Infos (ganz unten)</span>\n        <span id="extra-count-label-2" style="color:var(--primary); font-weight:600;">0 Elemente</span>\n      </div>\n\n      <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px; flex-wrap:wrap;">\n        <label for="extra-target-topic-2" style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Zuordnung (optional):</label>\n        <select id="extra-target-topic-2" style="flex:1; min-width:190px; padding:8px 11px; font-size:0.86rem; border-radius:12px;">\n          <option value="">Ganz unten unter 🟢 Fotos/Infos (Standard)</option>\n          <option value="ICT">🔴 ICT</option>\n          <option value="Flasher">🔴 Flasher</option>\n          <option value="EP">🔴 EP</option>\n          <option value="VP">🔴 VP</option>\n          <option value="HF">🔴 HF</option>\n          <option value="AOI">⚫ AOI</option>\n          <option value="AXI">⚫ AXI</option>\n          <option value="Pin Insertion">🟠 Pin Insertion</option>\n          <option value="Fräse">🟣 Fräse</option>\n          <option value="HGN">🟡 HGN</option>\n          <option value="Verpackplatz">🟡 Verpackplatz</option>\n          <option value="Roboterzelle">🟡 Roboterzelle</option>\n          <option value="AGV">🟤 AGV</option>\n          <option value="KB">🔵 KB</option>\n          <option value="Lötstation">⚪ Lötstation</option>\n          <option value="Orga">🟢 Orga</option>\n          <option value="Analysen">🟢 Analysen</option>\n          <option value="Material und Qualifizierung">📦 Material und Qualifizierung</option>\n          <option value="KBV">🟢 KBV</option>
             <option value="Sonstiges">🔵 Sonstiges</option>\n        </select>\n      </div>\n\n      <div id="extra-paste-box-2" tabindex="0" class="drop-box">\n        <div style="font-size:0.88rem; font-weight:700; color:#0f172a;">📎 Weitere Fotos oder Infos hier einfügen (Strg+V / Cmd+V)</div>\n        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:3px;">\n          Erscheinen ganz unten unter <strong>🟢 Fotos/Infos</strong> direkt in der Schichtzusammenfassung.\n        </div>\n        <div style="display:flex; gap:8px; justify-content:center; margin-top:8px; flex-wrap:wrap;">\n          <button type="button" class="secondary" id="paste-extra-btn-2" style="padding:6px 11px; font-size:0.78rem;">📋 Aus Zwischenablage</button>\n          <button type="button" class="secondary" id="pick-extra-btn-2" style="padding:6px 11px; font-size:0.78rem;">📁 Foto / Datei wählen</button>\n        </div>\n        <input type="file" id="extra-file-input-2" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.md" multiple style="display:none;" />\n      </div>\n\n      <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">\n        <input type="text" id="direct-info-input-2" placeholder="Kurze Zusatzinfo für 🟢 Fotos/Infos eingeben..." style="flex:1; padding:10px 13px; border-radius:14px; border:1px solid rgba(148,163,184,0.35); background:var(--glass-bg); color:var(--text); font-size:0.92rem;" />\n        <button type="button" class="secondary" id="add-direct-info-btn-2" style="padding:10px 14px; font-size:0.86rem;">+ Info</button>\n      </div>\n\n      <div id="extra-items-list-2" class="extra-grid"></div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">\n        <span>Dokumentierte Einträge (<span id="entry-count-2">0</span>)</span>\n      </div>\n      <div id="entries-list-2"></div>\n    </div>\n\n    <div class="card full-reset-bar">\n      <button type="button" class="danger" id="delete-all-btn-2" style="width:100%; padding:13px 16px; font-size:0.95rem; font-weight:700; border-radius:16px;">🗑️ Alles löschen</button>\n    </div>\n  `;
 
     const sel2 = document.getElementById('shift-select-2');
@@ -4027,6 +4152,10 @@
     if (hint2) hint2.textContent = getActiveShift2();
     if (cnt2) cnt2.textContent = state2.entries.length;
     updateTopicChipUI2();
+    const ictSub2Init = document.getElementById('ict-submenu-2');
+    const anaSub2Init = document.getElementById('analysen-submenu-2');
+    if (ictSub2Init) ictSub2Init.classList.toggle('open', Boolean(ictSubmenuOpen2 && selectedTopicKey2 === 'ICT'));
+    if (anaSub2Init) anaSub2Init.classList.toggle('open', Boolean(analysenSubmenuOpen2 && selectedTopicKey2 === 'Analysen'));
     const isSonst2Active = selectedTopicKey2 === 'Sonstiges';
     const sub2Init = document.getElementById('sonstiges-submenu-2');
     const ta2Init = document.getElementById('entry-input-2');

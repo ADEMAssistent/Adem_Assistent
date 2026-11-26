@@ -1450,7 +1450,40 @@
       background: rgba(15, 23, 42, 0.94) !important;
       color: #f8fafc !important;
     }
-</style>
+
+    .archive-version-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 12px;
+      padding: 10px 14px;
+      border-radius: 16px;
+      background: rgba(0, 122, 255, 0.08);
+      border: 1px solid rgba(0, 122, 255, 0.25);
+      font-size: 0.84rem;
+    }
+    .archive-version-bar-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .archive-version-changelog {
+      color: var(--text);
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+    body.dark-mode .archive-version-bar {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.34);
+    }
+    body.dark-mode .archive-version-changelog {
+      color: #f1f5f9;
+    }
+
+  </style>
 </head>
 <body>
 
@@ -1462,7 +1495,7 @@
   <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
     <button type="button" class="secondary theme-toggle-btn" id="toggle-theme-btn" aria-label="Day oder Dark Modus umschalten">🌙 Dark</button>
     <button type="button" class="secondary" id="toggle-split-sz-btn" style="display:none; padding:5px 11px; font-size:0.78rem; border-radius:999px;">➕ 2. SZ daneben</button>
-    <span class="badge">V4.7</span>
+    <span class="badge">V4.8</span>
   </div>
 </header>
 
@@ -1909,6 +1942,13 @@
   <div id="view-archive" class="view">
     <div class="card">
       <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>
+      <div id="archive-version-bar-1" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">
+        <div class="archive-version-bar-top">
+          <span>Version V4.8</span>
+          <span>Letztes Update</span>
+        </div>
+        <div class="archive-version-changelog">Geändert seit V4.7: Unter Archiv einen Versions- &amp; Änderungsbalken ergänzt und die Versionsanzeige oben in 0,1-Schritten auf V4.8 erhöht.</div>
+      </div>
       <div id="sz-archive-list"></div>
     </div>
   </div>
@@ -4100,7 +4140,7 @@
     if (!contentEl) return;
 
     if (isArchiveTab) {
-      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
+      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="archive-version-bar-2" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">\n        <div class="archive-version-bar-top">\n          <span>Version V4.8</span>\n          <span>Letztes Update</span>\n        </div>\n        <div class="archive-version-changelog">Geändert seit V4.7: Unter Archiv einen Versions- &amp; Änderungsbalken ergänzt und die Versionsanzeige oben in 0,1-Schritten auf V4.8 erhöht.</div>\n      </div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
       document.getElementById('sz-archive-list-2')?.addEventListener('click', (e) => {
         const copyBtn = e.target.closest('[data-copy-arch-2]');
         if (copyBtn) {

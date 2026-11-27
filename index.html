@@ -289,7 +289,10 @@
       box-shadow: none;
     }
 
-    .shift-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .shift-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; width: 100%; max-width: 100%; overflow: hidden; }
+    .shift-grid > select,
+    .shift-grid > input[type="date"] { min-width: 0; max-width: 100%; width: 100%; box-sizing: border-box; }
+    .shift-grid > input[type="date"] { display: block; -webkit-appearance: none; appearance: none; }
 
     .quick-topics { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
     .topic-chip {
@@ -1716,7 +1719,7 @@
   <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
     <button type="button" class="secondary theme-toggle-btn" id="toggle-theme-btn" aria-label="Day oder Dark Modus umschalten">🌙 Dark</button>
     <button type="button" class="secondary" id="toggle-split-sz-btn" style="display:none; padding:5px 11px; font-size:0.78rem; border-radius:999px;">➕ 2. SZ daneben</button>
-    <span class="badge">V5.7</span>
+    <span class="badge">V5.9</span>
   </div>
 </header>
 
@@ -2139,6 +2142,17 @@
           </div>
         </div>
 
+                <div id="pinin-submenu" class="analysen-submenu" role="region" aria-label="Pin In Nummer">
+          <div class="analysen-submenu-header">
+            <span>🟠 Pin In – Nummer eingeben (z. B. 0, 1, 2 → Pin in 0 / Pin in 2, leer → Pin in):</span>
+            <button type="button" class="secondary" id="close-pinin-submenu-btn" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>
+          </div>
+          <div class="analysen-submenu-actions">
+            <input type="number" id="pinin-number-input" class="sonstiges-input" min="0" step="1" inputmode="numeric" placeholder="Nummer (z. B. 0, 1, 2)..." style="max-width:160px; padding:7px 11px;" />
+            <span id="pinin-preview-label" style="font-size:0.82rem; font-weight:700;">Thema: Pin in</span>
+          </div>
+        </div>
+
         <div id="sonstiges-submenu" class="sonstiges-submenu" role="region" aria-label="Sonstiges Eingabefelder">
           <div class="sonstiges-submenu-header">
             <span>🔵 Sonstiges – Station/Modul &amp; Abstellmaßnahme:</span>
@@ -2282,7 +2296,7 @@
       <div id="archive-version-bar-1" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">
         <div class="archive-version-bar-top">
           <span>Versionsverlauf (Letzte 3 Versionen)</span>
-          <span>Aktuell: V5.8</span>
+          <span>Aktuell: V5.9</span>
         </div>
         <div id="archive-version-list-1" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>
       </div>
@@ -2680,30 +2694,14 @@
     return p.length === 3 ? `${p[2]}.${p[1]}.${p[0]}` : iso;
   }
 
-  const VERSION_HISTORY_STORAGE_KEY = 'adem_assistent_version_history_v1';
+  const VERSION_HISTORY_STORAGE_KEY = 'adem_assistent_version_history_v5_9';
   const DEFAULT_VERSION_HISTORY = [
+    { version: 'V5.9', text: 'Doppelpunkt bei Pin in entfernt, Pin in 0 als Nummer unterstützt und Datumsfeld-Überstand bei Schicht & Datum behoben.' },
     { version: 'V5.8', text: 'Linienspezifische Stationen & Themen-Buttons in Großbuchstaben (inkl. Cosma 2–4 & GW1–3) hinzugefügt.' },
-    { version: 'V5.7', text: 'Beschreibung im Balken des Analyse Assistenten auf der Startseite entfernt.' },
-    { version: 'V5.5', text: 'Kleinere Fehlerbehebungen; 2x Bugfix.' }
+    { version: 'V5.7', text: 'Beschreibung im Balken des Analyse Assistenten auf der Startseite entfernt.' }
   ];
 
   function loadAppVersionHistory() {
-    try {
-      const raw = localStorage.getItem(VERSION_HISTORY_STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          let list = parsed
-            .filter(item => item && item.version && item.text && item.version !== 'V5.2' && item.version !== 'V5.6')
-            .map(item => item.version === 'V5.5' ? { version: 'V5.5', text: 'Kleinere Fehlerbehebungen; 2x Bugfix.' } : item)
-            .slice(0, 3);
-          if (!list.some(item => item.version === 'V5.7')) {
-            list = [DEFAULT_VERSION_HISTORY[0], ...list].slice(0, 3);
-          }
-          return list;
-        }
-      }
-    } catch (e) {}
     return DEFAULT_VERSION_HISTORY.slice(0, 3);
   }
 
@@ -2837,15 +2835,54 @@
     if (arrowBtn) arrowBtn.style.display = isSonstiges ? 'none' : '';
   }
 
+  function isPinInBaseTopic(topicKey) {
+    const cleaned = String(topicKey || '').trim().toUpperCase().replace(/\.+$/, '');
+    return cleaned === 'PIN IN' || cleaned === 'PIN INSERTION';
+  }
+
+  function getEffectivePinInTopic(baseTopicKey, pane = 1) {
+    if (!isPinInBaseTopic(baseTopicKey)) return baseTopicKey;
+    const inputId = pane === 2 ? 'pinin-number-input-2' : 'pinin-number-input';
+    const raw = String(document.getElementById(inputId)?.value || '').trim();
+    if (/^\d+$/.test(raw)) {
+      const parsedNum = parseInt(raw, 10);
+      if (!Number.isNaN(parsedNum) && parsedNum >= 0) {
+        return `Pin in ${parsedNum}`;
+      }
+    }
+    return 'Pin in';
+  }
+
+  function syncPinInSubmenuUI(pane = 1) {
+    const activeKey = pane === 2 ? selectedTopicKey2 : selectedTopicKey;
+    const subId = pane === 2 ? 'pinin-submenu-2' : 'pinin-submenu';
+    const inpId = pane === 2 ? 'pinin-number-input-2' : 'pinin-number-input';
+    const lblId = pane === 2 ? 'pinin-preview-label-2' : 'pinin-preview-label';
+    const isPin = isPinInBaseTopic(activeKey);
+    const sub = document.getElementById(subId);
+    const inp = document.getElementById(inpId);
+    const lbl = document.getElementById(lblId);
+    if (sub) sub.classList.toggle('open', isPin);
+    if (lbl) lbl.textContent = `Thema: ${getEffectivePinInTopic(activeKey || 'Pin in', pane)}`;
+    if (isPin && inp) {
+      setTimeout(() => inp.focus(), 10);
+    }
+  }
+
   function selectTopic(topicKey) {
     selectedTopicKey = (selectedTopicKey === topicKey) ? null : topicKey;
     updateTopicChipUI();
     syncSonstigesPanel1();
+    syncPinInSubmenuUI(1);
     const ta = document.getElementById('entry-input');
     if (selectedTopicKey === 'SONSTIGES' || selectedTopicKey === 'Sonstiges') {
       const stInp = document.getElementById('sonstiges-station-input');
       if (stInp) stInp.focus();
       showToast('Thema gewählt: Sonstiges');
+    } else if (isPinInBaseTopic(selectedTopicKey)) {
+      const effTopic = getEffectivePinInTopic(selectedTopicKey, 1);
+      ta.placeholder = `${effTopic}: Nur Fehler und Abstellmaßnahme eingeben (z. B. 1#2344 -> Pin gewechselt)`;
+      showToast(`Thema gewählt: ${effTopic}`);
     } else if (selectedTopicKey) {
       ta.placeholder = `${selectedTopicKey}: Nur Fehler und Abstellmaßnahme eingeben (z. B. 1#2344 -> Pin gewechselt)`;
       ta.focus();
@@ -2886,7 +2923,15 @@
   }
 
   function getTopicMeta(key) {
-    const upper = String(key || '').trim().toUpperCase();
+    const rawStr = String(key || '').trim();
+    const pinNumMatch = rawStr.match(/^PIN\s*IN\.?\s*(\d+)$/i);
+    if (pinNumMatch) {
+      return { key: `Pin in ${parseInt(pinNumMatch[1], 10)}`, emoji: '🟠', section: 'tech' };
+    }
+    if (/^PIN\s*IN:?$/i.test(rawStr)) {
+      return { key: 'Pin in', emoji: '🟠', section: 'tech' };
+    }
+    const upper = rawStr.toUpperCase();
     if (upper === 'ORGA') {
       return { key: 'Orga', emoji: '🟢', section: 'tech' };
     }
@@ -3047,9 +3092,10 @@
 
     const ta = document.getElementById('entry-input');
     const rawVal = ta.value.trim();
+    const effectiveTopic1 = getEffectivePinInTopic(selectedTopicKey, 1);
 
-    if (!rawVal && selectedTopicKey) {
-      const meta = getTopicMeta(selectedTopicKey);
+    if (!rawVal && effectiveTopic1) {
+      const meta = getTopicMeta(effectiveTopic1);
       state.entries.push({
         id: Date.now() + Math.random(),
         topic: meta.key,
@@ -3065,7 +3111,7 @@
 
     // Immer genau ein Stichpunkt pro Hinzufügen-Klick (Zeilenumbrüche innerhalb des Textes werden zu Leerzeichen verbunden)
     const singleLineVal = rawVal.replace(/\s*\r?\n+\s*/g, ' ').trim();
-    const parsed = parseRawLine(singleLineVal, selectedTopicKey);
+    const parsed = parseRawLine(singleLineVal, effectiveTopic1);
     if (parsed && parsed.text) {
       state.entries.push({ id: Date.now() + Math.random(), ...parsed });
       ta.value = '';
@@ -4587,16 +4633,18 @@
         if (sub2) sub2.classList.toggle('open', isSonst2);
         if (ta) ta.style.display = isSonst2 ? 'none' : '';
         if (arr2) arr2.style.display = isSonst2 ? 'none' : '';
+        syncPinInSubmenuUI(2);
+        const effTopic2 = getEffectivePinInTopic(selectedTopicKey2, 2);
         if (isSonst2) {
           document.getElementById('sonstiges-station-input-2')?.focus();
         } else if (ta) {
           if (selectedTopicKey2 === 'Analysen') ta.value = '';
-          ta.placeholder = selectedTopicKey2
-            ? `${selectedTopicKey2}: Nur Fehler und Abstellmaßnahme eingeben (z. B. 1#2344 -> Pin gewechselt)`
+          ta.placeholder = effTopic2
+            ? `${effTopic2}: Nur Fehler und Abstellmaßnahme eingeben (z. B. 1#2344 -> Pin gewechselt)`
             : 'Nur Fehler und Abstellmaßnahme eingeben (z. B. 1#2344 -> Pin gewechselt)';
-          ta.focus();
+          if (!isPinInBaseTopic(selectedTopicKey2)) ta.focus();
         }
-        showToast(selectedTopicKey2 ? `Thema gewählt: ${selectedTopicKey2}` : 'Thema zurückgesetzt');
+        showToast(effTopic2 ? `Thema gewählt: ${effTopic2}` : 'Thema zurückgesetzt');
       });
 
       document.getElementById('close-ict-submenu-btn-2')?.addEventListener('click', () => setIctSubmenuState2(false));
@@ -4695,8 +4743,9 @@
         }
         const ta = document.getElementById('entry-input-2');
         const rawVal = (ta?.value || '').trim();
-        if (!rawVal && selectedTopicKey2) {
-          const meta = getTopicMeta(selectedTopicKey2);
+        const effectiveTopic2 = getEffectivePinInTopic(selectedTopicKey2, 2);
+        if (!rawVal && effectiveTopic2) {
+          const meta = getTopicMeta(effectiveTopic2);
           state2.entries.push({ id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, topic: meta.key, emoji: meta.emoji, section: meta.section, text: meta.key });
           saveState2();
           renderSecondPane();
@@ -4704,7 +4753,7 @@
           return;
         }
         const singleLineVal2 = rawVal.replace(/\s*\r?\n+\s*/g, ' ').trim();
-        const parsed2 = parseRawLine(singleLineVal2, selectedTopicKey2);
+        const parsed2 = parseRawLine(singleLineVal2, effectiveTopic2);
         if (parsed2 && parsed2.text) {
           state2.entries.push({ id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, ...parsed2 });
           if (ta) { ta.value = ''; ta.focus(); }
@@ -4979,7 +5028,7 @@
     if (!contentEl) return;
 
     if (isArchiveTab) {
-      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="archive-version-bar-2" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">\n        <div class="archive-version-bar-top">\n          <span>Versionsverlauf (Letzte 3 Versionen)</span>\n          <span>Aktuell: V5.8</span>\n        </div>\n        <div id="archive-version-list-2" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>\n      </div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
+      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="archive-version-bar-2" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">\n        <div class="archive-version-bar-top">\n          <span>Versionsverlauf (Letzte 3 Versionen)</span>\n          <span>Aktuell: V5.9</span>\n        </div>\n        <div id="archive-version-list-2" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>\n      </div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
       if (typeof renderArchiveVersionBars === 'function') renderArchiveVersionBars();
       document.getElementById('sz-archive-list-2')?.addEventListener('click', (e) => {
         const copyBtn = e.target.closest('[data-copy-arch-2]');
@@ -5018,7 +5067,18 @@
           <option value="KGIS MAU">KGIS MAU</option>
           <option value="GW1">GW1</option>
           <option value="GW3">GW3</option>
-</select>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">1. Thema anklicken &amp; Fehler + Maßnahme eintragen</div>\n\n      <div class="quick-topics" id="topic-chips-container-2">\n        <button type="button" class="topic-chip" data-topic="ICT">🔴 ICT</button>\n        <button type="button" class="topic-chip" data-topic="Flasher">🔴 Flasher</button>\n        <button type="button" class="topic-chip" data-topic="EP">🔴 EP</button>\n        <button type="button" class="topic-chip" data-topic="VP">🔴 VP</button>\n        <button type="button" class="topic-chip" data-topic="HF">🔴 HF</button>\n        <button type="button" class="topic-chip" data-topic="AOI">⚫ AOI</button>\n        <button type="button" class="topic-chip" data-topic="AXI">⚫ AXI</button>\n        <button type="button" class="topic-chip" data-topic="Pin Insertion">🟠 Pin In</button>\n        <button type="button" class="topic-chip" data-topic="Fräse">🟣 Fräse</button>\n        <button type="button" class="topic-chip" data-topic="HGN">🟡 HGN</button>\n        <button type="button" class="topic-chip" data-topic="Verpackplatz">🟡 Verpack</button>\n        <button type="button" class="topic-chip" data-topic="Roboterzelle">🟡 Roboter</button>\n        <button type="button" class="topic-chip" data-topic="AGV">🟤 AGV</button>\n        <button type="button" class="topic-chip" data-topic="KB">🔵 KB</button>\n        <button type="button" class="topic-chip" data-topic="Lötstation">⚪ Lötstation</button>\n        <button type="button" class="topic-chip" data-topic="Orga">🟢 Orga</button>\n        <button type="button" class="topic-chip" data-topic="Analysen">🟢 Analysen</button>\n        <button type="button" class="topic-chip" data-topic="Material und Qualifizierung">📦 Material/Quali</button>\n        <button type="button" class="topic-chip" data-topic="KBV">🟢 KBV</button>\n        <button type="button" class="topic-chip" data-topic="Sonstiges">🔵 Sonstiges</button>\n      </div>\n\n      <div id="ict-submenu-2" class="ict-submenu" role="region" aria-label="ICT Vorschläge">\n        <div class="ict-submenu-header">\n          <span>🔴 ICT Untermenü – Vorauswahl / Vorschlag:</span>\n          <button type="button" class="secondary" id="close-ict-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="ict-submenu-actions">\n          <button type="button" class="ict-suggestion-chip" id="ict-suggest-pin-btn-2" data-suggestion="Pin gewechselt">💡 Vorschlag: Pin gewechselt</button>\n          <button type="button" class="ict-suggestion-chip" id="ict-append-pin-btn-2" data-append-suggestion="Pin gewechselt">+ → Pin gewechselt</button>\n        </div>\n      </div>\n\n      <div id="analysen-submenu-2" class="analysen-submenu" role="region" aria-label="Analysen Vorschläge">\n        <div class="analysen-submenu-header">\n          <span>🟢 Analysen Untermenü – Vorauswahl / Vorschlag:</span>\n          <button type="button" class="secondary" id="close-analysen-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="analysen-submenu-actions">\n          <button type="button" class="analysen-suggestion-chip" id="analysen-suggest-eingeschleust-btn-2" data-suggestion="Alles eingeschleust">💡 Vorschlag: Alles eingeschleust</button>\n          <button type="button" class="analysen-suggestion-chip" id="analysen-append-eingeschleust-btn-2" data-append-suggestion="Alles eingeschleust">+ → Alles eingeschleust</button>\n        </div>\n      </div>\n\n      <div class="active-topic-banner">\n        <span>Gewähltes Thema: <strong id="selected-topic-label-2">Kein Thema gewählt</strong></span>\n        <button type="button" class="secondary" id="reset-topic-btn-2" style="padding:4px 9px; font-size:0.75rem;">Reset</button>\n      </div>\n\n      <div id="sonstiges-submenu-2" class="sonstiges-submenu" role="region" aria-label="Sonstiges Eingabefelder">\n        <div class="sonstiges-submenu-header">\n          <span>🔵 Sonstiges – Station/Modul &amp; Abstellmaßnahme:</span>\n          <button type="button" class="secondary" id="close-sonstiges-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="sonstiges-field-group">\n          <input type="text" id="sonstiges-station-input-2" class="sonstiges-input" lang="de" spellcheck="true" placeholder="1. Station / Modul (wird fette Überschrift in SZ & Check)..." />\n          <textarea id="sonstiges-measure-input-2" class="sonstiges-input" rows="2" lang="de" spellcheck="true" placeholder="2. Fehler / Abstellmaßnahme eingeben..."></textarea>\n        </div>\n      </div>\n\n      <textarea id="entry-input-2" rows="2" lang="de" spellcheck="true" autocorrect="on" autocapitalize="sentences" placeholder="Nur Fehler und Abstellmaßnahme eingeben (z. B. 1#2344 -> Pin gewechselt)"></textarea>\n\n      <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;">\n        <button type="button" class="secondary" id="insert-arrow-btn-2" style="padding:6px 10px; font-size:0.78rem;">+ → Pfeil einfügen</button>\n        <button type="button" class="secondary" id="append-last-btn-2" style="padding:6px 10px; font-size:0.78rem;">↳ An letzten Punkt anhängen</button>\n      </div>\n\n      <div style="margin-top:10px;">\n        <button type="button" id="add-entry-btn-2" style="width:100%;">+ Eintrag zur Schicht hinzufügen</button>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">\n        <span>2. OPM-Monitor Screenshot (nach OPM:)</span>\n        <span id="opm-status-label-2" style="color:var(--primary); font-weight:600;">Fehlt noch</span>\n      </div>\n\n      <div id="opm-paste-box-2" tabindex="0" class="drop-box">\n        <div style="font-size:0.88rem; font-weight:700; color:#0f172a;">🖥️ OPM-Screenshot hier einfügen (Strg+V / Cmd+V)</div>\n        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:3px;">\n          Wird nach Enter unter <strong>OPM:</strong> in die Schichtzusammenfassung einkopiert (ohne Link).\n        </div>\n        <div style="display:flex; gap:8px; justify-content:center; margin-top:8px; flex-wrap:wrap;">\n          <button type="button" class="secondary" id="paste-opm-btn-2" style="padding:6px 11px; font-size:0.78rem;">📋 OPM aus Zwischenablage</button>\n          <button type="button" class="secondary" id="pick-opm-btn-2" style="padding:6px 11px; font-size:0.78rem;">🖼️ OPM-Bild wählen</button>\n        </div>\n        <input type="file" id="opm-file-input-2" accept="image/*" style="display:none;" />\n        <div id="opm-preview-wrap-2"></div>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">\n        <span>3. Zusatzfotos / Infos (ganz unten)</span>\n        <span id="extra-count-label-2" style="color:var(--primary); font-weight:600;">0 Elemente</span>\n      </div>\n\n      <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px; flex-wrap:wrap;">\n        <label for="extra-target-topic-2" style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Zuordnung (optional):</label>\n        <select id="extra-target-topic-2" style="flex:1; min-width:190px; padding:8px 11px; font-size:0.86rem; border-radius:12px;">\n          <option value="">Ganz unten unter 🟢 Fotos/Infos (Standard)</option>\n          <option value="ICT">🔴 ICT</option>\n          <option value="Flasher">🔴 Flasher</option>\n          <option value="EP">🔴 EP</option>\n          <option value="VP">🔴 VP</option>\n          <option value="HF">🔴 HF</option>\n          <option value="AOI">⚫ AOI</option>\n          <option value="AXI">⚫ AXI</option>\n          <option value="Pin Insertion">🟠 Pin Insertion</option>\n          <option value="Fräse">🟣 Fräse</option>\n          <option value="HGN">🟡 HGN</option>\n          <option value="Verpackplatz">🟡 Verpackplatz</option>\n          <option value="Roboterzelle">🟡 Roboterzelle</option>\n          <option value="AGV">🟤 AGV</option>\n          <option value="KB">🔵 KB</option>\n          <option value="Lötstation">⚪ Lötstation</option>\n          <option value="Orga">🟢 Orga</option>\n          <option value="Analysen">🟢 Analysen</option>\n          <option value="Material und Qualifizierung">📦 Material und Qualifizierung</option>\n          <option value="KBV">🟢 KBV</option>
+</select>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">1. Thema anklicken &amp; Fehler + Maßnahme eintragen</div>\n\n      <div class="quick-topics" id="topic-chips-container-2">\n        <button type="button" class="topic-chip" data-topic="ICT">🔴 ICT</button>\n        <button type="button" class="topic-chip" data-topic="Flasher">🔴 Flasher</button>\n        <button type="button" class="topic-chip" data-topic="EP">🔴 EP</button>\n        <button type="button" class="topic-chip" data-topic="VP">🔴 VP</button>\n        <button type="button" class="topic-chip" data-topic="HF">🔴 HF</button>\n        <button type="button" class="topic-chip" data-topic="AOI">⚫ AOI</button>\n        <button type="button" class="topic-chip" data-topic="AXI">⚫ AXI</button>\n        <button type="button" class="topic-chip" data-topic="Pin Insertion">🟠 Pin In</button>\n        <button type="button" class="topic-chip" data-topic="Fräse">🟣 Fräse</button>\n        <button type="button" class="topic-chip" data-topic="HGN">🟡 HGN</button>\n        <button type="button" class="topic-chip" data-topic="Verpackplatz">🟡 Verpack</button>\n        <button type="button" class="topic-chip" data-topic="Roboterzelle">🟡 Roboter</button>\n        <button type="button" class="topic-chip" data-topic="AGV">🟤 AGV</button>\n        <button type="button" class="topic-chip" data-topic="KB">🔵 KB</button>\n        <button type="button" class="topic-chip" data-topic="Lötstation">⚪ Lötstation</button>\n        <button type="button" class="topic-chip" data-topic="Orga">🟢 Orga</button>\n        <button type="button" class="topic-chip" data-topic="Analysen">🟢 Analysen</button>\n        <button type="button" class="topic-chip" data-topic="Material und Qualifizierung">📦 Material/Quali</button>\n        <button type="button" class="topic-chip" data-topic="KBV">🟢 KBV</button>\n        <button type="button" class="topic-chip" data-topic="Sonstiges">🔵 Sonstiges</button>\n      </div>\n\n      <div id="ict-submenu-2" class="ict-submenu" role="region" aria-label="ICT Vorschläge">\n        <div class="ict-submenu-header">\n          <span>🔴 ICT Untermenü – Vorauswahl / Vorschlag:</span>\n          <button type="button" class="secondary" id="close-ict-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="ict-submenu-actions">\n          <button type="button" class="ict-suggestion-chip" id="ict-suggest-pin-btn-2" data-suggestion="Pin gewechselt">💡 Vorschlag: Pin gewechselt</button>\n          <button type="button" class="ict-suggestion-chip" id="ict-append-pin-btn-2" data-append-suggestion="Pin gewechselt">+ → Pin gewechselt</button>\n        </div>\n      </div>\n\n      <div id="analysen-submenu-2" class="analysen-submenu" role="region" aria-label="Analysen Vorschläge">\n        <div class="analysen-submenu-header">\n          <span>🟢 Analysen Untermenü – Vorauswahl / Vorschlag:</span>\n          <button type="button" class="secondary" id="close-analysen-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="analysen-submenu-actions">\n          <button type="button" class="analysen-suggestion-chip" id="analysen-suggest-eingeschleust-btn-2" data-suggestion="Alles eingeschleust">💡 Vorschlag: Alles eingeschleust</button>\n          <button type="button" class="analysen-suggestion-chip" id="analysen-append-eingeschleust-btn-2" data-append-suggestion="Alles eingeschleust">+ → Alles eingeschleust</button>\n        </div>\n      </div>\n\n      <div class="active-topic-banner">\n        <span>Gewähltes Thema: <strong id="selected-topic-label-2">Kein Thema gewählt</strong></span>\n        <button type="button" class="secondary" id="reset-topic-btn-2" style="padding:4px 9px; font-size:0.75rem;">Reset</button>\n      </div>\n\n            <div id="pinin-submenu-2" class="analysen-submenu" role="region" aria-label="Pin In Nummer">
+        <div class="analysen-submenu-header">
+          <span>🟠 Pin In – Nummer eingeben (z. B. 0, 1, 2 → Pin in 0 / Pin in 2, leer → Pin in):</span>
+          <button type="button" class="secondary" id="close-pinin-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>
+        </div>
+        <div class="analysen-submenu-actions">
+          <input type="number" id="pinin-number-input-2" class="sonstiges-input" min="0" step="1" inputmode="numeric" placeholder="Nummer (z. B. 0, 1, 2)..." style="max-width:160px; padding:7px 11px;" />
+          <span id="pinin-preview-label-2" style="font-size:0.82rem; font-weight:700;">Thema: Pin in</span>
+        </div>
+      </div>
+
+      <div id="sonstiges-submenu-2" class="sonstiges-submenu" role="region" aria-label="Sonstiges Eingabefelder">\n        <div class="sonstiges-submenu-header">\n          <span>🔵 Sonstiges – Station/Modul &amp; Abstellmaßnahme:</span>\n          <button type="button" class="secondary" id="close-sonstiges-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="sonstiges-field-group">\n          <input type="text" id="sonstiges-station-input-2" class="sonstiges-input" lang="de" spellcheck="true" placeholder="1. Station / Modul (wird fette Überschrift in SZ & Check)..." />\n          <textarea id="sonstiges-measure-input-2" class="sonstiges-input" rows="2" lang="de" spellcheck="true" placeholder="2. Fehler / Abstellmaßnahme eingeben..."></textarea>\n        </div>\n      </div>\n\n      <textarea id="entry-input-2" rows="2" lang="de" spellcheck="true" autocorrect="on" autocapitalize="sentences" placeholder="Nur Fehler und Abstellmaßnahme eingeben (z. B. 1#2344 -> Pin gewechselt)"></textarea>\n\n      <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;">\n        <button type="button" class="secondary" id="insert-arrow-btn-2" style="padding:6px 10px; font-size:0.78rem;">+ → Pfeil einfügen</button>\n        <button type="button" class="secondary" id="append-last-btn-2" style="padding:6px 10px; font-size:0.78rem;">↳ An letzten Punkt anhängen</button>\n      </div>\n\n      <div style="margin-top:10px;">\n        <button type="button" id="add-entry-btn-2" style="width:100%;">+ Eintrag zur Schicht hinzufügen</button>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">\n        <span>2. OPM-Monitor Screenshot (nach OPM:)</span>\n        <span id="opm-status-label-2" style="color:var(--primary); font-weight:600;">Fehlt noch</span>\n      </div>\n\n      <div id="opm-paste-box-2" tabindex="0" class="drop-box">\n        <div style="font-size:0.88rem; font-weight:700; color:#0f172a;">🖥️ OPM-Screenshot hier einfügen (Strg+V / Cmd+V)</div>\n        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:3px;">\n          Wird nach Enter unter <strong>OPM:</strong> in die Schichtzusammenfassung einkopiert (ohne Link).\n        </div>\n        <div style="display:flex; gap:8px; justify-content:center; margin-top:8px; flex-wrap:wrap;">\n          <button type="button" class="secondary" id="paste-opm-btn-2" style="padding:6px 11px; font-size:0.78rem;">📋 OPM aus Zwischenablage</button>\n          <button type="button" class="secondary" id="pick-opm-btn-2" style="padding:6px 11px; font-size:0.78rem;">🖼️ OPM-Bild wählen</button>\n        </div>\n        <input type="file" id="opm-file-input-2" accept="image/*" style="display:none;" />\n        <div id="opm-preview-wrap-2"></div>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">\n        <span>3. Zusatzfotos / Infos (ganz unten)</span>\n        <span id="extra-count-label-2" style="color:var(--primary); font-weight:600;">0 Elemente</span>\n      </div>\n\n      <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px; flex-wrap:wrap;">\n        <label for="extra-target-topic-2" style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Zuordnung (optional):</label>\n        <select id="extra-target-topic-2" style="flex:1; min-width:190px; padding:8px 11px; font-size:0.86rem; border-radius:12px;">\n          <option value="">Ganz unten unter 🟢 Fotos/Infos (Standard)</option>\n          <option value="ICT">🔴 ICT</option>\n          <option value="Flasher">🔴 Flasher</option>\n          <option value="EP">🔴 EP</option>\n          <option value="VP">🔴 VP</option>\n          <option value="HF">🔴 HF</option>\n          <option value="AOI">⚫ AOI</option>\n          <option value="AXI">⚫ AXI</option>\n          <option value="Pin Insertion">🟠 Pin Insertion</option>\n          <option value="Fräse">🟣 Fräse</option>\n          <option value="HGN">🟡 HGN</option>\n          <option value="Verpackplatz">🟡 Verpackplatz</option>\n          <option value="Roboterzelle">🟡 Roboterzelle</option>\n          <option value="AGV">🟤 AGV</option>\n          <option value="KB">🔵 KB</option>\n          <option value="Lötstation">⚪ Lötstation</option>\n          <option value="Orga">🟢 Orga</option>\n          <option value="Analysen">🟢 Analysen</option>\n          <option value="Material und Qualifizierung">📦 Material und Qualifizierung</option>\n          <option value="KBV">🟢 KBV</option>
             <option value="Sonstiges">🔵 Sonstiges</option>\n        </select>\n      </div>\n\n      <div id="extra-paste-box-2" tabindex="0" class="drop-box">\n        <div style="font-size:0.88rem; font-weight:700; color:#0f172a;">📎 Weitere Fotos oder Infos hier einfügen (Strg+V / Cmd+V)</div>\n        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:3px;">\n          Erscheinen ganz unten unter <strong>🟢 Fotos/Infos</strong> direkt in der Schichtzusammenfassung.\n        </div>\n        <div style="display:flex; gap:8px; justify-content:center; margin-top:8px; flex-wrap:wrap;">\n          <button type="button" class="secondary" id="paste-extra-btn-2" style="padding:6px 11px; font-size:0.78rem;">📋 Aus Zwischenablage</button>\n          <button type="button" class="secondary" id="pick-extra-btn-2" style="padding:6px 11px; font-size:0.78rem;">📁 Foto / Datei wählen</button>\n        </div>\n        <input type="file" id="extra-file-input-2" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.md" multiple style="display:none;" />\n      </div>\n\n      <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">\n        <input type="text" id="direct-info-input-2" placeholder="Kurze Zusatzinfo für 🟢 Fotos/Infos eingeben..." style="flex:1; padding:10px 13px; border-radius:14px; border:1px solid rgba(148,163,184,0.35); background:var(--glass-bg); color:var(--text); font-size:0.92rem;" />\n        <button type="button" class="secondary" id="add-direct-info-btn-2" style="padding:10px 14px; font-size:0.86rem;">+ Info</button>\n      </div>\n\n      <div id="extra-items-list-2" class="extra-grid"></div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">\n        <span>Dokumentierte Einträge (<span id="entry-count-2">0</span>)</span>\n      </div>\n      <div id="entries-list-2"></div>\n    </div>\n\n    <div class="card full-reset-bar">\n      <button type="button" class="danger" id="delete-all-btn-2" style="width:100%; padding:13px 16px; font-size:0.95rem; font-weight:700; border-radius:16px;">🗑️ Alles löschen</button>\n    </div>\n  `;
 
     const sel2 = document.getElementById('shift-select-2');
@@ -7814,7 +7874,32 @@ MLFB: ${mlfbVal}`, 'MLFB kopiert!');
         input.select();
       }
     });
-  })();
+  
+  document.getElementById('pinin-number-input')?.addEventListener('input', () => {
+    syncPinInSubmenuUI(1);
+    const eff = getEffectivePinInTopic(selectedTopicKey, 1);
+    const ta = document.getElementById('entry-input');
+    if (ta && isPinInBaseTopic(selectedTopicKey)) {
+      ta.placeholder = `${eff}: Nur Fehler und Abstellmaßnahme eingeben (z. B. 1#2344 -> Pin gewechselt)`;
+    }
+  });
+  document.getElementById('close-pinin-submenu-btn')?.addEventListener('click', () => {
+    const sub = document.getElementById('pinin-submenu');
+    if (sub) sub.classList.remove('open');
+  });
+  document.getElementById('pinin-number-input-2')?.addEventListener('input', () => {
+    syncPinInSubmenuUI(2);
+    const eff = getEffectivePinInTopic(selectedTopicKey2, 2);
+    const ta = document.getElementById('entry-input-2');
+    if (ta && isPinInBaseTopic(selectedTopicKey2)) {
+      ta.placeholder = `${eff}: Nur Fehler und Abstellmaßnahme eingeben (z. B. 1#2344 -> Pin gewechselt)`;
+    }
+  });
+  document.getElementById('close-pinin-submenu-btn-2')?.addEventListener('click', () => {
+    const sub = document.getElementById('pinin-submenu-2');
+    if (sub) sub.classList.remove('open');
+  });
+})();
 </script>
 </body>
 </html>

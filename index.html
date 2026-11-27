@@ -1698,7 +1698,7 @@
       min-width: 180px;
     }
 
-  </style>
+</style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
     if (window.pdfjsLib) {
@@ -1759,13 +1759,14 @@
 
     <button type="button" class="launcher-bar analyse-locked-bar" id="open-analyse-assistant-btn" style="grid-column: 1 / -1; align-items: center; text-align: center;">
       <div class="launcher-bar-top">
-        <span class="launcher-bar-icon">🔒 🔬</span>
+        <span class="launcher-bar-icon">🔒</span>
         <span class="launcher-bar-pill">4. Assistent</span>
       </div>
       <div class="launcher-bar-title launcher-bar-title-row" style="justify-content: center;">
         <span>Analyse Assistent</span>
-        <span class="analyse-soon-badge">Bald verfügbar</span>
+        <span class="analyse-soon-badge">Noch gesperrt · Bald verfügbar</span>
       </div>
+      <div class="launcher-bar-desc">Noch gesperrt, aber bald verfügbar.</div>
     </button>
   </div>
 </div>
@@ -2281,7 +2282,7 @@
       <div id="archive-version-bar-1" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">
         <div class="archive-version-bar-top">
           <span>Versionsverlauf (Letzte 3 Versionen)</span>
-          <span>Aktuell: V5.7</span>
+          <span>Aktuell: V5.8</span>
         </div>
         <div id="archive-version-list-1" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>
       </div>
@@ -2402,9 +2403,9 @@
       { key: 'SWL-MODUL', emoji: '🟡', section: 'tech' },
       { key: 'EOL M1', emoji: '🔴', section: 'tech' },
       { key: 'EOL M2', emoji: '🔴', section: 'tech' },
-      { key: 'ANALYSEPLATZ', emoji: '🔬', section: 'analysen' },
       { key: 'AGV', emoji: '🟤', section: 'tech' },
-      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' }
+      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' },
+      { key: 'Analysen', emoji: '🟢', section: 'analysen' }
     ],
     'MRA 2.1': [
       { key: 'MAGAZINIERER', emoji: '🔵', section: 'tech' },
@@ -2419,17 +2420,18 @@
       { key: 'LABELCHECK', emoji: '⚫', section: 'tech' },
       { key: 'VERPACKPLATZ', emoji: '🟡', section: 'tech' },
       { key: 'AGV', emoji: '🟤', section: 'tech' },
-      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' }
+      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' },
+      { key: 'Analysen', emoji: '🟢', section: 'analysen' }
     ],
     'MRA KL': [
       { key: 'MAGAZINIERER', emoji: '🔵', section: 'tech' },
       { key: 'KB', emoji: '🟡', section: 'tech' },
       { key: 'LÖTSTATION', emoji: '🟡', section: 'tech' },
       { key: 'AXI', emoji: '⚫', section: 'tech' },
-      { key: 'ANALYSEPLATZ', emoji: '🔬', section: 'analysen' },
       { key: 'FRÄSE', emoji: '🟣', section: 'tech' },
       { key: 'AGV', emoji: '🟤', section: 'tech' },
-      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' }
+      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' },
+      { key: 'Analysen', emoji: '🟢', section: 'analysen' }
     ],
     'MQB-A0': [
       { key: 'MAGAZINIERER', emoji: '🔵', section: 'tech' },
@@ -2445,7 +2447,8 @@
       { key: 'AOI', emoji: '⚫', section: 'tech' },
       { key: 'VERPACKPLATZ', emoji: '🟡', section: 'tech' },
       { key: 'AGV', emoji: '🟤', section: 'tech' },
-      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' }
+      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' },
+      { key: 'Analysen', emoji: '🟢', section: 'analysen' }
     ],
     'MQB-A': [
       { key: 'MAGAZINIERER', emoji: '🔵', section: 'tech' },
@@ -2460,7 +2463,8 @@
       { key: 'LASER', emoji: '🟡', section: 'tech' },
       { key: 'VERPACKPLATZ', emoji: '🟡', section: 'tech' },
       { key: 'AGV', emoji: '🟤', section: 'tech' },
-      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' }
+      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' },
+      { key: 'Analysen', emoji: '🟢', section: 'analysen' }
     ],
     'MEB-SAM': [
       { key: 'MAGAZINIERER', emoji: '🔵', section: 'tech' },
@@ -2476,7 +2480,8 @@
       { key: 'AOI', emoji: '⚫', section: 'tech' },
       { key: 'VERPACKPLATZ', emoji: '🟡', section: 'tech' },
       { key: 'AGV', emoji: '🟤', section: 'tech' },
-      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' }
+      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' },
+      { key: 'Analysen', emoji: '🟢', section: 'analysen' }
     ],
     'MARS': [
       { key: 'MAGAZINIERER', emoji: '🔵', section: 'tech' },
@@ -2491,7 +2496,8 @@
       { key: 'PIN CHECK', emoji: '⚫', section: 'tech' },
       { key: 'VERPACKPLATZ', emoji: '🟡', section: 'tech' },
       { key: 'AGV', emoji: '🟤', section: 'tech' },
-      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' }
+      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' },
+      { key: 'Analysen', emoji: '🟢', section: 'analysen' }
     ],
     'Cosma': [
       { key: 'MAGAZINIERER', emoji: '🔵', section: 'tech' },
@@ -2504,7 +2510,8 @@
       { key: 'M201', emoji: '🟡', section: 'tech' },
       { key: 'M202', emoji: '🟡', section: 'tech' },
       { key: 'AGV', emoji: '🟤', section: 'tech' },
-      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' }
+      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' },
+      { key: 'Analysen', emoji: '🟢', section: 'analysen' }
     ],
     'GW': [
       { key: 'MAGAZINIERER', emoji: '🔵', section: 'tech' },
@@ -2519,7 +2526,8 @@
       { key: 'AOI', emoji: '⚫', section: 'tech' },
       { key: 'VERPACKPLATZ', emoji: '🟡', section: 'tech' },
       { key: 'GEHÄUSE BEST.', emoji: '🟡', section: 'tech' },
-      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' }
+      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' },
+      { key: 'Analysen', emoji: '🟢', section: 'analysen' }
     ],
     'KGIS MAU': [
       { key: 'MAGAZINIERER', emoji: '🔵', section: 'tech' },
@@ -2532,7 +2540,8 @@
       { key: 'LASER', emoji: '🟡', section: 'tech' },
       { key: 'AOI', emoji: '⚫', section: 'tech' },
       { key: 'VERPACKPLATZ', emoji: '🟡', section: 'tech' },
-      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' }
+      { key: 'SONSTIGES', emoji: '🔵', section: 'tech' },
+      { key: 'Analysen', emoji: '🟢', section: 'analysen' }
     ]
   };
 
@@ -2546,17 +2555,42 @@
     return DEFAULT_TOPICS_LIST;
   }
 
+  const CORE_QUICK_TOPICS = [
+    { key: 'KBV', emoji: '🟢', section: 'tech' },
+    { key: 'Orga', emoji: '🟢', section: 'tech' },
+    { key: 'Analysen', emoji: '🟢', section: 'analysen' }
+  ];
+
+  function getMergedTopicsForLine(lineVal) {
+    const cleanLine = String(lineVal || '').trim();
+    if (!cleanLine) return [];
+    const baseList = [...getTopicsForLine(cleanLine)];
+    const seen = new Set(baseList.map(t => String(t.key || '').trim().toUpperCase()));
+    const merged = [...baseList];
+    for (const core of CORE_QUICK_TOPICS) {
+      const u = core.key.toUpperCase();
+      const aliasPresent =
+        (u === 'ORGA' && seen.has('ORGA')) ||
+        (u === 'ANALYSEN' && (seen.has('ANALYSEN') || seen.has('ANALYSEPLATZ'))) ||
+        (u === 'KBV' && seen.has('KBV'));
+      if (!seen.has(u) && !aliasPresent) {
+        seen.add(u);
+        merged.push(core);
+      }
+    }
+    return merged;
+  }
+
   function renderDynamicTopicControls(pane = 1) {
     const lineVal = String(pane === 2 ? (state2?.line || '') : (state?.line || '')).trim();
-    const hasLine = Boolean(lineVal);
-    const topics = hasLine ? getTopicsForLine(lineVal) : [];
+    const topics = getMergedTopicsForLine(lineVal);
     const chipsId = pane === 2 ? 'topic-chips-container-2' : 'topic-chips-container';
     const extraId = pane === 2 ? 'extra-target-topic-2' : 'extra-target-topic';
 
     const chipsEl = document.getElementById(chipsId);
     if (chipsEl) {
-      if (!hasLine) {
-        chipsEl.innerHTML = `<div style="font-size:0.84rem; color:var(--text-muted); padding:4px 0;">Bitte zuerst oben eine Linie auswählen, um die Themen anzuzeigen.</div>`;
+      if (!lineVal) {
+        chipsEl.innerHTML = '';
       } else {
         chipsEl.innerHTML = topics.map(t =>
           `<button type="button" class="topic-chip" data-topic="${escapeHtml(t.key)}">${t.emoji ? t.emoji + ' ' : ''}${escapeHtml(t.key)}</button>`
@@ -2566,17 +2600,18 @@
 
     const extraEl = document.getElementById(extraId);
     if (extraEl) {
-      const prevVal = hasLine ? extraEl.value : '';
+      const prevVal = extraEl.value;
       extraEl.innerHTML = `<option value="">Ganz unten unter 🟢 Fotos/Infos (Standard)</option>` +
         topics.map(t =>
           `<option value="${escapeHtml(t.key)}">${t.emoji ? t.emoji + ' ' : ''}${escapeHtml(t.key)}</option>`
         ).join('');
-      if (hasLine && [...extraEl.options].some(o => o.value === prevVal)) {
+      if ([...extraEl.options].some(o => o.value === prevVal)) {
         extraEl.value = prevVal;
       } else {
         extraEl.value = '';
       }
     }
+
   }
 
   let state = loadState();
@@ -2852,6 +2887,15 @@
 
   function getTopicMeta(key) {
     const upper = String(key || '').trim().toUpperCase();
+    if (upper === 'ORGA') {
+      return { key: 'Orga', emoji: '🟢', section: 'tech' };
+    }
+    if (upper === 'ANALYSEN' || upper === 'ANALYSE') {
+      return { key: 'Analysen', emoji: '🟢', section: 'analysen' };
+    }
+    if (upper === 'KBV') {
+      return { key: 'KBV', emoji: '🟢', section: 'tech' };
+    }
     const allLineTopics = [
       ...getTopicsForLine(state?.line || ''),
       ...(typeof state2 !== 'undefined' ? getTopicsForLine(state2?.line || '') : []),
@@ -2865,7 +2909,7 @@
     if (base) {
       return { key: base.key.toUpperCase(), emoji: base.emoji, section: base.section };
     }
-    return { key: upper || 'ORGA', emoji: '🟢', section: 'tech' };
+    return { key: upper || 'Orga', emoji: '🟢', section: 'tech' };
   }
 
   function escapeRegex(str) {
@@ -3310,7 +3354,9 @@
 
     for (const tKey of Object.keys(extraByTopic)) {
       const meta = getTopicMeta(tKey);
-      const textOnlyItems = extraByTopic[tKey].filter(x => x.kind !== 'image' && x.kind !== 'pdf');
+      const topicItems = extraByTopic[tKey] || [];
+      const textOnlyItems = topicItems.filter(x => x.kind !== 'image' && x.kind !== 'pdf');
+      const mediaItems = topicItems.filter(x => (x.kind === 'image' || x.kind === 'pdf') && x.dataUrl);
       const extraLines = textOnlyItems.map(x => getExtraLabel(x));
       if (meta.section === 'analysen') {
         analysenList.push(...extraLines);
@@ -3321,17 +3367,21 @@
           .filter(e => e.isCustomTopic && e.topic && techGroups[e.topic])
           .map(e => e.topic);
         const targetGroupKey = customSonstigesKeys.length > 0 ? customSonstigesKeys[customSonstigesKeys.length - 1] : 'Sonstiges';
-        if (extraLines.length > 0) {
-          if (!techGroups[targetGroupKey]) techGroups[targetGroupKey] = { emoji: '🔵', items: [] };
+        if (!techGroups[targetGroupKey] && (extraLines.length > 0 || mediaItems.length > 0)) {
+          techGroups[targetGroupKey] = { emoji: '🔵', items: [] };
+        }
+        if (extraLines.length > 0 && techGroups[targetGroupKey]) {
           techGroups[targetGroupKey].items.push(...extraLines);
         }
         if (targetGroupKey !== 'Sonstiges') {
           if (!resolvedExtraByTopic[targetGroupKey]) resolvedExtraByTopic[targetGroupKey] = [];
-          resolvedExtraByTopic[targetGroupKey].push(...extraByTopic[tKey]);
+          resolvedExtraByTopic[targetGroupKey].push(...topicItems);
         }
       } else {
-        if (extraLines.length > 0) {
-          if (!techGroups[meta.key]) techGroups[meta.key] = { emoji: meta.emoji, items: [] };
+        if (!techGroups[meta.key] && (extraLines.length > 0 || mediaItems.length > 0)) {
+          techGroups[meta.key] = { emoji: meta.emoji, items: [] };
+        }
+        if (extraLines.length > 0 && techGroups[meta.key]) {
           techGroups[meta.key].items.push(...extraLines);
         }
       }
@@ -4540,6 +4590,7 @@
         if (isSonst2) {
           document.getElementById('sonstiges-station-input-2')?.focus();
         } else if (ta) {
+          if (selectedTopicKey2 === 'Analysen') ta.value = '';
           ta.placeholder = selectedTopicKey2
             ? `${selectedTopicKey2}: Nur Fehler und Abstellmaßnahme eingeben (z. B. 1#2344 -> Pin gewechselt)`
             : 'Nur Fehler und Abstellmaßnahme eingeben (z. B. 1#2344 -> Pin gewechselt)';
@@ -4928,7 +4979,7 @@
     if (!contentEl) return;
 
     if (isArchiveTab) {
-      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="archive-version-bar-2" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">\n        <div class="archive-version-bar-top">\n          <span>Versionsverlauf (Letzte 3 Versionen)</span>\n          <span>Aktuell: V5.7</span>\n        </div>\n        <div id="archive-version-list-2" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>\n      </div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
+      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="archive-version-bar-2" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">\n        <div class="archive-version-bar-top">\n          <span>Versionsverlauf (Letzte 3 Versionen)</span>\n          <span>Aktuell: V5.8</span>\n        </div>\n        <div id="archive-version-list-2" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>\n      </div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
       if (typeof renderArchiveVersionBars === 'function') renderArchiveVersionBars();
       document.getElementById('sz-archive-list-2')?.addEventListener('click', (e) => {
         const copyBtn = e.target.closest('[data-copy-arch-2]');
@@ -6644,19 +6695,7 @@ MLFB: ${mlfbVal}`, 'MLFB kopiert!');
   document.getElementById('open-sz-assistant-btn')?.addEventListener('click', () => openAppMode('sz'));
   document.getElementById('open-material-assistant-btn')?.addEventListener('click', () => openAppMode('material'));
   document.getElementById('open-quick-notes-btn')?.addEventListener('click', () => openAppMode('notes'));
-  const ANALYSE_UNLOCK_PASS = '01072000';
-  let analyseUnlockedInSession = false;
-
   document.getElementById('open-analyse-assistant-btn')?.addEventListener('click', () => {
-    if (!analyseUnlockedInSession) {
-      const entered = window.prompt('Analyse Assistent ist gesperrt (Bald verfügbar). Bitte Passwort eingeben:');
-      if (entered === null) return;
-      if (entered.trim() !== ANALYSE_UNLOCK_PASS) {
-        showToast('Falsches Passwort');
-        return;
-      }
-      analyseUnlockedInSession = true;
-    }
     openAppMode('analyse');
   });
   document.getElementById('back-to-launcher-btn')?.addEventListener('click', () => openAppMode('launcher'));
@@ -7551,5 +7590,231 @@ MLFB: ${mlfbVal}`, 'MLFB kopiert!');
   <footer class="app-footer-contact">
     Verantwortlich &amp; Kontakt: <strong><a href="msteams://teams.microsoft.com/l/chat/48%3Anotes/conversations?context=%7B%22contextType%22%3A%22chat%22%7D" onclick="event.preventDefault(); launchNativeTeamsApp('https://teams.microsoft.com/l/chat/48%3Anotes/conversations?context=%7B%22contextType%22%3A%22chat%22%7D');" style="color:inherit; text-decoration:underline; cursor:pointer;">Gentrit Behrami</a> &amp; <a href="msteams://teams.microsoft.com/l/chat/19%3A8a31c73f-6c53-45b6-ab6d-85ff77d7dd6e_d78e9693-217e-45ef-ba12-a8eb37155a1b%40unq.gbl.spaces/conversations?context=%7B%22contextType%22%3A%22chat%22%7D" onclick="event.preventDefault(); launchNativeTeamsApp('https://teams.microsoft.com/l/chat/19%3A8a31c73f-6c53-45b6-ab6d-85ff77d7dd6e_d78e9693-217e-45ef-ba12-a8eb37155a1b%40unq.gbl.spaces/conversations?context=%7B%22contextType%22%3A%22chat%22%7D');" style="color:inherit; text-decoration:underline; cursor:pointer;">Arlond Gashi</a></strong> · Bei Fragen, Wünschen oder Rückmeldungen gerne direkt in <strong>Microsoft Teams</strong> melden.
   </footer>
+<!-- Passwort-Abfrage für Analyse Assistent (Passwort: 01072000, leicht durchsichtig, ohne "bald verfügbar") -->
+<div id="analyse-assistent-pw-modal" class="aa-pw-backdrop" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="aa-pw-title">
+  <div class="aa-pw-bar">
+    <div class="aa-pw-top">
+      <div class="aa-pw-heading">
+        <span class="aa-pw-icon">🔬</span>
+        <div>
+          <div id="aa-pw-title" class="aa-pw-title">Analyse Assistent – Passwort</div>
+          <div class="aa-pw-sub">Zugang geschützt</div>
+        </div>
+      </div>
+      <button type="button" id="aa-pw-cancel-btn" class="aa-pw-close" aria-label="Abbrechen">✕</button>
+    </div>
+
+    <form id="aa-pw-form" class="aa-pw-form" autocomplete="off">
+      <input
+        type="password"
+        id="aa-pw-input"
+        class="aa-pw-input"
+        inputmode="numeric"
+        placeholder="Passwort eingeben..."
+        aria-label="Passwort für Analyse Assistent"
+        required
+      />
+      <button type="submit" class="aa-pw-submit">Entsperren</button>
+    </form>
+
+    <div id="aa-pw-error" class="aa-pw-error" aria-live="polite"></div>
+  </div>
+</div>
+
+<style>
+  .aa-pw-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(15, 23, 42, 0.22);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .aa-pw-bar {
+    width: 100%;
+    max-width: 520px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.56);
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.14);
+    backdrop-filter: blur(14px) saturate(150%);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+    color: #0f172a;
+  }
+
+  body.dark-mode .aa-pw-bar {
+    background: rgba(15, 23, 42, 0.56);
+    border-color: rgba(148, 163, 184, 0.28);
+    color: #f8fafc;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.36);
+  }
+
+  .aa-pw-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .aa-pw-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .aa-pw-icon {
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .aa-pw-title {
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .aa-pw-sub {
+    font-size: 0.76rem;
+    opacity: 0.75;
+    font-weight: 600;
+  }
+
+  .aa-pw-close {
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+  }
+
+  .aa-pw-form {
+    display: flex;
+    gap: 8px;
+  }
+
+  .aa-pw-input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 13px;
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.45);
+    background: rgba(255, 255, 255, 0.72);
+    color: #0f172a;
+    font-size: 0.95rem;
+    outline: none;
+  }
+
+  body.dark-mode .aa-pw-input {
+    background: rgba(15, 23, 42, 0.65);
+    color: #f8fafc;
+    border-color: rgba(148, 163, 184, 0.35);
+  }
+
+  .aa-pw-input:focus {
+    border-color: var(--primary, #007aff);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.16);
+  }
+
+  .aa-pw-submit {
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .aa-pw-error {
+    min-height: 18px;
+    margin-top: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #dc2626;
+  }
+
+  body.dark-mode .aa-pw-error {
+    color: #fca5a5;
+  }
+</style>
+
+<script>
+  (function () {
+    const ANALYSE_PW = "01072000";
+    const UNLOCK_KEY = "analyse_assistent_unlocked_01072000";
+
+    const openBtn = document.getElementById("open-analyse-assistant-btn");
+    const modal = document.getElementById("analyse-assistent-pw-modal");
+    const form = document.getElementById("aa-pw-form");
+    const input = document.getElementById("aa-pw-input");
+    const errorEl = document.getElementById("aa-pw-error");
+    const cancelBtn = document.getElementById("aa-pw-cancel-btn");
+
+    if (!openBtn || !modal || !form || !input) return;
+
+    function isUnlocked() {
+      try {
+        return sessionStorage.getItem(UNLOCK_KEY) === "1";
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function openPwModal() {
+      if (errorEl) errorEl.textContent = "";
+      input.value = "";
+      modal.style.display = "flex";
+      setTimeout(() => input.focus(), 20);
+    }
+
+    function closePwModal() {
+      modal.style.display = "none";
+      input.value = "";
+      if (errorEl) errorEl.textContent = "";
+    }
+
+    // Capture-Listener fängt den Klick auf den Analyse-Assistent-Button vor dem Öffnen ab
+    openBtn.addEventListener("click", function (e) {
+      if (isUnlocked()) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      openPwModal();
+    }, true);
+
+    cancelBtn?.addEventListener("click", closePwModal);
+
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closePwModal();
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.style.display === "flex") {
+        closePwModal();
+      }
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (input.value.trim() === ANALYSE_PW) {
+        try {
+          sessionStorage.setItem(UNLOCK_KEY, "1");
+        } catch (err) {}
+        closePwModal();
+        if (typeof openAppMode === "function") {
+          openAppMode("analyse");
+        }
+        if (typeof showToast === "function") {
+          showToast("Analyse Assistent entsperrt");
+        }
+      } else {
+        if (errorEl) errorEl.textContent = "Falsches Passwort.";
+        input.select();
+      }
+    });
+  })();
+</script>
 </body>
 </html>

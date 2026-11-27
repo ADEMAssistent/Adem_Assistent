@@ -1702,7 +1702,275 @@
       min-width: 180px;
     }
 
-</style>
+    body.dark-mode select#shift-line-select optgroup[label="Gruppe 1"],
+    body.dark-mode select#shift-line-select option[style*="#eff6ff"],
+    body.dark-mode select#shift-line-select-2 optgroup[label="Gruppe 1"],
+    body.dark-mode select#shift-line-select-2 option[style*="#eff6ff"],
+    body.dark-mode select#mat-line-select optgroup[label="Gruppe 1"],
+    body.dark-mode select#mat-line-select option[style*="#eff6ff"] {
+      background-color: #172554 !important;
+      color: #bfdbfe !important;
+    }
+    body.dark-mode select#shift-line-select optgroup[label="Gruppe 2"],
+    body.dark-mode select#shift-line-select option[style*="#f0fdf4"],
+    body.dark-mode select#shift-line-select-2 optgroup[label="Gruppe 2"],
+    body.dark-mode select#shift-line-select-2 option[style*="#f0fdf4"],
+    body.dark-mode select#mat-line-select optgroup[label="Gruppe 2"],
+    body.dark-mode select#mat-line-select option[style*="#f0fdf4"] {
+      background-color: #052e16 !important;
+      color: #bbf7d0 !important;
+    }
+
+    /* Zweispaltiges Dropdown-Menü: Gruppe 1 links, Gruppe 2 rechts (jeweils nach unten sortiert) */
+    .line-select-enh-wrap {
+      position: relative;
+      width: 100%;
+    }
+    .line-select-enh-wrap.is-enhanced > select {
+      position: absolute !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      width: 1px !important;
+      height: 1px !important;
+    }
+    .line-dual-trigger {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: var(--text);
+      padding: 11px 13px;
+      border-radius: 14px;
+      font-size: 0.98rem;
+      font-weight: 500;
+      font-family: inherit;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: none;
+      cursor: pointer;
+    }
+    .line-dual-trigger:focus,
+    .line-dual-trigger.open {
+      background: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+      outline: none;
+    }
+    .line-dual-trigger.mat-field-missing {
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.16) !important;
+      background: #fffafa !important;
+    }
+    .line-dual-trigger-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .line-dual-arrow {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .line-dual-popover {
+      display: none;
+      position: fixed;
+      z-index: 9500;
+      min-width: 320px;
+      max-width: min(94vw, 560px);
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 18px;
+      padding: 10px;
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.18);
+    }
+    .line-dual-popover.open {
+      display: block;
+    }
+    .line-dual-reset-row {
+      margin-bottom: 8px;
+    }
+    .line-dual-reset-btn {
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 10px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      text-align: left;
+      background: rgba(148, 163, 184, 0.12);
+      color: var(--text-muted);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      box-shadow: none;
+    }
+    .line-dual-reset-btn:hover {
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text);
+    }
+    .line-dual-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+    .line-dual-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-radius: 12px;
+      padding: 8px;
+    }
+    .line-dual-col-g1 {
+      background: rgba(239, 246, 255, 0.85);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+    .line-dual-col-g2 {
+      background: rgba(240, 253, 244, 0.85);
+      border: 1px solid rgba(34, 197, 94, 0.25);
+    }
+    .line-dual-col-title {
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      padding: 2px 6px 5px 6px;
+      margin-bottom: 2px;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    }
+    .line-dual-col-g1 .line-dual-col-title {
+      color: #1e3a8a;
+    }
+    .line-dual-col-g2 .line-dual-col-title {
+      color: #14532d;
+    }
+    .line-dual-opt-btn {
+      width: 100%;
+      text-align: left;
+      padding: 7px 9px;
+      border-radius: 9px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.75);
+      color: #0f172a;
+      border: 1px solid transparent;
+      box-shadow: none;
+    }
+    .line-dual-opt-btn:hover {
+      background: #ffffff;
+      border-color: rgba(0, 122, 255, 0.35);
+    }
+    .line-dual-opt-btn.selected {
+      background: #007aff;
+      color: #ffffff;
+      border-color: #007aff;
+    }
+    body.dark-mode .line-dual-trigger {
+      background: rgba(15, 23, 42, 0.92) !important;
+      color: #f8fafc !important;
+      border-color: rgba(148, 163, 184, 0.32) !important;
+    }
+    body.dark-mode .line-dual-trigger:focus,
+    body.dark-mode .line-dual-trigger.open {
+      background: rgba(15, 23, 42, 0.98) !important;
+      border-color: var(--primary) !important;
+    }
+    body.dark-mode .line-dual-popover {
+      background: rgba(15, 23, 42, 0.98);
+      border-color: rgba(148, 163, 184, 0.32);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.65);
+    }
+    body.dark-mode .line-dual-reset-btn {
+      background: rgba(30, 41, 59, 0.9);
+      color: #cbd5e1;
+      border-color: rgba(148, 163, 184, 0.25);
+    }
+    body.dark-mode .line-dual-col-g1 {
+      background: rgba(23, 37, 84, 0.72);
+      border-color: rgba(96, 165, 250, 0.3);
+    }
+    body.dark-mode .line-dual-col-g1 .line-dual-col-title {
+      color: #bfdbfe;
+      border-bottom-color: rgba(148, 163, 184, 0.2);
+    }
+    body.dark-mode .line-dual-col-g2 {
+      background: rgba(5, 46, 22, 0.72);
+      border-color: rgba(74, 222, 128, 0.3);
+    }
+    body.dark-mode .line-dual-col-g2 .line-dual-col-title {
+      color: #bbf7d0;
+      border-bottom-color: rgba(148, 163, 184, 0.2);
+    }
+    body.dark-mode .line-dual-opt-btn {
+      background: rgba(30, 41, 59, 0.82);
+      color: #f8fafc;
+    }
+    body.dark-mode .line-dual-opt-btn:hover {
+      background: rgba(51, 65, 85, 0.95);
+      border-color: rgba(56, 189, 248, 0.45);
+    }
+    body.dark-mode .line-dual-opt-btn.selected {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #38bdf8;
+    }
+    /* Nebeneinander aufklappende Gruppen in Schichtzusammenfassung & Material Assistent */
+    .sz-groups-side-by-side {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      align-items: start;
+    }
+    .sz-groups-side-by-side > .list-item {
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.82);
+      height: 100%;
+    }
+    body.dark-mode .sz-groups-side-by-side > .list-item {
+      background: rgba(15, 23, 42, 0.92);
+      border-color: rgba(148, 163, 184, 0.24);
+    }
+
+    .mat-groups-side-by-side {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      align-items: start;
+    }
+    .mat-group-col {
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.82);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      height: 100%;
+    }
+    .mat-group-col-title {
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: var(--text);
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    body.dark-mode .mat-group-col {
+      background: rgba(15, 23, 42, 0.92);
+      border-color: rgba(148, 163, 184, 0.24);
+    }
+    body.dark-mode .mat-group-col-title {
+      color: #f8fafc;
+      border-bottom-color: rgba(148, 163, 184, 0.16);
+    }
+
+  </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
     if (window.pdfjsLib) {
@@ -1720,7 +1988,7 @@
   <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
     <button type="button" class="secondary theme-toggle-btn" id="toggle-theme-btn" aria-label="Day oder Dark Modus umschalten">🌙 Dark</button>
     <button type="button" class="secondary" id="toggle-split-sz-btn" style="display:none; padding:5px 11px; font-size:0.78rem; border-radius:999px;">➕ 2. SZ daneben</button>
-    <span class="badge">V5.9</span>
+    <span class="badge">V6.0</span>
   </div>
 </header>
 
@@ -1755,7 +2023,7 @@
     <button type="button" class="launcher-bar" id="open-quick-notes-btn">
       <div class="launcher-bar-top">
         <span class="launcher-bar-icon">📝</span>
-        <span class="launcher-bar-pill">3. Punkt</span>
+        <span class="launcher-bar-pill">3. Assistent</span>
       </div>
       <div class="launcher-bar-title">Rüst-Assistent</div>
       <div class="launcher-bar-desc">Rüst-Legende, Generationen und Stationsübersichten übersichtlich auswählen und einsehen.</div>
@@ -1784,15 +2052,22 @@
     <div class="mat-grid" style="margin-bottom:10px;">
       <select id="mat-line-select" aria-label="Linie auswählen">
         <option value="">— Linie auswählen —</option>
-        <option value="ICAS">ICAS</option>
-        <option value="MRA 2.1">MRA 2.1</option>
-        <option value="MRA KL">MRA KL</option>
-        <option value="MQB-A0">MQB-A0</option>
-        <option value="MQB-A">MQB-A</option>
-        <option value="MEB SAM 1&2">MEB SAM 1&2</option>
-        <option value="MARS">MARS</option>
-
-</select>
+        <optgroup label="Gruppe 1" style="background-color:#eff6ff; color:#1e3a8a;">
+          <option value="Cosma 2" style="background-color:#eff6ff; color:#1e3a8a;">Cosma 2</option>
+          <option value="Cosma 3" style="background-color:#eff6ff; color:#1e3a8a;">Cosma 3</option>
+          <option value="Cosma 4" style="background-color:#eff6ff; color:#1e3a8a;">Cosma 4</option>
+          <option value="KGIS MAU" style="background-color:#eff6ff; color:#1e3a8a;">KGIS MAU</option>
+        </optgroup>
+        <optgroup label="Gruppe 2" style="background-color:#f0fdf4; color:#14532d;">
+          <option value="ICAS" style="background-color:#f0fdf4; color:#14532d;">ICAS</option>
+          <option value="MRA 2.1" style="background-color:#f0fdf4; color:#14532d;">MRA 2.1</option>
+          <option value="MRA KL" style="background-color:#f0fdf4; color:#14532d;">MRA KL</option>
+          <option value="MQB-A0" style="background-color:#f0fdf4; color:#14532d;">MQB-A0</option>
+          <option value="MQB-A" style="background-color:#f0fdf4; color:#14532d;">MQB-A</option>
+          <option value="MEB SAM 1&2" style="background-color:#f0fdf4; color:#14532d;">MEB SAM 1&2</option>
+          <option value="MARS" style="background-color:#f0fdf4; color:#14532d;">MARS</option>
+        </optgroup>
+      </select>
       <select id="mat-material-select" aria-label="Material auswählen">
         <option value="">— Material auswählen (oder frei eingeben) —</option>
       </select>
@@ -1880,7 +2155,6 @@
         <option value="MQB-A">MQB-A</option>
         <option value="MEB SAM 1&2">MEB SAM 1&2</option>
         <option value="MARS">MARS</option>
-        <option value="Cosma">Cosma</option>
       </select>
 
       <div id="ana-cards-multi-wrap" class="ana-cards-multi-wrap" style="grid-column: 1 / -1; margin-bottom: 0;">
@@ -1966,7 +2240,6 @@
         <option value="MEB SAM 1&2">MEB SAM 1&2</option>
         <option value="MARS">MARS</option>
       
-        <option value="Cosma">Cosma</option>
       </select>
       <button type="button" class="secondary qn-mlfb-trigger-btn" id="qn-mlfb-open-btn" style="display:none;">➕ MLFB eingeben</button>
     </div>
@@ -2015,32 +2288,6 @@
       </div>
     </div>
 
-    <div id="qn-cosma-box" class="qn-icas-gen-box" role="region" aria-label="Cosma Materialauswahl und Coding">
-      <div class="qn-icas-select-wrap">
-        <div>
-          <span class="qn-icas-label">Materialauswahl für Cosma:</span>
-          <div id="qn-cosma-mat-buttons" class="qn-btn-group" role="group" aria-label="Gehäuse oder Deckel auswählen">
-            <button type="button" class="qn-choice-btn" data-cosma-mat="Gehäuse">Gehäuse</button>
-            <button type="button" class="qn-choice-btn" data-cosma-mat="Deckel">Deckel</button>
-          </div>
-        </div>
-
-        <div id="qn-cosma-list-panel" class="qn-gen1-type-panel">
-          <span id="qn-cosma-list-label" class="qn-icas-label">Coding auswählen:</span>
-          <div id="qn-cosma-coding-buttons" class="qn-btn-group" role="group" aria-label="Coding Liste auswählen"></div>
-        </div>
-      </div>
-
-      <div id="qn-cosma-result-box" class="qn-gen2-overview" aria-label="Ausgewähltes Cosma Coding">
-        <div class="qn-gen2-overview-title">Ausgewähltes Coding:</div>
-        <div id="qn-cosma-result-text" style="font-size:0.96rem; font-weight:700; padding:4px 6px; white-space:pre-wrap; word-break:break-word;"></div>
-      </div>
-
-      <div id="qn-cosma-copy-bar" class="qn-copy-bar">
-        <button type="button" class="success" id="qn-copy-cosma-btn" style="padding:8px 14px; font-size:0.84rem;">📋 Coding kopieren</button>
-      </div>
-    </div>
-
     <div id="qn-mlfb-box" class="qn-mlfb-box">
       <div id="qn-mlfb-label" style="font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px;">
         Bitte MLFB auswählen:
@@ -2076,23 +2323,27 @@
             <input type="date" id="shift-date" />
           </div>
                     <select id="shift-line-select" aria-label="Linie auswählen">
-            <option value="">— Linie (optional) —</option>
-            <option value="ICAS">ICAS</option>
-            <option value="MRA 2.1">MRA 2.1</option>
-            <option value="MRA KL">MRA KL</option>
-            <option value="MQB-A0">MQB-A0</option>
-            <option value="MQB-A">MQB-A</option>
-            <option value="MEB-SAM 1">MEB-SAM 1</option>
-            <option value="MEB-SAM 2">MEB-SAM 2</option>
-            <option value="MARS">MARS</option>
-            <option value="Cosma 2">Cosma 2</option>
-            <option value="GW2">GW2</option>
-            <option value="Cosma 3">Cosma 3</option>
-            <option value="Cosma 4">Cosma 4</option>
-            <option value="KGIS MAU">KGIS MAU</option>
-            <option value="GW1">GW1</option>
-            <option value="GW3">GW3</option>
-</select>
+                      <option value="">— Linie (optional) —</option>
+                      <optgroup label="Gruppe 1" style="background-color:#eff6ff; color:#1e3a8a;">
+                        <option value="Cosma 2" style="background-color:#eff6ff; color:#1e3a8a;">Cosma 2</option>
+                        <option value="Cosma 3" style="background-color:#eff6ff; color:#1e3a8a;">Cosma 3</option>
+                        <option value="Cosma 4" style="background-color:#eff6ff; color:#1e3a8a;">Cosma 4</option>
+                        <option value="KGIS MAU" style="background-color:#eff6ff; color:#1e3a8a;">KGIS MAU</option>
+                        <option value="GW1" style="background-color:#eff6ff; color:#1e3a8a;">GW1</option>
+                        <option value="GW2" style="background-color:#eff6ff; color:#1e3a8a;">GW2</option>
+                        <option value="GW3" style="background-color:#eff6ff; color:#1e3a8a;">GW3</option>
+                      </optgroup>
+                      <optgroup label="Gruppe 2" style="background-color:#f0fdf4; color:#14532d;">
+                        <option value="ICAS" style="background-color:#f0fdf4; color:#14532d;">ICAS</option>
+                        <option value="MRA 2.1" style="background-color:#f0fdf4; color:#14532d;">MRA 2.1</option>
+                        <option value="MRA KL" style="background-color:#f0fdf4; color:#14532d;">MRA KL</option>
+                        <option value="MQB-A0" style="background-color:#f0fdf4; color:#14532d;">MQB-A0</option>
+                        <option value="MQB-A" style="background-color:#f0fdf4; color:#14532d;">MQB-A</option>
+                        <option value="MEB-SAM 1" style="background-color:#f0fdf4; color:#14532d;">MEB-SAM 1</option>
+                        <option value="MEB-SAM 2" style="background-color:#f0fdf4; color:#14532d;">MEB-SAM 2</option>
+                        <option value="MARS" style="background-color:#f0fdf4; color:#14532d;">MARS</option>
+                      </optgroup>
+                    </select>
         </div>
       </div>
       <div class="card">
@@ -2297,7 +2548,7 @@
       <div id="archive-version-bar-1" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">
         <div class="archive-version-bar-top">
           <span>Versionsverlauf (Letzte 3 Versionen)</span>
-          <span>Aktuell: V5.9</span>
+          <span>Aktuell: V6.0</span>
         </div>
         <div id="archive-version-list-1" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>
       </div>
@@ -2695,11 +2946,11 @@
     return p.length === 3 ? `${p[2]}.${p[1]}.${p[0]}` : iso;
   }
 
-  const VERSION_HISTORY_STORAGE_KEY = 'adem_assistent_version_history_v5_9';
+  const VERSION_HISTORY_STORAGE_KEY = 'adem_assistent_version_history_v6_0';
   const DEFAULT_VERSION_HISTORY = [
+    { version: 'V6.0', text: 'Farbliche Gruppenunterscheidung im Material Assistenten ergänzt und Cosma aus dem Rüst-Assistenten entfernt.' },
     { version: 'V5.9', text: 'Doppelpunkt bei Pin in entfernt, Pin in 0 als Nummer unterstützt und Datumsfeld-Überstand bei Schicht & Datum behoben.' },
-    { version: 'V5.8', text: 'Linienspezifische Stationen & Themen-Buttons in Großbuchstaben (inkl. Cosma 2–4 & GW1–3) hinzugefügt.' },
-    { version: 'V5.7', text: 'Beschreibung im Balken des Analyse Assistenten auf der Startseite entfernt.' }
+    { version: 'V5.8', text: 'Linienspezifische Stationen & Themen-Buttons in Großbuchstaben (inkl. Cosma 2–4 & GW1–3) hinzugefügt.' }
   ];
 
   function loadAppVersionHistory() {
@@ -2730,7 +2981,7 @@
 
   function renderArchiveVersionBars() {
     const trimmed = appVersionHistory.slice(0, 3);
-    const latestVer = trimmed[0]?.version || 'V5.2';
+    const latestVer = trimmed[0]?.version || 'V6.0';
     const badgeEl = document.querySelector('header .badge');
     if (badgeEl) badgeEl.textContent = latestVer;
 
@@ -3846,7 +4097,7 @@
       listEl.innerHTML = `<div style="font-size:0.86rem; color:var(--text-muted); padding:6px 0;">Noch keine Einträge in dieser Schicht (bei SZ wird automatisch KBV ausgegeben).</div>`;
     } else {
       const groupedEntries = groupEntriesByTopic(state.entries);
-      listEl.innerHTML = groupedEntries.map((grp) => {
+      listEl.innerHTML = `<div class="sz-groups-side-by-side">` + groupedEntries.map((grp) => {
         const subRowsHtml = grp.items.map(({ entry: e, origIdx }, subIdx) => {
           if (editingEntryId1 !== null && String(editingEntryId1) === String(e.id)) {
             return `\n              <div class="list-item" style="flex-direction:column; align-items:stretch; gap:8px; background:rgba(0,122,255,0.05); border-radius:14px; padding:10px; margin-top:6px;">\n                <div class="item-title">${e.emoji ? e.emoji + ' ' : ''}${escapeHtml(e.topic)}</div>\n                <textarea id="inline-edit-input-1" rows="3" lang="de" spellcheck="true" oninput="autoResizeInlineTextarea(this)" style="width:100%; min-height:84px; padding:10px 12px; border-radius:12px; border:1.5px solid var(--primary); background:var(--glass-bg); color:var(--text); font-size:0.92rem; line-height:1.45; resize:vertical; overflow-y:auto; white-space:pre-wrap; word-break:break-word;">${escapeHtml(e.text)}</textarea>\n                <div style="display:flex; gap:8px; justify-content:flex-end;">\n                  <button type="button" class="secondary" onclick="editingEntryId1=null; renderAll();" data-cancel-entry-1="${e.id}" data-entry-idx-1="${origIdx}" style="padding:6px 11px; font-size:0.8rem;">Abbrechen</button>\n                  <button type="button" class="success" onclick="commitInlineEdit1('${String(e.id).replace(/'/g, '')}', ${origIdx})" data-save-entry-1="${e.id}" data-entry-idx-1="${origIdx}" style="padding:6px 12px; font-size:0.8rem;">Speichern</button>\n                </div>\n              </div>\n            `;
@@ -5033,7 +5284,7 @@
     if (!contentEl) return;
 
     if (isArchiveTab) {
-      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="archive-version-bar-2" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">\n        <div class="archive-version-bar-top">\n          <span>Versionsverlauf (Letzte 3 Versionen)</span>\n          <span>Aktuell: V5.9</span>\n        </div>\n        <div id="archive-version-list-2" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>\n      </div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
+      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="archive-version-bar-2" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">\n        <div class="archive-version-bar-top">\n          <span>Versionsverlauf (Letzte 3 Versionen)</span>\n          <span>Aktuell: V6.0</span>\n        </div>\n        <div id="archive-version-list-2" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>\n      </div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
       if (typeof renderArchiveVersionBars === 'function') renderArchiveVersionBars();
       document.getElementById('sz-archive-list-2')?.addEventListener('click', (e) => {
         const copyBtn = e.target.closest('[data-copy-arch-2]');
@@ -5063,16 +5314,28 @@
       return;
     }
 
-    contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">\n        <span>Schicht &amp; Datum</span>\n        <span id="auto-shift-hint-2" style="color:var(--primary); font-weight:600;">Auto</span>\n      </div>\n      <div style="display:flex; flex-direction:column; gap:8px;">\n        <div class="shift-grid">\n          <select id="shift-select-2">\n            <option value="AUTO">Automatisch (Uhrzeit)</option>\n            <option value="Frühschicht">Frühschicht (06:00–14:30)</option>\n            <option value="Spätschicht">Spätschicht (14:30–23:00)</option>\n            <option value="Nachtschicht">Nachtschicht (23:00–06:00)</option>\n          </select>\n          <input type="date" id="shift-date-2" />\n        </div>\n        <select id="shift-line-select-2" aria-label="Linie auswählen">\n          <option value="">— Linie (optional) —</option>\n          <option value="ICAS">ICAS</option>\n          <option value="MRA 2.1">MRA 2.1</option>\n          <option value="MRA KL">MRA KL</option>\n          <option value="MQB-A0">MQB-A0</option>\n          <option value="MQB-A">MQB-A</option>\n          <option value="MEB-SAM 1">MEB-SAM 1</option>
-          <option value="MEB-SAM 2">MEB-SAM 2</option>\n          <option value="MARS">MARS</option>
-          <option value="Cosma 2">Cosma 2</option>
-          <option value="GW2">GW2</option>
-          <option value="Cosma 3">Cosma 3</option>
-          <option value="Cosma 4">Cosma 4</option>
-          <option value="KGIS MAU">KGIS MAU</option>
-          <option value="GW1">GW1</option>
-          <option value="GW3">GW3</option>
-</select>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">1. Thema anklicken &amp; Fehler + Maßnahme eintragen</div>\n\n      <div class="quick-topics" id="topic-chips-container-2">\n        <button type="button" class="topic-chip" data-topic="ICT">🔴 ICT</button>\n        <button type="button" class="topic-chip" data-topic="Flasher">🔴 Flasher</button>\n        <button type="button" class="topic-chip" data-topic="EP">🔴 EP</button>\n        <button type="button" class="topic-chip" data-topic="VP">🔴 VP</button>\n        <button type="button" class="topic-chip" data-topic="HF">🔴 HF</button>\n        <button type="button" class="topic-chip" data-topic="AOI">⚫ AOI</button>\n        <button type="button" class="topic-chip" data-topic="AXI">⚫ AXI</button>\n        <button type="button" class="topic-chip" data-topic="Pin Insertion">🟠 Pin In</button>\n        <button type="button" class="topic-chip" data-topic="Fräse">🟣 Fräse</button>\n        <button type="button" class="topic-chip" data-topic="HGN">🟡 HGN</button>\n        <button type="button" class="topic-chip" data-topic="Verpackplatz">🟡 Verpack</button>\n        <button type="button" class="topic-chip" data-topic="Roboterzelle">🟡 Roboter</button>\n        <button type="button" class="topic-chip" data-topic="AGV">🟤 AGV</button>\n        <button type="button" class="topic-chip" data-topic="KB">🔵 KB</button>\n        <button type="button" class="topic-chip" data-topic="Lötstation">⚪ Lötstation</button>\n        <button type="button" class="topic-chip" data-topic="Orga">🟢 Orga</button>\n        <button type="button" class="topic-chip" data-topic="Analysen">🟢 Analysen</button>\n        <button type="button" class="topic-chip" data-topic="Material und Qualifizierung">📦 Material/Quali</button>\n        <button type="button" class="topic-chip" data-topic="KBV">🟢 KBV</button>\n        <button type="button" class="topic-chip" data-topic="Sonstiges">🔵 Sonstiges</button>\n      </div>\n\n      <div id="ict-submenu-2" class="ict-submenu" role="region" aria-label="ICT Vorschläge">\n        <div class="ict-submenu-header">\n          <span>🔴 ICT Untermenü – Vorauswahl / Vorschlag:</span>\n          <button type="button" class="secondary" id="close-ict-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="ict-submenu-actions">\n          <button type="button" class="ict-suggestion-chip" id="ict-suggest-pin-btn-2" data-suggestion="Pin gewechselt">💡 Vorschlag: Pin gewechselt</button>\n          <button type="button" class="ict-suggestion-chip" id="ict-append-pin-btn-2" data-append-suggestion="Pin gewechselt">+ → Pin gewechselt</button>\n        </div>\n      </div>\n\n      <div id="analysen-submenu-2" class="analysen-submenu" role="region" aria-label="Analysen Vorschläge">\n        <div class="analysen-submenu-header">\n          <span>🟢 Analysen Untermenü – Vorauswahl / Vorschlag:</span>\n          <button type="button" class="secondary" id="close-analysen-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="analysen-submenu-actions">\n          <button type="button" class="analysen-suggestion-chip" id="analysen-suggest-eingeschleust-btn-2" data-suggestion="Alles eingeschleust">💡 Vorschlag: Alles eingeschleust</button>\n          <button type="button" class="analysen-suggestion-chip" id="analysen-append-eingeschleust-btn-2" data-append-suggestion="Alles eingeschleust">+ → Alles eingeschleust</button>\n        </div>\n      </div>\n\n      <div class="active-topic-banner">\n        <span>Gewähltes Thema: <strong id="selected-topic-label-2">Kein Thema gewählt</strong></span>\n        <button type="button" class="secondary" id="reset-topic-btn-2" style="padding:4px 9px; font-size:0.75rem;">Reset</button>\n      </div>\n\n            <div id="pinin-submenu-2" class="analysen-submenu" role="region" aria-label="Pin In Nummer">
+    contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">\n        <span>Schicht &amp; Datum</span>\n        <span id="auto-shift-hint-2" style="color:var(--primary); font-weight:600;">Auto</span>\n      </div>\n      <div style="display:flex; flex-direction:column; gap:8px;">\n        <div class="shift-grid">\n          <select id="shift-select-2">\n            <option value="AUTO">Automatisch (Uhrzeit)</option>\n            <option value="Frühschicht">Frühschicht (06:00–14:30)</option>\n            <option value="Spätschicht">Spätschicht (14:30–23:00)</option>\n            <option value="Nachtschicht">Nachtschicht (23:00–06:00)</option>\n          </select>\n          <input type="date" id="shift-date-2" />\n        </div>\n        <select id="shift-line-select-2" aria-label="Linie auswählen">
+          <option value="">— Linie (optional) —</option>
+          <optgroup label="Gruppe 1" style="background-color:#eff6ff; color:#1e3a8a;">
+            <option value="Cosma 2" style="background-color:#eff6ff; color:#1e3a8a;">Cosma 2</option>
+            <option value="Cosma 3" style="background-color:#eff6ff; color:#1e3a8a;">Cosma 3</option>
+            <option value="Cosma 4" style="background-color:#eff6ff; color:#1e3a8a;">Cosma 4</option>
+            <option value="KGIS MAU" style="background-color:#eff6ff; color:#1e3a8a;">KGIS MAU</option>
+            <option value="GW1" style="background-color:#eff6ff; color:#1e3a8a;">GW1</option>
+            <option value="GW2" style="background-color:#eff6ff; color:#1e3a8a;">GW2</option>
+            <option value="GW3" style="background-color:#eff6ff; color:#1e3a8a;">GW3</option>
+          </optgroup>
+          <optgroup label="Gruppe 2" style="background-color:#f0fdf4; color:#14532d;">
+            <option value="ICAS" style="background-color:#f0fdf4; color:#14532d;">ICAS</option>
+            <option value="MRA 2.1" style="background-color:#f0fdf4; color:#14532d;">MRA 2.1</option>
+            <option value="MRA KL" style="background-color:#f0fdf4; color:#14532d;">MRA KL</option>
+            <option value="MQB-A0" style="background-color:#f0fdf4; color:#14532d;">MQB-A0</option>
+            <option value="MQB-A" style="background-color:#f0fdf4; color:#14532d;">MQB-A</option>
+            <option value="MEB-SAM 1" style="background-color:#f0fdf4; color:#14532d;">MEB-SAM 1</option>
+            <option value="MEB-SAM 2" style="background-color:#f0fdf4; color:#14532d;">MEB-SAM 2</option>
+            <option value="MARS" style="background-color:#f0fdf4; color:#14532d;">MARS</option>
+          </optgroup>
+        </select>\n      </div>\n    </div>\n\n    <div class="card">\n      <div class="card-title">1. Thema anklicken &amp; Fehler + Maßnahme eintragen</div>\n\n      <div class="quick-topics" id="topic-chips-container-2">\n        <button type="button" class="topic-chip" data-topic="ICT">🔴 ICT</button>\n        <button type="button" class="topic-chip" data-topic="Flasher">🔴 Flasher</button>\n        <button type="button" class="topic-chip" data-topic="EP">🔴 EP</button>\n        <button type="button" class="topic-chip" data-topic="VP">🔴 VP</button>\n        <button type="button" class="topic-chip" data-topic="HF">🔴 HF</button>\n        <button type="button" class="topic-chip" data-topic="AOI">⚫ AOI</button>\n        <button type="button" class="topic-chip" data-topic="AXI">⚫ AXI</button>\n        <button type="button" class="topic-chip" data-topic="Pin Insertion">🟠 Pin In</button>\n        <button type="button" class="topic-chip" data-topic="Fräse">🟣 Fräse</button>\n        <button type="button" class="topic-chip" data-topic="HGN">🟡 HGN</button>\n        <button type="button" class="topic-chip" data-topic="Verpackplatz">🟡 Verpack</button>\n        <button type="button" class="topic-chip" data-topic="Roboterzelle">🟡 Roboter</button>\n        <button type="button" class="topic-chip" data-topic="AGV">🟤 AGV</button>\n        <button type="button" class="topic-chip" data-topic="KB">🔵 KB</button>\n        <button type="button" class="topic-chip" data-topic="Lötstation">⚪ Lötstation</button>\n        <button type="button" class="topic-chip" data-topic="Orga">🟢 Orga</button>\n        <button type="button" class="topic-chip" data-topic="Analysen">🟢 Analysen</button>\n        <button type="button" class="topic-chip" data-topic="Material und Qualifizierung">📦 Material/Quali</button>\n        <button type="button" class="topic-chip" data-topic="KBV">🟢 KBV</button>\n        <button type="button" class="topic-chip" data-topic="Sonstiges">🔵 Sonstiges</button>\n      </div>\n\n      <div id="ict-submenu-2" class="ict-submenu" role="region" aria-label="ICT Vorschläge">\n        <div class="ict-submenu-header">\n          <span>🔴 ICT Untermenü – Vorauswahl / Vorschlag:</span>\n          <button type="button" class="secondary" id="close-ict-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="ict-submenu-actions">\n          <button type="button" class="ict-suggestion-chip" id="ict-suggest-pin-btn-2" data-suggestion="Pin gewechselt">💡 Vorschlag: Pin gewechselt</button>\n          <button type="button" class="ict-suggestion-chip" id="ict-append-pin-btn-2" data-append-suggestion="Pin gewechselt">+ → Pin gewechselt</button>\n        </div>\n      </div>\n\n      <div id="analysen-submenu-2" class="analysen-submenu" role="region" aria-label="Analysen Vorschläge">\n        <div class="analysen-submenu-header">\n          <span>🟢 Analysen Untermenü – Vorauswahl / Vorschlag:</span>\n          <button type="button" class="secondary" id="close-analysen-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>\n        </div>\n        <div class="analysen-submenu-actions">\n          <button type="button" class="analysen-suggestion-chip" id="analysen-suggest-eingeschleust-btn-2" data-suggestion="Alles eingeschleust">💡 Vorschlag: Alles eingeschleust</button>\n          <button type="button" class="analysen-suggestion-chip" id="analysen-append-eingeschleust-btn-2" data-append-suggestion="Alles eingeschleust">+ → Alles eingeschleust</button>\n        </div>\n      </div>\n\n      <div class="active-topic-banner">\n        <span>Gewähltes Thema: <strong id="selected-topic-label-2">Kein Thema gewählt</strong></span>\n        <button type="button" class="secondary" id="reset-topic-btn-2" style="padding:4px 9px; font-size:0.75rem;">Reset</button>\n      </div>\n\n            <div id="pinin-submenu-2" class="analysen-submenu" role="region" aria-label="Pin In Nummer">
         <div class="analysen-submenu-header">
           <span>🟠 Pin In – Nummer eingeben (z. B. 0, 1, 2 → Pin in 0 / Pin in 2, leer → Pin in):</span>
           <button type="button" class="secondary" id="close-pinin-submenu-btn-2" style="padding:2px 8px; font-size:0.72rem; border-radius:999px;">✕</button>
@@ -5167,7 +5430,7 @@
         entriesList2.innerHTML = `<div style="font-size:0.86rem; color:var(--text-muted); padding:6px 0;">Noch keine Einträge in dieser Schicht (bei SZ wird automatisch KBV ausgegeben).</div>`;
       } else {
         const groupedEntries2 = groupEntriesByTopic(state2.entries);
-        entriesList2.innerHTML = groupedEntries2.map((grp) => {
+        entriesList2.innerHTML = `<div class="sz-groups-side-by-side">` + groupedEntries2.map((grp) => {
           const subRowsHtml = grp.items.map(({ entry: e, origIdx }, subIdx) => {
             if (editingEntryId2 !== null && String(editingEntryId2) === String(e.id)) {
               return `\n                <div class="list-item" style="flex-direction:column; align-items:stretch; gap:8px; background:rgba(0,122,255,0.05); border-radius:14px; padding:10px; margin-top:6px;">\n                  <div class="item-title">${e.emoji ? e.emoji + ' ' : ''}${escapeHtml(e.topic)}</div>\n                  <textarea id="inline-edit-input-2" rows="3" lang="de" spellcheck="true" oninput="autoResizeInlineTextarea(this)" style="width:100%; min-height:84px; padding:10px 12px; border-radius:12px; border:1.5px solid var(--primary); background:var(--glass-bg); color:var(--text); font-size:0.92rem; line-height:1.45; resize:vertical; overflow-y:auto; white-space:pre-wrap; word-break:break-word;">${escapeHtml(e.text)}</textarea>\n                  <div style="display:flex; gap:8px; justify-content:flex-end;">\n                    <button type="button" class="secondary" onclick="editingEntryId2=null; renderSecondPane();" data-cancel-entry-2="${e.id}" data-entry-idx-2="${origIdx}" style="padding:6px 11px; font-size:0.8rem;">Abbrechen</button>\n                    <button type="button" class="success" onclick="commitInlineEdit2('${String(e.id).replace(/'/g, '')}', ${origIdx})" data-save-entry-2="${e.id}" data-entry-idx-2="${origIdx}" style="padding:6px 12px; font-size:0.8rem;">Speichern</button>\n                  </div>\n                </div>\n              `;
@@ -5367,14 +5630,45 @@
       if (matItems.length === 0) {
         listEl.innerHTML = `<div style="font-size:0.86rem; color:var(--text-muted); padding:6px 0;">Noch keine Materialeinträge vorhanden.</div>`;
       } else {
-        listEl.innerHTML = matItems.map((m, i) => {
-          const lineTag = m.line ? ` [${escapeHtml(m.line)}]` : '';
-          const prioBadge = m.priority === 'Kritisch / Linienstopp'
-            ? `<span style="display:inline-block; margin-left:6px; padding:1px 8px; border-radius:999px; font-size:0.74rem; font-weight:800; background:rgba(239,68,68,0.14); color:#dc2626; border:1px solid rgba(239,68,68,0.35);">🔴 Kritisch / Linienstopp</span>`
-            : `<span style="display:inline-block; margin-left:6px; padding:1px 8px; border-radius:999px; font-size:0.74rem; font-weight:700; background:rgba(16,185,129,0.12); color:#059669; border:1px solid rgba(16,185,129,0.3);">🟢 Normal</span>`;
-          const maPart = m.maInformed ? ` · <strong>MA informiert?</strong> ${escapeHtml(m.maInformed)}` : ` · <strong>MA informiert?</strong> -`;
-          return `\n      <div class="list-item">\n        <div>\n          <div class="item-title">${i + 1}.${lineTag} ${escapeHtml(m.item)} ${prioBadge}</div>\n          <div class="item-sub">${m.qty ? '<strong>Aktueller Bestand:</strong> ' + escapeHtml(m.qty) : '<strong>Aktueller Bestand:</strong> -'}${maPart}</div>\n        </div>\n        <button type="button" class="danger" data-del-mat="${m.id}">✕</button>\n      </div>\n    `;
-        }).join('');
+        const matGroups = [];
+        const matGroupMap = new Map();
+        matItems.forEach((m, i) => {
+          const gKey = (m.line && String(m.line).trim()) ? String(m.line).trim() : 'Ohne Linie';
+          if (!matGroupMap.has(gKey)) {
+            const grpObj = { lineName: gKey, entries: [] };
+            matGroupMap.set(gKey, grpObj);
+            matGroups.push(grpObj);
+          }
+          matGroupMap.get(gKey).entries.push({ m, idx: i });
+        });
+
+        listEl.innerHTML = `<div class="mat-groups-side-by-side">` + matGroups.map((grp) => {
+          const rowsHtml = grp.entries.map(({ m, idx }) => {
+            const prioBadge = m.priority === 'Kritisch / Linienstopp'
+              ? `<span style="display:inline-block; margin-left:6px; padding:1px 8px; border-radius:999px; font-size:0.74rem; font-weight:800; background:rgba(239,68,68,0.14); color:#dc2626; border:1px solid rgba(239,68,68,0.35);">🔴 Kritisch / Linienstopp</span>`
+              : `<span style="display:inline-block; margin-left:6px; padding:1px 8px; border-radius:999px; font-size:0.74rem; font-weight:700; background:rgba(16,185,129,0.12); color:#059669; border:1px solid rgba(16,185,129,0.3);">🟢 Normal</span>`;
+            const maPart = m.maInformed ? ` · <strong>MA informiert?</strong> ${escapeHtml(m.maInformed)}` : ` · <strong>MA informiert?</strong> -`;
+            return `
+      <div class="list-item" style="padding:8px 0;">
+        <div>
+          <div class="item-title">${idx + 1}. ${escapeHtml(m.item)} ${prioBadge}</div>
+          <div class="item-sub">${m.qty ? '<strong>Aktueller Bestand:</strong> ' + escapeHtml(m.qty) : '<strong>Aktueller Bestand:</strong> -'}${maPart}</div>
+        </div>
+        <button type="button" class="danger" data-del-mat="${m.id}">✕</button>
+      </div>
+    `;
+          }).join('');
+
+          return `
+      <div class="mat-group-col">
+        <div class="mat-group-col-title">
+          <span>${escapeHtml(grp.lineName)}</span>
+          <span style="font-size:0.78rem; color:var(--primary);">${grp.entries.length}</span>
+        </div>
+        <div>${rowsHtml}</div>
+      </div>
+    `;
+        }).join('') + `</div>`;
       }
     }
     renderMaterialCopyPreview();
@@ -6092,8 +6386,7 @@
     'MRA KL': Object.keys(MRA_KL_MLFB_DETAILS),
     'MQB-A0': MQB_A0_VARIANTS.map(v => v.typ),
     'MEB SAM 1&2': MEB_SAM_VARIANTS.map(v => v.mlfb),
-    'MARS': MARS_VARIANTS.map(v => v.mlfb),
-    'Cosma': COSMA_VARIANTS.map(v => v.name)
+    'MARS': MARS_VARIANTS.map(v => v.mlfb)
   };
 
   let selectedQnMlfbType = '';
@@ -6593,8 +6886,7 @@
       icasBox.classList.toggle('open', isIcas);
     }
 
-    const isCosma = lineVal === 'Cosma';
-    if (isIcas || isCosma) {
+    if (isIcas) {
       selectedQnMlfbType = '';
       if (mlfbOpenBtn) mlfbOpenBtn.style.display = 'none';
       if (mlfbBox) mlfbBox.classList.remove('open');
@@ -6623,7 +6915,6 @@
     renderMlfbTypeButtons();
     syncMlfbCopyVisibility();
     renderIcasSelectionAndOverviews();
-    if (typeof renderCosmaAssistent === 'function') renderCosmaAssistent();
   }
 
   document.getElementById('qn-icas-gen-buttons')?.addEventListener('click', (e) => {
@@ -6658,14 +6949,6 @@
     syncQnLineAndMlfbUI();
     const lineSel = document.getElementById('qn-line-select');
     const lineVal = (lineSel?.value || '').trim();
-    if (lineVal === 'Cosma') {
-      selectedCosmaMat = '';
-      selectedCosmaCodingIdx = -1;
-      const mlfbBox = document.getElementById('qn-mlfb-box');
-      if (mlfbBox) mlfbBox.classList.remove('open');
-      if (typeof renderCosmaAssistent === 'function') renderCosmaAssistent();
-      return;
-    }
     if (lineVal && lineVal !== 'ICAS') {
       const mlfbBox = document.getElementById('qn-mlfb-box');
       if (mlfbBox) mlfbBox.classList.add('open');
@@ -6766,6 +7049,59 @@ MLFB: ${mlfbVal}`, 'MLFB kopiert!');
   document.getElementById('back-to-launcher-btn')?.addEventListener('click', () => openAppMode('launcher'));
 
   const LINE_MATERIAL_OPTIONS = {
+    'Cosma 2': [
+      {
+        group: 'Gehäuse',
+        items: [
+          { label: 'BMW FBD5s → A3C1063480000', value: 'BMW FBD5s → A3C1063480000' },
+          { label: 'BMW FBD5 → A3C1063460000', value: 'BMW FBD5 → A3C1063460000' }
+        ]
+      },
+      {
+        group: 'Deckel',
+        items: [
+          { label: 'BMW FBD5s → A3C0449810400', value: 'BMW FBD5s → A3C0449810400' },
+          { label: 'BMW FBD5 → A3C0449780400', value: 'BMW FBD5 → A3C0449780400' }
+        ]
+      }
+    ],
+    'Cosma 3': [
+      {
+        group: 'Gehäuse',
+        items: [
+          { label: 'Mercedes Coding A → A3C0644360400', value: 'Mercedes Coding A → A3C0644360400' },
+          { label: 'Mercedes Coding B → A3C1034420000', value: 'Mercedes Coding B → A3C1034420000' },
+          { label: 'Mercedes Coding C → A3C1034430000', value: 'Mercedes Coding C → A3C1034430000' },
+          { label: 'BMW FBD5s → A3C1063480000', value: 'BMW FBD5s → A3C1063480000' }
+        ]
+      },
+      {
+        group: 'Deckel',
+        items: [
+          { label: 'Mercedes → A3C0644350500', value: 'Mercedes → A3C0644350500' },
+          { label: 'BMW FBD5s → A3C0449810400', value: 'BMW FBD5s → A3C0449810400' }
+        ]
+      }
+    ],
+    'Cosma 4': [
+      {
+        group: 'Gehäuse',
+        items: [
+          { label: 'Audi Coding A → A3C0755580400', value: 'Audi Coding A → A3C0755580400' },
+          { label: 'Audi Coding B → A3C0858810200', value: 'Audi Coding B → A3C0858810200' },
+          { label: 'Audi Coding C → A3C1137340000', value: 'Audi Coding C → A3C1137340000' },
+          { label: 'Audi Coding D → AAA2817310000', value: 'Audi Coding D → AAA2817310000' },
+          { label: 'BMW FBD5 → A3C1063460000', value: 'BMW FBD5 → A3C1063460000' }
+        ]
+      },
+      {
+        group: 'Deckel',
+        items: [
+          { label: 'Audi → A3C0755570200', value: 'Audi → A3C0755570200' },
+          { label: 'BMW FBD5 → A3C0449780400', value: 'BMW FBD5 → A3C0449780400' }
+        ]
+      }
+    ],
     'ICAS': [
       { label: 'Gehäuse GEN2 → AAA2425900000', value: 'Gehäuse GEN2 → AAA2425900000' },
       { label: 'Deckel GEN2 → AAA2425910000', value: 'Deckel GEN2 → AAA2425910000' },
@@ -6806,6 +7142,10 @@ MLFB: ${mlfbVal}`, 'MLFB kopiert!');
       { label: 'C04 Stecker → A2C77490404', value: 'C04 Stecker → A2C77490404' },
       { label: 'E82 Stecker → A2C75028204', value: 'E82 Stecker → A2C75028204' },
       { label: 'D05 Stecker → A2C7749054', value: 'D05 Stecker → A2C7749054' }
+    ],
+    'KGIS MAU': [
+      { label: 'GOT (Weiß) → A3C0723180700', value: 'GOT (Weiß) → A3C0723180700' },
+      { label: 'GUT (Schwarz) → A3C0723190700', value: 'GUT (Schwarz) → A3C0723190700' }
     ]
   };
 
@@ -6816,28 +7156,47 @@ MLFB: ${mlfbVal}`, 'MLFB kopiert!');
     if (!lineSel || !matSel) return;
 
     const lineKey = lineSel.value;
-    const opts = Object.prototype.hasOwnProperty.call(LINE_MATERIAL_OPTIONS, lineKey)
+    const rawOpts = Object.prototype.hasOwnProperty.call(LINE_MATERIAL_OPTIONS, lineKey)
       ? LINE_MATERIAL_OPTIONS[lineKey]
       : [];
+
+    const hasGroups = rawOpts.some(entry => entry && Array.isArray(entry.items));
+    const totalCount = hasGroups
+      ? rawOpts.reduce((acc, g) => acc + g.items.length, 0)
+      : rawOpts.length;
 
     matSel.innerHTML = '';
     const placeholderOpt = document.createElement('option');
     placeholderOpt.value = '';
     if (!lineKey) {
       placeholderOpt.textContent = '— Zuerst Linie wählen oder Material eingeben —';
-    } else if (opts.length === 0) {
+    } else if (totalCount === 0) {
       placeholderOpt.textContent = `— Keine hinterlegten Materialien für ${lineKey} (frei eingeben) —`;
     } else {
       placeholderOpt.textContent = `— Material für ${lineKey} auswählen —`;
     }
     matSel.appendChild(placeholderOpt);
 
-    opts.forEach((o) => {
-      const optEl = document.createElement('option');
-      optEl.value = o.value;
-      optEl.textContent = o.label;
-      matSel.appendChild(optEl);
-    });
+    if (hasGroups) {
+      rawOpts.forEach((grp) => {
+        const optGroupEl = document.createElement('optgroup');
+        optGroupEl.label = grp.group;
+        (grp.items || []).forEach((o) => {
+          const optEl = document.createElement('option');
+          optEl.value = o.value;
+          optEl.textContent = o.label;
+          optGroupEl.appendChild(optEl);
+        });
+        matSel.appendChild(optGroupEl);
+      });
+    } else {
+      rawOpts.forEach((o) => {
+        const optEl = document.createElement('option');
+        optEl.value = o.value;
+        optEl.textContent = o.label;
+        matSel.appendChild(optEl);
+      });
+    }
 
     if (!keepExistingItemValue && itemInp) {
       itemInp.value = '';
@@ -7160,123 +7519,6 @@ MLFB: ${mlfbVal}`, 'MLFB kopiert!');
     applyAnalysenSuggestion('entry-input', true);
   });
 
-  // --- Cosma Rüst-Assistent (Gehäusecoding & Deckelcoding) ---
-  const COSMA_GEHAEUSE_CODING = [
-    { label: 'MERCEDES Coding A', target: 'A3C0644360400 (Blaues Quadrat)' },
-    { label: 'MERCEDES Coding B', target: 'A3C1034420000 (Weißes Quadrat)' },
-    { label: 'MERCEDES Coding C', target: 'A3C1034430000 (Rotes Quadrat)' },
-    { label: 'AUDI Coding A', target: 'A3C0755580400 (Blaues Dreieck)' },
-    { label: 'AUDI Coding B', target: 'A3C0858810200 (Weißes Dreieck)' },
-    { label: 'AUDI Coding C', target: 'A3C1137340000 (Rotes Dreieck)' },
-    { label: 'AUDI Coding D', target: 'AAA2817310000 (Gelbes Dreieck)' },
-    { label: 'BMW FBD5', target: 'A3C1063460000 (Blauer kreis)' },
-    { label: 'BMW FBD5s', target: 'A3C1063480000 (Roter Kreis)' }
-  ];
-
-  const COSMA_DECKEL_CODING = [
-    { label: 'BMW FBD5', target: 'A3C0449780400 (Kreis, Gelb umrandet)' },
-    { label: 'BMW FBD5s', target: 'A3C0449810400 (Kreis, weiß umrandet)' },
-    { label: 'MERCEDES', target: 'A3C0644350500 (Quadrat, Grün umrandet)' },
-    { label: 'AUDI', target: 'A3C0755570200 (Dreieck, Grün umrandet)' }
-  ];
-
-  let selectedCosmaMat = '';
-  let selectedCosmaCodingIdx = -1;
-
-  function getCosmaItemsForMaterial(mat) {
-    if (mat === 'Gehäuse') return COSMA_GEHAEUSE_CODING;
-    if (mat === 'Deckel') return COSMA_DECKEL_CODING;
-    return [];
-  }
-
-  function getActiveCosmaFormattedLine() {
-    const lineVal = (document.getElementById('qn-line-select')?.value || '').trim();
-    if (lineVal !== 'Cosma' || !selectedCosmaMat) return '';
-    const items = getCosmaItemsForMaterial(selectedCosmaMat);
-    if (selectedCosmaCodingIdx < 0 || selectedCosmaCodingIdx >= items.length) return '';
-    const entry = items[selectedCosmaCodingIdx];
-    return `${entry.label} -> ${entry.target}`;
-  }
-
-  function renderCosmaAssistent() {
-    const lineVal = (document.getElementById('qn-line-select')?.value || '').trim();
-    const isCosma = lineVal === 'Cosma';
-    const cosmaBox = document.getElementById('qn-cosma-box');
-    const listPanel = document.getElementById('qn-cosma-list-panel');
-    const listLabel = document.getElementById('qn-cosma-list-label');
-    const codingBtnsEl = document.getElementById('qn-cosma-coding-buttons');
-    const resultBox = document.getElementById('qn-cosma-result-box');
-    const resultTextEl = document.getElementById('qn-cosma-result-text');
-    const copyBar = document.getElementById('qn-cosma-copy-bar');
-
-    if (!cosmaBox) return;
-    cosmaBox.classList.toggle('open', isCosma);
-
-    if (!isCosma) {
-      selectedCosmaMat = '';
-      selectedCosmaCodingIdx = -1;
-      listPanel?.classList.remove('open');
-      resultBox?.classList.remove('open');
-      copyBar?.classList.remove('open');
-      return;
-    }
-
-    document.querySelectorAll('#qn-cosma-mat-buttons .qn-choice-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.cosmaMat === selectedCosmaMat);
-    });
-
-    const items = getCosmaItemsForMaterial(selectedCosmaMat);
-    if (!selectedCosmaMat || items.length === 0) {
-      listPanel?.classList.remove('open');
-      if (codingBtnsEl) codingBtnsEl.innerHTML = '';
-      resultBox?.classList.remove('open');
-      copyBar?.classList.remove('open');
-      return;
-    }
-
-    listPanel?.classList.add('open');
-    if (listLabel) {
-      listLabel.textContent = selectedCosmaMat === 'Gehäuse'
-        ? 'Gehäusecoding auswählen:'
-        : 'Deckelcoding auswählen:';
-    }
-
-    if (codingBtnsEl) {
-      codingBtnsEl.innerHTML = items.map((item, idx) => {
-        const isSel = idx === selectedCosmaCodingIdx;
-        return `<button type="button" class="qn-choice-btn${isSel ? ' active' : ''}" data-cosma-idx="${idx}">${escapeHtml(item.label)}</button>`;
-      }).join('');
-    }
-
-    const formatted = getActiveCosmaFormattedLine();
-    if (formatted && resultBox && resultTextEl) {
-      resultTextEl.textContent = formatted;
-      resultBox.classList.add('open');
-      copyBar?.classList.add('open');
-    } else {
-      resultBox?.classList.remove('open');
-      copyBar?.classList.remove('open');
-    }
-  }
-
-  document.getElementById('qn-cosma-mat-buttons')?.addEventListener('click', (e) => {
-    const btn = e.target.closest('.qn-choice-btn[data-cosma-mat]');
-    if (!btn) return;
-    const nextMat = btn.dataset.cosmaMat || '';
-    selectedCosmaMat = (selectedCosmaMat === nextMat) ? '' : nextMat;
-    selectedCosmaCodingIdx = -1;
-    renderCosmaAssistent();
-  });
-
-  document.getElementById('qn-cosma-coding-buttons')?.addEventListener('click', (e) => {
-    const btn = e.target.closest('.qn-choice-btn[data-cosma-idx]');
-    if (!btn) return;
-    const idx = Number(btn.dataset.cosmaIdx);
-    if (Number.isNaN(idx)) return;
-    selectedCosmaCodingIdx = (selectedCosmaCodingIdx === idx) ? -1 : idx;
-    renderCosmaAssistent();
-  });
-
 
   // --- Analyse Assistent ---
   const ANA_STORAGE_KEY = 'analyse_assistent_v2';
@@ -7451,7 +7693,7 @@ MLFB: ${mlfbVal}`, 'MLFB kopiert!');
               <button type="button" class="danger" data-del-ana="${a.id}">✕</button>
             </div>
           `;
-        }).join('');
+        }).join('') + `</div>`;
       }
     }
 
@@ -7917,6 +8159,254 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+
+  // --- Zweispaltiges Linien-Dropdown: Gruppe 1 links, Gruppe 2 rechts ---
+  (function initDualGroupLineDropdowns() {
+    const TARGET_SELECT_IDS = ['shift-line-select', 'shift-line-select-2', 'mat-line-select'];
+    const instances = new Map();
+    let activePopoverSelectId = null;
+
+    function closeAllPopovers(restoreFocus = false) {
+      let prevTrigger = null;
+      instances.forEach((inst) => {
+        if (inst.popover.classList.contains('open')) {
+          prevTrigger = inst.trigger;
+        }
+        inst.popover.classList.remove('open');
+        inst.trigger.classList.remove('open');
+      });
+      activePopoverSelectId = null;
+      if (restoreFocus && prevTrigger) {
+        prevTrigger.focus();
+      }
+    }
+
+    function positionPopover(inst) {
+      const rect = inst.trigger.getBoundingClientRect();
+      const pop = inst.popover;
+      const desiredWidth = Math.max(rect.width, 320);
+      const maxWidth = Math.min(window.innerWidth - 20, 560);
+      const width = Math.min(desiredWidth, Math.max(280, maxWidth));
+      pop.style.width = width + 'px';
+
+      let left = rect.left;
+      if (left + width > window.innerWidth - 10) {
+        left = window.innerWidth - width - 10;
+      }
+      if (left < 10) left = 10;
+      pop.style.left = left + 'px';
+
+      const popHeight = pop.offsetHeight || 280;
+      const spaceBelow = window.innerHeight - rect.bottom - 12;
+      const spaceAbove = rect.top - 12;
+      let top;
+      if (spaceBelow >= Math.min(popHeight, 220) || spaceBelow >= spaceAbove) {
+        top = Math.min(rect.bottom + 6, window.innerHeight - popHeight - 10);
+      } else {
+        top = Math.max(10, rect.top - popHeight - 6);
+      }
+      pop.style.top = top + 'px';
+    }
+
+    function syncTriggerFromSelect(selectEl) {
+      const inst = instances.get(selectEl.id);
+      if (!inst) return;
+      const selectedOpt = selectEl.options[selectEl.selectedIndex];
+      const emptyOpt = selectEl.querySelector('option[value=""]');
+      const placeholderText = emptyOpt ? emptyOpt.textContent.trim() : '— Linie auswählen —';
+      const currentVal = selectEl.value;
+      const labelText = currentVal && selectedOpt ? selectedOpt.textContent.trim() : placeholderText;
+
+      inst.labelSpan.textContent = labelText;
+      inst.labelSpan.style.color = currentVal ? '' : 'var(--text-muted)';
+      inst.trigger.classList.toggle('mat-field-missing', selectEl.classList.contains('mat-field-missing'));
+
+      inst.popover.querySelectorAll('.line-dual-opt-btn').forEach((btn) => {
+        btn.classList.toggle('selected', btn.dataset.val === currentVal);
+      });
+    }
+
+    function enhanceSelect(selectEl) {
+      if (!selectEl || selectEl.dataset.dualEnhanced === '1') return;
+      const optgroups = Array.from(selectEl.querySelectorAll('optgroup'));
+      if (optgroups.length < 2) return;
+
+      const g1 = optgroups[0];
+      const g2 = optgroups[1];
+      const emptyOpt = selectEl.querySelector('option[value=""]');
+      const placeholderText = emptyOpt ? emptyOpt.textContent.trim() : '— Linie auswählen —';
+
+      const wrap = document.createElement('div');
+      wrap.className = 'line-select-enh-wrap is-enhanced';
+
+      const trigger = document.createElement('button');
+      trigger.type = 'button';
+      trigger.className = 'line-dual-trigger';
+      trigger.setAttribute('aria-label', selectEl.getAttribute('aria-label') || 'Linie auswählen');
+
+      const labelSpan = document.createElement('span');
+      labelSpan.className = 'line-dual-trigger-text';
+      labelSpan.textContent = placeholderText;
+
+      const arrowSpan = document.createElement('span');
+      arrowSpan.className = 'line-dual-arrow';
+      arrowSpan.textContent = '▾';
+
+      trigger.appendChild(labelSpan);
+      trigger.appendChild(arrowSpan);
+
+      const popover = document.createElement('div');
+      popover.className = 'line-dual-popover';
+      popover.setAttribute('role', 'listbox');
+
+      const resetRow = document.createElement('div');
+      resetRow.className = 'line-dual-reset-row';
+      const resetBtn = document.createElement('button');
+      resetBtn.type = 'button';
+      resetBtn.className = 'line-dual-reset-btn';
+      resetBtn.textContent = placeholderText;
+      resetBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        selectEl.value = '';
+        selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+        syncTriggerFromSelect(selectEl);
+        closeAllPopovers(true);
+      });
+      resetRow.appendChild(resetBtn);
+      popover.appendChild(resetRow);
+
+      const colsDiv = document.createElement('div');
+      colsDiv.className = 'line-dual-cols';
+
+      function buildGroupCol(optgroupEl, extraColClass) {
+        const col = document.createElement('div');
+        col.className = 'line-dual-col ' + extraColClass;
+        const title = document.createElement('div');
+        title.className = 'line-dual-col-title';
+        title.textContent = optgroupEl.label || '';
+        col.appendChild(title);
+
+        Array.from(optgroupEl.querySelectorAll('option')).forEach((opt) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'line-dual-opt-btn';
+          btn.dataset.val = opt.value;
+          btn.textContent = opt.textContent.trim();
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            selectEl.value = opt.value;
+            selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+            syncTriggerFromSelect(selectEl);
+            closeAllPopovers(true);
+          });
+          col.appendChild(btn);
+        });
+        return col;
+      }
+
+      colsDiv.appendChild(buildGroupCol(g1, 'line-dual-col-g1'));
+      colsDiv.appendChild(buildGroupCol(g2, 'line-dual-col-g2'));
+      popover.appendChild(colsDiv);
+
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const wasOpen = popover.classList.contains('open');
+        closeAllPopovers(false);
+        if (!wasOpen) {
+          popover.classList.add('open');
+          trigger.classList.add('open');
+          activePopoverSelectId = selectEl.id;
+          positionPopover(inst);
+        }
+      });
+
+      const parent = selectEl.parentNode;
+      parent.insertBefore(wrap, selectEl);
+      wrap.appendChild(selectEl);
+      wrap.appendChild(trigger);
+      document.body.appendChild(popover);
+
+      selectEl.dataset.dualEnhanced = '1';
+      const inst = { selectEl, wrap, trigger, labelSpan, popover };
+      instances.set(selectEl.id, inst);
+
+      selectEl.addEventListener('change', () => syncTriggerFromSelect(selectEl));
+      const observer = new MutationObserver(() => syncTriggerFromSelect(selectEl));
+      observer.observe(selectEl, { attributes: true, attributeFilter: ['class', 'value'] });
+
+      syncTriggerFromSelect(selectEl);
+    }
+
+    function refreshAll() {
+      TARGET_SELECT_IDS.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) {
+          enhanceSelect(el);
+          syncTriggerFromSelect(el);
+        }
+      });
+      if (activePopoverSelectId && instances.has(activePopoverSelectId)) {
+        const activeInst = instances.get(activePopoverSelectId);
+        if (activeInst.popover.classList.contains('open')) {
+          positionPopover(activeInst);
+        }
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!activePopoverSelectId) return;
+      const inst = instances.get(activePopoverSelectId);
+      if (!inst) return;
+      if (!inst.popover.contains(e.target) && !inst.trigger.contains(e.target)) {
+        closeAllPopovers(false);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && activePopoverSelectId) {
+        e.preventDefault();
+        closeAllPopovers(true);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (activePopoverSelectId && instances.has(activePopoverSelectId)) {
+        const activeInst = instances.get(activePopoverSelectId);
+        if (activeInst.popover.classList.contains('open')) {
+          positionPopover(activeInst);
+        }
+      }
+    });
+
+    window.addEventListener('scroll', (e) => {
+      if (!activePopoverSelectId) return;
+      const inst = instances.get(activePopoverSelectId);
+      if (inst && inst.popover.contains(e.target)) return;
+      closeAllPopovers(false);
+    }, true);
+
+    refreshAll();
+    const origRenderSecondPane = window.renderSecondPane;
+    if (typeof origRenderSecondPane === 'function') {
+      window.renderSecondPane = function() {
+        const res = origRenderSecondPane.apply(this, arguments);
+        refreshAll();
+        return res;
+      };
+    }
+    const origRenderAllFn = window.renderAll;
+    if (typeof origRenderAllFn === 'function') {
+      window.renderAll = function() {
+        const res = origRenderAllFn.apply(this, arguments);
+        refreshAll();
+        return res;
+      };
+    }
+  })();
+
 </script>
 </body>
 </html>

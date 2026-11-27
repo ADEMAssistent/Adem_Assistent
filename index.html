@@ -507,11 +507,35 @@
     .check-row:last-child { border-bottom: none; }
 
     .toast {
-      position: fixed; top: calc(64px + var(--safe-top)); left: 50%; transform: translateX(-50%);
-      background: rgba(15, 23, 42, 0.92); color: #fff; padding: 9px 16px; border-radius: 999px;
-      font-size: 0.85rem; font-weight: 600; z-index: 50; opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
+      position: fixed; top: calc(68px + var(--safe-top)); left: 50%;
+      transform: translate(-50%, -8px) scale(0.96);
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      border: 2px solid #38bdf8;
+      padding: 13px 22px;
+      border-radius: 18px;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      max-width: min(92vw, 520px);
+      width: max-content;
+      text-align: center;
+      box-shadow: 0 16px 38px rgba(15, 23, 42, 0.42), 0 0 0 4px rgba(56, 189, 248, 0.28);
+      transition: opacity 0.18s ease, transform 0.18s ease;
     }
-    .toast.show { opacity: 1; }
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0) scale(1);
+    }
+    body.dark-mode .toast {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+      border-color: #bae6fd;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.65), 0 0 0 4px rgba(186, 230, 253, 0.32);
+    }
 
     .tab-bar-wrap {
       position: fixed; bottom: calc(10px + var(--safe-bottom)); left: 14px; right: 14px;
@@ -2377,11 +2401,16 @@
     }
   }
 
+  let toastTimer = null;
   function showToast(msg) {
     const t = document.getElementById('toast');
+    if (!t) return;
     t.textContent = msg;
+    t.classList.remove('show');
+    void t.offsetWidth;
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 1800);
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
   }
 
   function detectShiftNow() {
@@ -3878,8 +3907,70 @@
     }, 140);
   }
 
+  function validateSzBeforeCopyChat(targetState, paneNum = 1) {
+    const missing = [];
+    const currentLine = String((targetState && targetState.line) || '').trim();
+    const hasOpm = Boolean(targetState && targetState.opmScreenshot);
+
+    if (!currentLine) {
+      missing.push('Linie anwahl');
+    }
+    if (!hasOpm) {
+      missing.push('2. OPM Bild (muss hinterlegt sein)');
+    }
+
+    if (missing.length > 0) {
+      const msg = `Copy & Chat blockiert – bitte noch pflegen: ${missing.join(' & ')}`;
+      showToast(msg);
+
+      if (paneNum === 2) {
+        if (!currentLine) {
+          const el2 = document.getElementById('shift-line-select-2');
+          if (el2) {
+            el2.classList.add('mat-field-missing');
+            el2.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el2.focus();
+            setTimeout(() => el2.classList.remove('mat-field-missing'), 2600);
+          }
+        } else if (!hasOpm) {
+          const box2 = document.getElementById('opm-paste-box-2');
+          if (box2) {
+            box2.classList.add('mat-field-missing');
+            box2.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => box2.classList.remove('mat-field-missing'), 2600);
+          }
+        }
+      } else {
+        if (!currentLine) {
+          const el1 = document.getElementById('shift-line-select');
+          if (el1) {
+            el1.classList.add('mat-field-missing');
+            el1.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el1.focus();
+            setTimeout(() => el1.classList.remove('mat-field-missing'), 2600);
+          }
+        } else if (!hasOpm) {
+          const box1 = document.getElementById('opm-paste-box');
+          if (box1) {
+            box1.classList.add('mat-field-missing');
+            box1.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => box1.classList.remove('mat-field-missing'), 2600);
+          }
+        }
+      }
+      return false;
+    }
+    return true;
+  }
+
   async function copyAndOpenTeamsChat(paneNum = 1) {
     const isPane2 = paneNum === 2;
+    const activeSzState = isPane2 ? state2 : state;
+
+    if (!validateSzBeforeCopyChat(activeSzState, paneNum)) {
+      return;
+    }
+
     const prevState = state;
     if (isPane2) {
       state = state2;
@@ -3892,10 +3983,6 @@
       state = prevState;
     }
 
-    if (!currentLine) {
-      await copyHtmlAndPlainRobust(html, plain, 'SZ kopiert – Hinweis: Keine Linie ausgewählt (kein Teams-Link hinterlegt)');
-      return;
-    }
     if (!teamsUrl) {
       await copyHtmlAndPlainRobust(html, plain, `SZ kopiert – Hinweis: Für Linie "${currentLine}" ist kein Teams-Link hinterlegt`);
       return;

@@ -448,6 +448,49 @@
       border-radius: 8px;
       display: block;
     }
+    .extra-pdf-preview-wrap {
+      position: relative;
+      width: 100%;
+      height: 92px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 6px;
+      background: #f8fafc;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .extra-pdf-preview-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0;
+      margin-bottom: 0;
+    }
+    .extra-pdf-badge {
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+      background: rgba(220, 38, 38, 0.92);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 6px;
+      letter-spacing: 0.03em;
+    }
+    .sz-pdf-card-badge {
+      display: inline-block;
+      margin-top: 5px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #dc2626;
+      background: rgba(239, 68, 68, 0.10);
+      padding: 2px 7px;
+      border-radius: 6px;
+      word-break: break-word;
+    }
 
     .list-item {
       display: flex; justify-content: space-between; align-items: flex-start;
@@ -1484,6 +1527,12 @@
     }
 
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (window.pdfjsLib) {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+  </script>
 </head>
 <body>
 
@@ -1495,7 +1544,7 @@
   <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
     <button type="button" class="secondary theme-toggle-btn" id="toggle-theme-btn" aria-label="Day oder Dark Modus umschalten">🌙 Dark</button>
     <button type="button" class="secondary" id="toggle-split-sz-btn" style="display:none; padding:5px 11px; font-size:0.78rem; border-radius:999px;">➕ 2. SZ daneben</button>
-    <span class="badge">V4.9</span>
+    <span class="badge">V5.2</span>
   </div>
 </header>
 
@@ -1583,7 +1632,6 @@
     <div id="mat-validation-hint" class="mat-validation-hint" role="alert"></div>
     <div style="display:flex; gap:8px; flex-wrap:wrap;">
       <button type="button" id="mat-add-btn" style="flex:1;">+ Materialeintrag hinzufügen</button>
-      <button type="button" class="success" id="mat-copy-btn">📋 Liste kopieren</button>
       <button type="button" id="mat-copy-chat-btn">💬 Copy&amp;Chat</button>
     </div>
   </div>
@@ -1599,10 +1647,6 @@
   <div class="card">
     <div class="card-title">
       <span>Kopier-Vorschau (wie beim Kopieren)</span>
-      <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
-        <button type="button" class="success" id="mat-copy-preview-btn" style="padding:6px 12px; font-size:0.8rem;">📋 Copy</button>
-        <button type="button" id="mat-copy-chat-preview-btn" style="padding:6px 12px; font-size:0.8rem;">💬 Copy&amp;Chat</button>
-      </div>
     </div>
     <div id="mat-copy-preview" class="mat-copy-preview-box"></div>
   </div>
@@ -1944,10 +1988,10 @@
       <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>
       <div id="archive-version-bar-1" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">
         <div class="archive-version-bar-top">
-          <span>Version V4.9</span>
-          <span>Letztes Update</span>
+          <span>Versionsverlauf (Letzte 3 Versionen)</span>
+          <span>Aktuell: V5.2</span>
         </div>
-        <div class="archive-version-changelog">Geändert seit V4.8: Bei Punkt 1 entsteht aus einer Eingabe stets genau ein Stichpunkt, mehrfache Einträge zum selben Thema werden gebündelt untereinander dargestellt und Enter fügt Zeilenumbrüche ein statt abzusenden.</div>
+        <div id="archive-version-list-1" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>
       </div>
       <div id="sz-archive-list"></div>
     </div>
@@ -2090,6 +2134,77 @@
     return p.length === 3 ? `${p[2]}.${p[1]}.${p[0]}` : iso;
   }
 
+  const VERSION_HISTORY_STORAGE_KEY = 'adem_assistent_version_history_v1';
+  const DEFAULT_VERSION_HISTORY = [
+    { version: 'V5.2', text: 'Version auf V5.2 erhöht (+0.1) und Versionsverlauf fest auf die letzten 3 Einträge begrenzt.' },
+    { version: 'V5.1', text: 'Versionsverlauf auf die letzten 3 Versionen begrenzt & Material Assistent auf Copy&Chat reduziert.' },
+    { version: 'V5.0', text: 'PDF-Vorschau unter Punkt 3 (Zusatzfotos / Infos) integriert und Versionsverlauf verschlankt.' }
+  ];
+
+  function loadAppVersionHistory() {
+    try {
+      const raw = localStorage.getItem(VERSION_HISTORY_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed
+            .filter(item => item && item.version && item.text)
+            .slice(-3)
+            .reverse()
+            .slice(0, 3);
+        }
+      }
+    } catch (e) {}
+    return DEFAULT_VERSION_HISTORY.slice(0, 3);
+  }
+
+  let appVersionHistory = loadAppVersionHistory();
+
+  function saveAppVersionHistory() {
+    appVersionHistory = appVersionHistory.slice(0, 3);
+    try {
+      localStorage.setItem(VERSION_HISTORY_STORAGE_KEY, JSON.stringify(appVersionHistory));
+    } catch (e) {}
+  }
+
+  function addVersionEntry(versionLabel, changeText) {
+    const cleanVer = String(versionLabel || '').trim();
+    const cleanTxt = String(changeText || '').trim();
+    if (!cleanVer || !cleanTxt) return;
+    appVersionHistory = [{ version: cleanVer, text: cleanTxt }, ...appVersionHistory].slice(0, 3);
+    saveAppVersionHistory();
+    const badgeEl = document.querySelector('header .badge');
+    if (badgeEl) badgeEl.textContent = cleanVer;
+    renderArchiveVersionBars();
+  }
+
+  window.addVersionEntry = addVersionEntry;
+
+  function renderArchiveVersionBars() {
+    const trimmed = appVersionHistory.slice(0, 3);
+    const latestVer = trimmed[0]?.version || 'V5.2';
+    const badgeEl = document.querySelector('header .badge');
+    if (badgeEl) badgeEl.textContent = latestVer;
+
+    const rowsHtml = trimmed.map(v =>
+      `<div><strong>${escapeHtml(v.version)}:</strong> ${escapeHtml(v.text)}</div>`
+    ).join('');
+
+    [
+      { barId: 'archive-version-bar-1', listId: 'archive-version-list-1' },
+      { barId: 'archive-version-bar-2', listId: 'archive-version-list-2' }
+    ].forEach(({ barId, listId }) => {
+      const bar = document.getElementById(barId);
+      if (!bar) return;
+      const topSpan = bar.querySelector('.archive-version-bar-top span:last-child');
+      if (topSpan) topSpan.textContent = `Aktuell: ${latestVer}`;
+      const listEl = document.getElementById(listId);
+      if (listEl) {
+        listEl.innerHTML = rowsHtml;
+      }
+    });
+  }
+
   function saveSettings() {
     state.shiftMode = document.getElementById('shift-select').value;
     const lineEl = document.getElementById('shift-line-select');
@@ -2097,6 +2212,7 @@
     state.date = document.getElementById('shift-date').value;
     saveState();
     renderAll();
+  renderArchiveVersionBars();
   }
 
   function switchTab(tab) {
@@ -2453,9 +2569,63 @@
     return '';
   }
 
+  function isPdfFile(fileOrBlob, name = '') {
+    const type = String(fileOrBlob?.type || '').toLowerCase();
+    const fname = String(name || fileOrBlob?.name || '').toLowerCase();
+    return type === 'application/pdf' || fname.endsWith('.pdf');
+  }
+
+  function renderPdfPreviewDataUrl(fileOrBlob, cb) {
+    const reader = new FileReader();
+    reader.onload = async function(ev) {
+      const arrayBuffer = ev.target.result;
+      try {
+        if (window.pdfjsLib) {
+          const loadingTask = window.pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
+          const pdf = await loadingTask.promise;
+          const page = await pdf.getPage(1);
+          const unscaledViewport = page.getViewport({ scale: 1 });
+          const maxDim = 1100;
+          const scale = Math.min(2.0, maxDim / Math.max(unscaledViewport.width, unscaledViewport.height));
+          const viewport = page.getViewport({ scale: Math.max(1, scale) });
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.round(viewport.width);
+          canvas.height = Math.round(viewport.height);
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          await page.render({ canvasContext: ctx, viewport }).promise;
+          cb({
+            previewUrl: canvas.toDataURL('image/jpeg', 0.84),
+            pageCount: pdf.numPages || 1
+          });
+          return;
+        }
+      } catch (err) {}
+
+      // Fallback SVG-Vorschau falls PDF.js offline nicht geladen werden konnte
+      const fallbackSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="320" viewBox="0 0 480 320">
+        <rect width="480" height="320" rx="16" fill="#f8fafc"/>
+        <rect x="140" y="34" width="200" height="252" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+        <rect x="168" y="64" width="76" height="28" rx="6" fill="#dc2626"/>
+        <text x="206" y="83" font-family="sans-serif" font-size="15" font-weight="bold" fill="#ffffff" text-anchor="middle">PDF</text>
+        <line x1="168" y1="114" x2="312" y2="114" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+        <line x1="168" y1="136" x2="296" y2="136" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
+        <line x1="168" y1="158" x2="306" y2="158" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
+        <line x1="168" y1="180" x2="270" y2="180" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
+      </svg>`;
+      cb({
+        previewUrl: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(fallbackSvg),
+        pageCount: 1
+      });
+    };
+    reader.readAsArrayBuffer(fileOrBlob);
+  }
+
   function addExtraFileOrImage(fileOrBlob, fallbackName, explicitTopic = null) {
     const isImage = fileOrBlob.type && fileOrBlob.type.startsWith('image/');
     const name = fileOrBlob.name || fallbackName || (isImage ? 'Zusatzfoto' : 'Datei');
+    const isPdf = !isImage && isPdfFile(fileOrBlob, name);
     if (isImage) {
       const targetTopic = explicitTopic !== null ? explicitTopic : getSelectedExtraTopic(1);
       compressImage(fileOrBlob, (dataUrl) => {
@@ -2469,6 +2639,22 @@
         saveState();
         renderAll();
         showToast(targetTopic ? `Foto unter ${targetTopic} hinzugefügt` : 'Zusatzfoto hinzugefügt');
+      });
+    } else if (isPdf) {
+      const targetTopic = explicitTopic !== null ? explicitTopic : getSelectedExtraTopic(1);
+      renderPdfPreviewDataUrl(fileOrBlob, ({ previewUrl, pageCount }) => {
+        state.extraItems.push({
+          id: Date.now() + Math.random(),
+          kind: 'pdf',
+          name,
+          dataUrl: previewUrl,
+          pageCount,
+          sizeKb: Math.max(1, Math.round((fileOrBlob.size || 0) / 1024)),
+          targetTopic
+        });
+        saveState();
+        renderAll();
+        showToast(targetTopic ? `PDF unter ${targetTopic} hinzugefügt` : `PDF mit Vorschau hinzugefügt: ${name}`);
       });
     } else {
       const targetTopic = explicitTopic !== null ? explicitTopic : getSelectedExtraTopic(1);
@@ -2596,7 +2782,7 @@
 
     for (const tKey of Object.keys(extraByTopic)) {
       const meta = getTopicMeta(tKey);
-      const textOnlyItems = extraByTopic[tKey].filter(x => x.kind !== 'image');
+      const textOnlyItems = extraByTopic[tKey].filter(x => x.kind !== 'image' && x.kind !== 'pdf');
       const extraLines = textOnlyItems.map(x => getExtraLabel(x));
       if (meta.section === 'analysen') {
         analysenList.push(...extraLines);
@@ -2749,11 +2935,12 @@
 
   function renderTopicMediaHtml(topicItems) {
     if (!topicItems || topicItems.length === 0) return '';
-    const imgs = topicItems.filter(x => x.kind === 'image' && x.dataUrl);
-    if (imgs.length === 0) return '';
-    return `<div class="sz-bottom-photos">` + imgs.map(im =>
-      `<div class="sz-bottom-photo-card"><img src="${im.dataUrl}" alt="${escapeHtml(im.name || 'Foto')}" /></div>`
-    ).join('') + `</div>`;
+    const mediaItems = topicItems.filter(x => (x.kind === 'image' || x.kind === 'pdf') && x.dataUrl);
+    if (mediaItems.length === 0) return '';
+    return `<div class="sz-bottom-photos">` + mediaItems.map(im => {
+      const pdfTag = im.kind === 'pdf' ? `<div class="sz-pdf-card-badge">📄 ${escapeHtml(im.name || 'PDF')}</div>` : '';
+      return `<div class="sz-bottom-photo-card"><img src="${im.dataUrl}" alt="${escapeHtml(im.name || 'Vorschau')}" />${pdfTag}</div>`;
+    }).join('') + `</div>`;
   }
 
   function renderChannelSheet() {
@@ -2792,8 +2979,8 @@
       html += `<p class="sz-line"><br></p><p class="sz-line"><br></p>`;
       html += `<p class="sz-line"><strong>🟢 Fotos/Infos</strong></p>`;
       html += `<p class="sz-line"><br></p>`;
-      const imgs = unassigned.filter(x => x.kind === 'image');
-      const nonImgs = unassigned.filter(x => x.kind !== 'image');
+      const imgs = unassigned.filter(x => (x.kind === 'image' || x.kind === 'pdf') && x.dataUrl);
+      const nonImgs = unassigned.filter(x => !((x.kind === 'image' || x.kind === 'pdf') && x.dataUrl));
 
       if (nonImgs.length > 0) {
         html += nonImgs.map(x => `<p class="sz-line">${escapeHtml(`- ${x.kind === 'info' ? x.text : x.name}`)}</p><p class="sz-line"><br></p>`).join('');
@@ -2801,7 +2988,8 @@
       if (imgs.length > 0) {
         html += `<div class="sz-bottom-photos">`;
         for (const im of imgs) {
-          html += `<div class="sz-bottom-photo-card"><img src="${im.dataUrl}" alt="${escapeHtml(im.name)}" /></div>`;
+          const pdfTag = im.kind === 'pdf' ? `<div class="sz-pdf-card-badge">📄 ${escapeHtml(im.name)}</div>` : '';
+          html += `<div class="sz-bottom-photo-card"><img src="${im.dataUrl}" alt="${escapeHtml(im.name)}" />${pdfTag}</div>`;
         }
         html += `</div>`;
       }
@@ -2838,8 +3026,8 @@
         if (isLastLineOfTopic && !renderedTopics.has(x.topicKey) && model.extraByTopic && model.extraByTopic[x.topicKey]) {
           renderedTopics.add(x.topicKey);
           for (const item of model.extraByTopic[x.topicKey]) {
-            if (item.kind === 'image' && item.dataUrl) {
-              out += `<p style="margin:4px 0 8px 0;"><img src="${item.dataUrl}" alt="${escapeHtml(item.name || 'Foto')}" width="480" style="max-width:480px; width:100%; height:auto; display:block;" /></p>`;
+            if ((item.kind === 'image' || item.kind === 'pdf') && item.dataUrl) {
+              out += `<p style="margin:4px 0 8px 0;"><img src="${item.dataUrl}" alt="${escapeHtml(item.name || 'Vorschau')}" width="480" style="max-width:480px; width:100%; height:auto; display:block;" /></p>`;
             }
           }
         }
@@ -2859,8 +3047,8 @@
     if (unassigned.length > 0) {
       html += `<p style="margin:8px 0 2px 0;"><br></p><p style="margin:8px 0 2px 0;"><br></p><p style="margin:8px 0 2px 0;"><strong>🟢 Fotos/Infos</strong></p>`;
       for (const item of unassigned) {
-        if (item.kind === 'image' && item.dataUrl) {
-          html += `<p style="margin:4px 0 8px 0;"><img src="${item.dataUrl}" alt="${escapeHtml(item.name || 'Foto')}" width="480" style="max-width:480px; width:100%; height:auto; display:block;" /></p>`;
+        if ((item.kind === 'image' || item.kind === 'pdf') && item.dataUrl) {
+          html += `<p style="margin:4px 0 8px 0;"><img src="${item.dataUrl}" alt="${escapeHtml(item.name || 'Vorschau')}" width="480" style="max-width:480px; width:100%; height:auto; display:block;" /></p>`;
         } else {
           const label = `- ${item.kind === 'info' ? item.text : item.name}`;
           html += `<p style="margin:0 0 4px 0;">${escapeHtml(label)}</p>`;
@@ -2941,7 +3129,7 @@
     const hasAnalysen = state.entries.some(e => e.section === 'analysen');
     const hasMaterial = state.entries.some(e => e.section === 'material');
     const hasUnassignedExtra = (model.unassignedExtras || []).length > 0;
-    const extraImages = state.extraItems.filter(x => x.kind === 'image');
+    const extraImages = state.extraItems.filter(x => x.kind === 'image' || x.kind === 'pdf');
     const allExtraImagesRendered = extraImages.every(img =>
       Boolean(img.dataUrl) && (
         (model.unassignedExtras || []).some(u => u.id === img.id) ||
@@ -2971,6 +3159,13 @@
       : `<div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:4px;">📌 🟢 Fotos/Infos</div>`;
     if (item.kind === 'image') {
       return `\n        <div class="extra-item">\n          ${delBtn}\n          ${topicBadge}\n          <img src="${item.dataUrl}" alt="${escapeHtml(item.name)}" />\n          <div class="extra-caption">${escapeHtml(item.name)}</div>\n        </div>\n      `;
+    }
+    if (item.kind === 'pdf') {
+      const pagesLabel = item.pageCount && item.pageCount > 1 ? ` · ${item.pageCount} S.` : '';
+      const previewBlock = item.dataUrl
+        ? `<div class="extra-pdf-preview-wrap"><img src="${item.dataUrl}" alt="${escapeHtml(item.name)}" /><span class="extra-pdf-badge">PDF${pagesLabel}</span></div>`
+        : `<div class="extra-doc-pill">📄 PDF</div>`;
+      return `\n        <div class="extra-item">\n          ${delBtn}\n          ${topicBadge}\n          ${previewBlock}\n          <div class="extra-caption">${escapeHtml(item.name)}</div>\n        </div>\n      `;
     }
     if (item.kind === 'info') {
       return `\n        <div class="extra-item">\n          ${delBtn}\n          ${topicBadge}\n          <div class="extra-doc-pill">📝 Info</div>\n          <div class="extra-caption">${escapeHtml(item.text)}</div>\n        </div>\n      `;
@@ -3585,8 +3780,8 @@
       html += `<p class="sz-line"><br></p><p class="sz-line"><br></p>`;
       html += `<p class="sz-line"><strong>🟢 Fotos/Infos</strong></p>`;
       html += `<p class="sz-line"><br></p>`;
-      const imgs = unassigned.filter(x => x.kind === 'image');
-      const nonImgs = unassigned.filter(x => x.kind !== 'image');
+      const imgs = unassigned.filter(x => (x.kind === 'image' || x.kind === 'pdf') && x.dataUrl);
+      const nonImgs = unassigned.filter(x => !((x.kind === 'image' || x.kind === 'pdf') && x.dataUrl));
 
       if (nonImgs.length > 0) {
         html += nonImgs.map(x => `<p class="sz-line">${escapeHtml(`- ${x.kind === 'info' ? x.text : x.name}`)}</p><p class="sz-line"><br></p>`).join('');
@@ -3594,7 +3789,8 @@
       if (imgs.length > 0) {
         html += `<div class="sz-bottom-photos">`;
         for (const im of imgs) {
-          html += `<div class="sz-bottom-photo-card"><img src="${im.dataUrl}" alt="${escapeHtml(im.name)}" /></div>`;
+          const pdfTag = im.kind === 'pdf' ? `<div class="sz-pdf-card-badge">📄 ${escapeHtml(im.name)}</div>` : '';
+          html += `<div class="sz-bottom-photo-card"><img src="${im.dataUrl}" alt="${escapeHtml(im.name)}" />${pdfTag}</div>`;
         }
         html += `</div>`;
       }
@@ -3967,8 +4163,17 @@
         files.forEach(f => {
           const isImage = f.type && f.type.startsWith('image/');
           const name = f.name || (isImage ? 'Zusatzfoto' : 'Datei');
+          const isPdf = !isImage && isPdfFile(f, name);
           if (isImage) {
             const tTopic = getSelectedExtraTopic(2); compressImage(f, (dataUrl) => { state2.extraItems.push({ id: Date.now() + Math.random(), kind: 'image', name, dataUrl, targetTopic: tTopic }); saveState2(); renderSecondPane(); });
+          } else if (isPdf) {
+            const tTopic = getSelectedExtraTopic(2);
+            renderPdfPreviewDataUrl(f, ({ previewUrl, pageCount }) => {
+              state2.extraItems.push({ id: Date.now() + Math.random(), kind: 'pdf', name, dataUrl: previewUrl, pageCount, sizeKb: Math.max(1, Math.round((f.size || 0) / 1024)), targetTopic: tTopic });
+              saveState2();
+              renderSecondPane();
+              showToast(tTopic ? `PDF #2 unter ${tTopic} hinzugefügt` : `PDF #2 mit Vorschau hinzugefügt`);
+            });
           } else {
             const tTopic = getSelectedExtraTopic(2); state2.extraItems.push({ id: Date.now() + Math.random(), kind: 'doc', name, sizeKb: Math.max(1, Math.round((f.size || 0) / 1024)), targetTopic: tTopic });
             saveState2();
@@ -4136,7 +4341,8 @@
     if (!contentEl) return;
 
     if (isArchiveTab) {
-      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="archive-version-bar-2" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">\n        <div class="archive-version-bar-top">\n          <span>Version V4.9</span>\n          <span>Letztes Update</span>\n        </div>\n        <div class="archive-version-changelog">Geändert seit V4.8: Bei Punkt 1 entsteht aus einer Eingabe stets genau ein Stichpunkt, mehrfache Einträge zum selben Thema werden gebündelt untereinander dargestellt und Enter fügt Zeilenumbrüche ein statt abzusenden.</div>\n      </div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
+      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="archive-version-bar-2" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">\n        <div class="archive-version-bar-top">\n          <span>Versionsverlauf (Letzte 3 Versionen)</span>\n          <span>Aktuell: V5.2</span>\n        </div>\n        <div id="archive-version-list-2" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>\n      </div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
+      if (typeof renderArchiveVersionBars === 'function') renderArchiveVersionBars();
       document.getElementById('sz-archive-list-2')?.addEventListener('click', (e) => {
         const copyBtn = e.target.closest('[data-copy-arch-2]');
         if (copyBtn) {
@@ -4277,6 +4483,7 @@
   renderAll = function() {
     origRenderAll();
     renderSecondPane();
+    renderArchiveVersionBars();
   };
 
   document.getElementById('toggle-split-sz-btn').addEventListener('click', () => {
@@ -6357,7 +6564,7 @@ MLFB: ${mlfbVal}`, 'MLFB kopiert!');
 </script>
 
   <footer class="app-footer-contact">
-    Verantwortlich &amp; Kontakt: <strong>Gentrit Behrami &amp; Arlond Gashi</strong> · Bei Fragen, Wünschen oder Rückmeldungen gerne direkt in <strong>Microsoft Teams</strong> melden.
+    Verantwortlich &amp; Kontakt: <strong><a href="msteams://teams.microsoft.com/l/chat/48%3Anotes/conversations?context=%7B%22contextType%22%3A%22chat%22%7D" onclick="event.preventDefault(); launchNativeTeamsApp('https://teams.microsoft.com/l/chat/48%3Anotes/conversations?context=%7B%22contextType%22%3A%22chat%22%7D');" style="color:inherit; text-decoration:underline; cursor:pointer;">Gentrit Behrami</a> &amp; <a href="msteams://teams.microsoft.com/l/chat/19%3A8a31c73f-6c53-45b6-ab6d-85ff77d7dd6e_d78e9693-217e-45ef-ba12-a8eb37155a1b%40unq.gbl.spaces/conversations?context=%7B%22contextType%22%3A%22chat%22%7D" onclick="event.preventDefault(); launchNativeTeamsApp('https://teams.microsoft.com/l/chat/19%3A8a31c73f-6c53-45b6-ab6d-85ff77d7dd6e_d78e9693-217e-45ef-ba12-a8eb37155a1b%40unq.gbl.spaces/conversations?context=%7B%22contextType%22%3A%22chat%22%7D');" style="color:inherit; text-decoration:underline; cursor:pointer;">Arlond Gashi</a></strong> · Bei Fragen, Wünschen oder Rückmeldungen gerne direkt in <strong>Microsoft Teams</strong> melden.
   </footer>
 </body>
 </html>

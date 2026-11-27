@@ -1526,6 +1526,154 @@
       color: #f1f5f9;
     }
 
+
+    .ana-persist-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+    .ana-persist-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .ana-persist-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .ana-shift-btn-group {
+      display: inline-flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .ana-shift-btn {
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--text);
+      border: 1.5px solid rgba(148, 163, 184, 0.38);
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    }
+    .ana-shift-btn.active {
+      background: linear-gradient(180deg, #1a88ff 0%, #007aff 100%);
+      color: #ffffff;
+      border-color: #007aff;
+      box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25);
+    }
+    .ana-kenn-saved-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .ana-remark-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 13px;
+      border-radius: 12px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .ana-remark-collapse {
+      display: none;
+      margin-bottom: 10px;
+    }
+    .ana-remark-collapse.open {
+      display: block;
+    }
+    body.dark-mode .ana-persist-box {
+      background: rgba(15, 23, 42, 0.88);
+      border-color: rgba(148, 163, 184, 0.28);
+    }
+    body.dark-mode .ana-shift-btn {
+      background: rgba(30, 41, 59, 0.95);
+      color: #f1f5f9;
+      border-color: rgba(148, 163, 184, 0.35);
+    }
+    body.dark-mode .ana-shift-btn.active {
+      background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+      color: #0b1120;
+      border-color: #38bdf8;
+    }
+    body.dark-mode .ana-kenn-saved-badge {
+      background: rgba(16, 185, 129, 0.16);
+      border-color: rgba(52, 211, 153, 0.4);
+      color: #f8fafc;
+    }
+
+
+    .launcher-bar.analyse-locked-bar {
+      background: rgba(255, 255, 255, 0.24) !important;
+      backdrop-filter: blur(12px) saturate(140%) !important;
+      -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+      border: 1.5px dashed rgba(100, 116, 139, 0.45) !important;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04) !important;
+      opacity: 0.88;
+    }
+    .launcher-bar.analyse-locked-bar:hover {
+      border-color: rgba(0, 122, 255, 0.5) !important;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08) !important;
+    }
+    .launcher-bar-title-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .analyse-soon-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(100, 116, 139, 0.14);
+      color: #475569;
+      border: 1px solid rgba(100, 116, 139, 0.32);
+      letter-spacing: 0.01em;
+    }
+    body.dark-mode .launcher-bar.analyse-locked-bar {
+      background: rgba(15, 23, 42, 0.28) !important;
+      border-color: rgba(148, 163, 184, 0.35) !important;
+    }
+    body.dark-mode .analyse-soon-badge {
+      background: rgba(148, 163, 184, 0.16);
+      color: #cbd5e1;
+      border-color: rgba(148, 163, 184, 0.32);
+    }
+    .ana-cards-multi-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .ana-card-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .ana-card-row select {
+      flex: 1;
+      min-width: 180px;
+    }
+
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
@@ -1544,7 +1692,7 @@
   <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
     <button type="button" class="secondary theme-toggle-btn" id="toggle-theme-btn" aria-label="Day oder Dark Modus umschalten">🌙 Dark</button>
     <button type="button" class="secondary" id="toggle-split-sz-btn" style="display:none; padding:5px 11px; font-size:0.78rem; border-radius:999px;">➕ 2. SZ daneben</button>
-    <span class="badge">V5.2</span>
+    <span class="badge">V5.7</span>
   </div>
 </header>
 
@@ -1565,6 +1713,17 @@
       </div>
       <div class="launcher-bar-title">Schichtzusammenfassung</div>
       <div class="launcher-bar-desc">Störungen, OPM-Screenshot, Fotos/Infos erfassen, prüfen und direkt für den Kanal kopieren.</div>
+    </button>
+
+    <button type="button" class="launcher-bar analyse-locked-bar" id="open-analyse-assistant-btn" style="grid-column: 1 / -1; align-items: center; text-align: center;">
+      <div class="launcher-bar-top">
+        <span class="launcher-bar-icon">🔒 🔬</span>
+        <span class="launcher-bar-pill">4. Assistent</span>
+      </div>
+      <div class="launcher-bar-title launcher-bar-title-row" style="justify-content: center;">
+        <span>Analyse Assistent</span>
+        <span class="analyse-soon-badge">Bald verfügbar</span>
+      </div>
     </button>
 
     <button type="button" class="launcher-bar" id="open-material-assistant-btn">
@@ -1649,6 +1808,115 @@
       <span>Kopier-Vorschau (wie beim Kopieren)</span>
     </div>
     <div id="mat-copy-preview" class="mat-copy-preview-box"></div>
+  </div>
+</div>
+
+<div id="analyse-app-screen" style="display:none; max-width:960px; margin:0 auto; padding:16px;">
+  <div class="card">
+    <div class="card-title">
+      <span>🔬 Analyse Assistent</span>
+      <span id="ana-count-badge" style="color:var(--primary); font-weight:700;">0 Einträge</span>
+    </div>
+
+    <div class="ana-persist-box">
+      <div class="ana-persist-row">
+        <span class="ana-persist-label">Schicht (dauerhaft gespeichert):</span>
+        <div class="ana-shift-btn-group" role="group" aria-label="Schicht A, B oder C auswählen">
+          <button type="button" class="ana-shift-btn" data-ana-shift="Schicht A">Schicht A</button>
+          <button type="button" class="ana-shift-btn" data-ana-shift="Schicht B">Schicht B</button>
+          <button type="button" class="ana-shift-btn" data-ana-shift="Schicht C">Schicht C</button>
+        </div>
+      </div>
+
+      <div class="ana-persist-row">
+        <span class="ana-persist-label">Kenn.-Nr. (einmalig speichern):</span>
+        <div id="ana-kenn-input-wrap" style="display:flex; gap:8px; flex:1; min-width:220px; align-items:center;">
+          <input type="text" id="ana-kenn-input" class="mat-input" placeholder="Kenn.-Nr. einmalig eingeben..." style="flex:1;" />
+          <button type="button" id="ana-kenn-save-btn" style="padding:10px 14px; font-size:0.86rem;">Speichern</button>
+        </div>
+        <div id="ana-kenn-saved-wrap" style="display:none; align-items:center; gap:8px; flex-wrap:wrap;">
+          <span class="ana-kenn-saved-badge">Kenn.-Nr.: <strong id="ana-kenn-saved-value"></strong></span>
+          <button type="button" class="secondary" id="ana-kenn-edit-btn" style="padding:6px 11px; font-size:0.8rem;">Ändern</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mat-grid" style="margin-bottom:10px;">
+      <select id="ana-line-select" aria-label="Linie auswählen">
+        <option value="">— Linie auswählen —</option>
+        <option value="ICAS">ICAS</option>
+        <option value="MRA 2.1">MRA 2.1</option>
+        <option value="MRA KL">MRA KL</option>
+        <option value="MQB-A0">MQB-A0</option>
+        <option value="MQB-A">MQB-A</option>
+        <option value="MEB SAM 1&2">MEB SAM 1&2</option>
+        <option value="MARS">MARS</option>
+        <option value="Cosma">Cosma</option>
+      </select>
+
+      <div id="ana-cards-multi-wrap" class="ana-cards-multi-wrap" style="grid-column: 1 / -1; margin-bottom: 0;">
+        <div class="ana-card-row">
+          <select class="ana-card-select-item" aria-label="Analysekärtchen Nummer Auswahl 1-20">
+            <option value="">— Analysekärtchen Nummer (1–20) —</option>
+            <option value="1">Kärtchen 1</option>
+            <option value="2">Kärtchen 2</option>
+            <option value="3">Kärtchen 3</option>
+            <option value="4">Kärtchen 4</option>
+            <option value="5">Kärtchen 5</option>
+            <option value="6">Kärtchen 6</option>
+            <option value="7">Kärtchen 7</option>
+            <option value="8">Kärtchen 8</option>
+            <option value="9">Kärtchen 9</option>
+            <option value="10">Kärtchen 10</option>
+            <option value="11">Kärtchen 11</option>
+            <option value="12">Kärtchen 12</option>
+            <option value="13">Kärtchen 13</option>
+            <option value="14">Kärtchen 14</option>
+            <option value="15">Kärtchen 15</option>
+            <option value="16">Kärtchen 16</option>
+            <option value="17">Kärtchen 17</option>
+            <option value="18">Kärtchen 18</option>
+            <option value="19">Kärtchen 19</option>
+            <option value="20">Kärtchen 20</option>
+          </select>
+          <button type="button" class="secondary" id="ana-add-card-btn" style="padding:10px 14px; font-size:0.86rem; white-space:nowrap;">+ Weiteres Kärtchen</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:10px;">
+      <input type="number" id="ana-qty-input" class="mat-input" min="0" step="1" inputmode="numeric" placeholder="Stückzahl eingeben..." />
+    </div>
+
+    <div>
+      <button type="button" class="secondary ana-remark-toggle-btn" id="ana-remark-toggle-btn" aria-expanded="false">
+        <span id="ana-remark-arrow">▸</span>
+        <span>Bemerkung: (bei Bedarf)</span>
+      </button>
+      <div id="ana-remark-collapse" class="ana-remark-collapse">
+        <textarea id="ana-remark-input" class="mat-input" rows="2" placeholder="Bemerkung nur bei Bedarf eingeben..." style="resize:vertical;"></textarea>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;">
+      <button type="button" id="ana-add-btn" style="flex:1;">+ Eintrag hinzufügen</button>
+      <button type="button" class="success" id="ana-copy-btn">💬 Copy &amp; Chat</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <span>Erfasste Analyse-Einträge</span>
+      <button type="button" class="danger" id="ana-clear-btn">Alle löschen</button>
+    </div>
+    <div id="ana-list-container"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <span>Vorschau</span>
+    </div>
+    <div id="ana-copy-preview" class="mat-copy-preview-box"></div>
   </div>
 </div>
 
@@ -1989,7 +2257,7 @@
       <div id="archive-version-bar-1" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">
         <div class="archive-version-bar-top">
           <span>Versionsverlauf (Letzte 3 Versionen)</span>
-          <span>Aktuell: V5.2</span>
+          <span>Aktuell: V5.7</span>
         </div>
         <div id="archive-version-list-1" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>
       </div>
@@ -2136,9 +2404,8 @@
 
   const VERSION_HISTORY_STORAGE_KEY = 'adem_assistent_version_history_v1';
   const DEFAULT_VERSION_HISTORY = [
-    { version: 'V5.2', text: 'Version auf V5.2 erhöht (+0.1) und Versionsverlauf fest auf die letzten 3 Einträge begrenzt.' },
-    { version: 'V5.1', text: 'Versionsverlauf auf die letzten 3 Versionen begrenzt & Material Assistent auf Copy&Chat reduziert.' },
-    { version: 'V5.0', text: 'PDF-Vorschau unter Punkt 3 (Zusatzfotos / Infos) integriert und Versionsverlauf verschlankt.' }
+    { version: 'V5.7', text: 'Beschreibung im Balken des Analyse Assistenten auf der Startseite entfernt.' },
+    { version: 'V5.5', text: 'Kleinere Fehlerbehebungen; 2x Bugfix.' }
   ];
 
   function loadAppVersionHistory() {
@@ -2147,11 +2414,14 @@
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed
-            .filter(item => item && item.version && item.text)
-            .slice(-3)
-            .reverse()
+          let list = parsed
+            .filter(item => item && item.version && item.text && item.version !== 'V5.2' && item.version !== 'V5.6')
+            .map(item => item.version === 'V5.5' ? { version: 'V5.5', text: 'Kleinere Fehlerbehebungen; 2x Bugfix.' } : item)
             .slice(0, 3);
+          if (!list.some(item => item.version === 'V5.7')) {
+            list = [DEFAULT_VERSION_HISTORY[0], ...list].slice(0, 3);
+          }
+          return list;
         }
       }
     } catch (e) {}
@@ -4341,7 +4611,7 @@
     if (!contentEl) return;
 
     if (isArchiveTab) {
-      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="archive-version-bar-2" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">\n        <div class="archive-version-bar-top">\n          <span>Versionsverlauf (Letzte 3 Versionen)</span>\n          <span>Aktuell: V5.2</span>\n        </div>\n        <div id="archive-version-list-2" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>\n      </div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
+      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="archive-version-bar-2" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">\n        <div class="archive-version-bar-top">\n          <span>Versionsverlauf (Letzte 3 Versionen)</span>\n          <span>Aktuell: V5.7</span>\n        </div>\n        <div id="archive-version-list-2" class="archive-version-changelog" style="display:flex; flex-direction:column; gap:4px; margin-top:4px;"></div>\n      </div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
       if (typeof renderArchiveVersionBars === 'function') renderArchiveVersionBars();
       document.getElementById('sz-archive-list-2')?.addEventListener('click', (e) => {
         const copyBtn = e.target.closest('[data-copy-arch-2]');
@@ -4682,6 +4952,7 @@
     const szTabBar = document.getElementById('main-sz-tabbar');
     const matScreen = document.getElementById('material-app-screen');
     const qnScreen = document.getElementById('quick-notes-screen');
+    const anaScreen = document.getElementById('analyse-app-screen');
     const backBtn = document.getElementById('back-to-launcher-btn');
     const splitBtn = document.getElementById('toggle-split-sz-btn');
     const titleEl = document.getElementById('main-header-title');
@@ -4690,6 +4961,7 @@
       if (launcher) launcher.style.display = 'none';
       if (matScreen) matScreen.style.display = 'none';
       if (qnScreen) qnScreen.style.display = 'none';
+      if (anaScreen) anaScreen.style.display = 'none';
       if (szContainer) szContainer.style.display = '';
       if (szTabBar) szTabBar.style.display = '';
       if (backBtn) backBtn.style.display = 'inline-block';
@@ -4701,6 +4973,7 @@
       if (szContainer) szContainer.style.display = 'none';
       if (szTabBar) szTabBar.style.display = 'none';
       if (qnScreen) qnScreen.style.display = 'none';
+      if (anaScreen) anaScreen.style.display = 'none';
       if (matScreen) matScreen.style.display = 'block';
       if (backBtn) backBtn.style.display = 'inline-block';
       if (splitBtn) splitBtn.style.display = 'none';
@@ -4711,17 +4984,32 @@
       if (szContainer) szContainer.style.display = 'none';
       if (szTabBar) szTabBar.style.display = 'none';
       if (matScreen) matScreen.style.display = 'none';
+      if (anaScreen) anaScreen.style.display = 'none';
       if (qnScreen) qnScreen.style.display = 'block';
       if (backBtn) backBtn.style.display = 'inline-block';
       if (splitBtn) splitBtn.style.display = 'none';
       if (titleEl) titleEl.textContent = 'Rüst-Assistent';
       syncQnLineAndMlfbUI();
+    } else if (mode === 'analyse') {
+      if (launcher) launcher.style.display = 'none';
+      if (szContainer) szContainer.style.display = 'none';
+      if (szTabBar) szTabBar.style.display = 'none';
+      if (matScreen) matScreen.style.display = 'none';
+      if (qnScreen) qnScreen.style.display = 'none';
+      if (anaScreen) anaScreen.style.display = 'block';
+      if (backBtn) backBtn.style.display = 'inline-block';
+      if (splitBtn) splitBtn.style.display = 'none';
+      if (titleEl) titleEl.textContent = 'Analyse Assistent';
+      syncAnaShiftButtons();
+      syncAnaKennUI();
+      renderAnalyseList();
     } else {
       if (launcher) launcher.style.display = 'block';
       if (szContainer) szContainer.style.display = 'none';
       if (szTabBar) szTabBar.style.display = 'none';
       if (matScreen) matScreen.style.display = 'none';
       if (qnScreen) qnScreen.style.display = 'none';
+      if (anaScreen) anaScreen.style.display = 'none';
       if (backBtn) backBtn.style.display = 'none';
       if (splitBtn) splitBtn.style.display = 'none';
       if (titleEl) titleEl.textContent = 'Adem Assistent';
@@ -6038,6 +6326,21 @@ MLFB: ${mlfbVal}`, 'MLFB kopiert!');
   document.getElementById('open-sz-assistant-btn')?.addEventListener('click', () => openAppMode('sz'));
   document.getElementById('open-material-assistant-btn')?.addEventListener('click', () => openAppMode('material'));
   document.getElementById('open-quick-notes-btn')?.addEventListener('click', () => openAppMode('notes'));
+  const ANALYSE_UNLOCK_PASS = '01072000';
+  let analyseUnlockedInSession = false;
+
+  document.getElementById('open-analyse-assistant-btn')?.addEventListener('click', () => {
+    if (!analyseUnlockedInSession) {
+      const entered = window.prompt('Analyse Assistent ist gesperrt (Bald verfügbar). Bitte Passwort eingeben:');
+      if (entered === null) return;
+      if (entered.trim() !== ANALYSE_UNLOCK_PASS) {
+        showToast('Falsches Passwort');
+        return;
+      }
+      analyseUnlockedInSession = true;
+    }
+    openAppMode('analyse');
+  });
   document.getElementById('back-to-launcher-btn')?.addEventListener('click', () => openAppMode('launcher'));
 
   const LINE_MATERIAL_OPTIONS = {
@@ -6552,14 +6855,378 @@ MLFB: ${mlfbVal}`, 'MLFB kopiert!');
     renderCosmaAssistent();
   });
 
-  document.getElementById('qn-copy-cosma-btn')?.addEventListener('click', () => {
-    const lineOut = getActiveCosmaFormattedLine();
-    if (!lineOut) {
-      showToast('Bitte zuerst Gehäuse/Deckel und ein Coding antippen');
+
+  // --- Analyse Assistent ---
+  const ANA_STORAGE_KEY = 'analyse_assistent_v2';
+  const ANA_PREFS_STORAGE_KEY = 'analyse_assistent_prefs_v1';
+
+  function loadAnaPrefs() {
+    try {
+      const raw = localStorage.getItem(ANA_PREFS_STORAGE_KEY);
+      if (raw) {
+        const p = JSON.parse(raw);
+        return {
+          shift: ['Schicht A', 'Schicht B', 'Schicht C'].includes(p.shift) ? p.shift : '',
+          kennNr: typeof p.kennNr === 'string' ? p.kennNr : '',
+          kennLocked: Boolean(p.kennLocked && typeof p.kennNr === 'string' && p.kennNr.trim())
+        };
+      }
+    } catch (e) {}
+    return { shift: '', kennNr: '', kennLocked: false };
+  }
+
+  let anaPrefs = loadAnaPrefs();
+
+  function saveAnaPrefs() {
+    try {
+      localStorage.setItem(ANA_PREFS_STORAGE_KEY, JSON.stringify(anaPrefs));
+    } catch (e) {}
+  }
+
+  let anaItems = (() => {
+    try {
+      const raw = localStorage.getItem(ANA_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  })();
+
+  function saveAnaItems() {
+    try { localStorage.setItem(ANA_STORAGE_KEY, JSON.stringify(anaItems)); } catch (e) {}
+  }
+
+  function getCurrentDateTimeDE() {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const dd = pad(now.getDate());
+    const mm = pad(now.getMonth() + 1);
+    const yyyy = now.getFullYear();
+    const hh = pad(now.getHours());
+    const min = pad(now.getMinutes());
+    return `${dd}.${mm}.${yyyy} ${hh}:${min}`;
+  }
+
+  function formatAnalysePreviewBlock(item) {
+    const dtStr = item.dateTime || getCurrentDateTimeDE();
+    const shiftStr = item.shift || '-';
+    const kennStr = item.kennNr || '-';
+    const lineStr = item.line || '-';
+    const cardStr = Array.isArray(item.cardNumbers) && item.cardNumbers.length > 0
+      ? item.cardNumbers.join(', ')
+      : (item.cardNumber !== undefined && item.cardNumber !== null && String(item.cardNumber).trim() !== ''
+        ? String(item.cardNumber).trim()
+        : '-');
+    const qtyStr = item.qty !== undefined && item.qty !== null && String(item.qty).trim() !== ''
+      ? String(item.qty).trim()
+      : '-';
+    const remarkStr = String(item.remark || '').trim();
+
+    const lines = [
+      `Datum + aktuelle Uhrzeit: ${dtStr}`,
+      `Schichtauswahl: ${shiftStr}`,
+      `Kennnummer: ${kennStr}`,
+      `Linie: **${lineStr}**`,
+      `Kärtchen nummer: **${cardStr}**`,
+      `Stückzahl: **${qtyStr}**`
+    ];
+    if (remarkStr) {
+      lines.push(`Bemerkungsfeld: ${remarkStr}`);
+    }
+    return lines.join('\n');
+  }
+
+  function buildAnalysePlainText() {
+    if (anaItems.length > 0) {
+      return anaItems.map(item => formatAnalysePreviewBlock(item)).join('\n\n---\n\n');
+    }
+    const lineVal = (document.getElementById('ana-line-select')?.value || '').trim();
+    const cardVals = getSelectedAnaCards();
+    const qtyVal = (document.getElementById('ana-qty-input')?.value || '').trim();
+    const remarkVal = (document.getElementById('ana-remark-input')?.value || '').trim();
+    return formatAnalysePreviewBlock({
+      dateTime: getCurrentDateTimeDE(),
+      shift: anaPrefs.shift,
+      kennNr: anaPrefs.kennNr,
+      line: lineVal,
+      cardNumber: cardVals.join(', '),
+      cardNumbers: cardVals,
+      qty: qtyVal,
+      remark: remarkVal
+    });
+  }
+
+  function renderAnalysePreviewHtmlFromPlain(plainStr) {
+    return String(plainStr || '').split('\n').map(line => {
+      if (line === '---') {
+        return '<hr class="mat-preview-sep" />';
+      }
+      const boldedLine = escapeHtml(line).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      return `<p class="sz-line">${boldedLine}</p>`;
+    }).join('');
+  }
+
+  function syncAnaShiftButtons() {
+    document.querySelectorAll('#analyse-app-screen [data-ana-shift]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.anaShift === anaPrefs.shift);
+    });
+  }
+
+  function syncAnaKennUI() {
+    const inputWrap = document.getElementById('ana-kenn-input-wrap');
+    const savedWrap = document.getElementById('ana-kenn-saved-wrap');
+    const savedValEl = document.getElementById('ana-kenn-saved-value');
+    const inpEl = document.getElementById('ana-kenn-input');
+
+    const hasSavedKenn = Boolean(anaPrefs.kennLocked && anaPrefs.kennNr && anaPrefs.kennNr.trim());
+    if (inputWrap) inputWrap.style.display = hasSavedKenn ? 'none' : 'flex';
+    if (savedWrap) savedWrap.style.display = hasSavedKenn ? 'flex' : 'none';
+    if (savedValEl) savedValEl.textContent = anaPrefs.kennNr || '';
+    if (inpEl && !hasSavedKenn) inpEl.value = anaPrefs.kennNr || '';
+  }
+
+  function setAnaRemarkOpen(open) {
+    const collapseEl = document.getElementById('ana-remark-collapse');
+    const toggleBtn = document.getElementById('ana-remark-toggle-btn');
+    const arrowEl = document.getElementById('ana-remark-arrow');
+    const isOpen = Boolean(open);
+    if (collapseEl) collapseEl.classList.toggle('open', isOpen);
+    if (toggleBtn) toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    if (arrowEl) arrowEl.textContent = isOpen ? '▾' : '▸';
+    if (isOpen) {
+      document.getElementById('ana-remark-input')?.focus();
+    }
+  }
+
+  function renderAnalyseList() {
+    const listEl = document.getElementById('ana-list-container');
+    const badgeEl = document.getElementById('ana-count-badge');
+    const prevEl = document.getElementById('ana-copy-preview');
+    if (badgeEl) badgeEl.textContent = `${anaItems.length} Einträge`;
+
+    if (listEl) {
+      if (anaItems.length === 0) {
+        listEl.innerHTML = `<div style="font-size:0.86rem; color:var(--text-muted); padding:6px 0;">Noch keine Analyse-Einträge vorhanden.</div>`;
+      } else {
+        listEl.innerHTML = anaItems.map((a, idx) => {
+          const titleParts = [
+            a.shift || '',
+            a.line ? `Linie ${a.line}` : '',
+            a.cardNumber ? `Kärtchen ${a.cardNumber}` : '',
+            a.qty !== undefined && a.qty !== '' ? `Stückzahl: ${a.qty}` : ''
+          ].filter(Boolean).join(' · ');
+          const subParts = [
+            a.dateTime || '',
+            a.kennNr ? `Kenn.-Nr.: ${a.kennNr}` : '',
+            a.remark ? `Bemerkung: ${a.remark}` : ''
+          ].filter(Boolean).join(' · ');
+          return `
+            <div class="list-item">
+              <div>
+                <div class="item-title">${idx + 1}. ${escapeHtml(titleParts || 'Analyse')}</div>
+                <div class="item-sub">${escapeHtml(subParts || '-')}</div>
+              </div>
+              <button type="button" class="danger" data-del-ana="${a.id}">✕</button>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    if (prevEl) {
+      prevEl.innerHTML = renderAnalysePreviewHtmlFromPlain(buildAnalysePlainText());
+    }
+  }
+
+  document.querySelectorAll('#analyse-app-screen [data-ana-shift]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      anaPrefs.shift = btn.dataset.anaShift || '';
+      saveAnaPrefs();
+      syncAnaShiftButtons();
+      renderAnalyseList();
+      showToast(`${anaPrefs.shift} dauerhaft gespeichert`);
+    });
+  });
+
+  document.getElementById('ana-kenn-save-btn')?.addEventListener('click', () => {
+    const inp = document.getElementById('ana-kenn-input');
+    const val = (inp?.value || '').trim();
+    if (!val) {
+      showToast('Bitte zuerst eine Kenn.-Nr. eingeben');
+      inp?.focus();
       return;
     }
-    copyPlainRobust(lineOut, 'Cosma Coding kopiert!');
+    anaPrefs.kennNr = val;
+    anaPrefs.kennLocked = true;
+    saveAnaPrefs();
+    syncAnaKennUI();
+    renderAnalyseList();
+    showToast('Kenn.-Nr. gespeichert');
   });
+
+  document.getElementById('ana-kenn-edit-btn')?.addEventListener('click', () => {
+    anaPrefs.kennLocked = false;
+    saveAnaPrefs();
+    syncAnaKennUI();
+    document.getElementById('ana-kenn-input')?.focus();
+  });
+
+  document.getElementById('ana-remark-toggle-btn')?.addEventListener('click', () => {
+    const collapseEl = document.getElementById('ana-remark-collapse');
+    const currentlyOpen = collapseEl?.classList.contains('open');
+    setAnaRemarkOpen(!currentlyOpen);
+  });
+
+  function getSelectedAnaCards() {
+    return Array.from(document.querySelectorAll('#ana-cards-multi-wrap .ana-card-select-item'))
+      .map(sel => String(sel.value || '').trim())
+      .filter(Boolean);
+  }
+
+  function resetAnaCardRows() {
+    const wrap = document.getElementById('ana-cards-multi-wrap');
+    if (!wrap) return;
+    const rows = Array.from(wrap.querySelectorAll('.ana-card-row'));
+    rows.forEach((row, idx) => {
+      if (idx === 0) {
+        const sel = row.querySelector('.ana-card-select-item');
+        if (sel) sel.value = '';
+      } else {
+        row.remove();
+      }
+    });
+  }
+
+  function addAnaCardRow() {
+    const wrap = document.getElementById('ana-cards-multi-wrap');
+    if (!wrap) return;
+    const row = document.createElement('div');
+    row.className = 'ana-card-row';
+    const sel = document.createElement('select');
+    sel.className = 'ana-card-select-item';
+    sel.setAttribute('aria-label', 'Analysekärtchen Nummer Auswahl 1-20');
+    sel.innerHTML = `<option value="">— Analysekärtchen Nummer (1–20) —</option>` +
+      Array.from({ length: 20 }, (_, i) => `<option value="${i + 1}">Kärtchen ${i + 1}</option>`).join('');
+    sel.addEventListener('change', () => renderAnalyseList());
+
+    const rmBtn = document.createElement('button');
+    rmBtn.type = 'button';
+    rmBtn.className = 'danger';
+    rmBtn.textContent = '✕';
+    rmBtn.setAttribute('aria-label', 'Kärtchen entfernen');
+    rmBtn.addEventListener('click', () => {
+      row.remove();
+      renderAnalyseList();
+    });
+
+    row.appendChild(sel);
+    row.appendChild(rmBtn);
+    wrap.appendChild(row);
+    sel.focus();
+  }
+
+  document.getElementById('ana-add-card-btn')?.addEventListener('click', () => {
+    addAnaCardRow();
+  });
+
+  document.querySelectorAll('#ana-cards-multi-wrap .ana-card-select-item').forEach(sel => {
+    sel.addEventListener('change', () => renderAnalyseList());
+  });
+
+  ['ana-line-select', 'ana-qty-input', 'ana-remark-input'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', () => renderAnalyseList());
+    document.getElementById(id)?.addEventListener('change', () => renderAnalyseList());
+  });
+
+  document.getElementById('ana-add-btn')?.addEventListener('click', () => {
+    if (!anaPrefs.kennLocked && (document.getElementById('ana-kenn-input')?.value || '').trim()) {
+      anaPrefs.kennNr = document.getElementById('ana-kenn-input').value.trim();
+      anaPrefs.kennLocked = true;
+      saveAnaPrefs();
+      syncAnaKennUI();
+    }
+
+    const lineVal = (document.getElementById('ana-line-select')?.value || '').trim();
+    const cardVals = getSelectedAnaCards();
+    const cardVal = cardVals.join(', ');
+    const qtyVal = (document.getElementById('ana-qty-input')?.value || '').trim();
+    const remarkVal = (document.getElementById('ana-remark-input')?.value || '').trim();
+
+    if (!lineVal && !cardVal && !qtyVal && !remarkVal) {
+      showToast('Bitte Linie, Kärtchennummer oder Stückzahl eingeben');
+      return;
+    }
+
+    anaItems.push({
+      id: Date.now() + Math.random(),
+      dateTime: getCurrentDateTimeDE(),
+      shift: anaPrefs.shift || '-',
+      kennNr: anaPrefs.kennNr || '-',
+      line: lineVal || '-',
+      cardNumber: cardVal || '-',
+      cardNumbers: cardVals,
+      qty: qtyVal || '-',
+      remark: remarkVal
+    });
+    saveAnaItems();
+
+    resetAnaCardRows();
+    const qtyEl = document.getElementById('ana-qty-input');
+    const remEl = document.getElementById('ana-remark-input');
+    if (qtyEl) qtyEl.value = '';
+    if (remEl) remEl.value = '';
+    setAnaRemarkOpen(false);
+    renderAnalyseList();
+    showToast('Eintrag hinzugefügt');
+  });
+
+  document.getElementById('ana-list-container')?.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-del-ana]');
+    if (!btn) return;
+    anaItems = anaItems.filter(x => String(x.id) !== String(btn.dataset.delAna));
+    saveAnaItems();
+    renderAnalyseList();
+    showToast('Eintrag gelöscht');
+  });
+
+  document.getElementById('ana-clear-btn')?.addEventListener('click', () => {
+    anaItems = [];
+    saveAnaItems();
+    renderAnalyseList();
+    showToast('Analyse-Liste geleert');
+  });
+
+  function copyTextBeforeMailto(txt, successMsg) {
+    const msg = successMsg || 'Vorlage kopiert!';
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      return navigator.clipboard.writeText(txt).then(() => {
+        showToast(msg);
+        return true;
+      }).catch(() => {
+        const ok = fallbackExecCopy(txt);
+        showToast(ok ? msg : 'Kopieren blockiert – Text manuell markieren');
+        return ok;
+      });
+    }
+    const ok = fallbackExecCopy(txt);
+    showToast(ok ? msg : 'Kopieren nicht unterstützt');
+    return Promise.resolve(ok);
+  }
+
+  document.getElementById('ana-copy-btn')?.addEventListener('click', async () => {
+    const templateText = buildAnalysePlainText();
+    await copyTextBeforeMailto(templateText, 'Vorlage kopiert – E-Mail wird geöffnet...');
+    const subject = encodeURIComponent('Analyse Assistent – Vorlage');
+    const body = encodeURIComponent(templateText);
+    const mailtoUrl = `mailto:uif25043@aumovio-wan.com?subject=${subject}&body=${body}`;
+    setTimeout(() => {
+      window.location.href = mailtoUrl;
+    }, 120);
+  });
+
+  syncAnaShiftButtons();
+  syncAnaKennUI();
+  renderAnalyseList();
 
 </script>
 

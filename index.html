@@ -2826,8 +2826,12 @@
     if (box1) box1.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
+  function isSonstigesTopic(key) {
+    return String(key || '').trim().toUpperCase() === 'SONSTIGES';
+  }
+
   function syncSonstigesPanel1() {
-    const isSonstiges = selectedTopicKey === 'Sonstiges';
+    const isSonstiges = isSonstigesTopic(selectedTopicKey);
     const panel = document.getElementById('sonstiges-submenu');
     const mainTa = document.getElementById('entry-input');
     const arrowBtn = document.getElementById('insert-arrow-btn');
@@ -3052,7 +3056,7 @@
   }
 
   function addEntry() {
-    if (selectedTopicKey === 'Sonstiges') {
+    if (isSonstigesTopic(selectedTopicKey)) {
       const stInp = document.getElementById('sonstiges-station-input');
       const msInp = document.getElementById('sonstiges-measure-input');
       const stationRaw = autoCorrectText((stInp?.value || '').trim()).replace(/:+$/, '').trim().toUpperCase();
@@ -3409,7 +3413,7 @@
         analysenList.push(...extraLines);
       } else if (meta.section === 'material') {
         materialList.push(...extraLines);
-      } else if (tKey === 'Sonstiges') {
+      } else if (isSonstigesTopic(tKey)) {
         const customSonstigesKeys = state.entries
           .filter(e => e.isCustomTopic && e.topic && techGroups[e.topic])
           .map(e => e.topic);
@@ -4627,7 +4631,7 @@
         updateTopicChipUI2();
         setIctSubmenuState2(willSelect && selectedTopicKey2 === 'ICT');
         setAnalysenSubmenuState2(willSelect && selectedTopicKey2 === 'Analysen');
-        const isSonst2 = selectedTopicKey2 === 'Sonstiges';
+        const isSonst2 = isSonstigesTopic(selectedTopicKey2);
         const sub2 = document.getElementById('sonstiges-submenu-2');
         const ta = document.getElementById('entry-input-2');
         const arr2 = document.getElementById('insert-arrow-btn-2');
@@ -4706,7 +4710,7 @@
       });
 
       document.getElementById('add-entry-btn-2')?.addEventListener('click', () => {
-        if (selectedTopicKey2 === 'Sonstiges') {
+        if (isSonstigesTopic(selectedTopicKey2)) {
           const stInp = document.getElementById('sonstiges-station-input-2');
           const msInp = document.getElementById('sonstiges-measure-input-2');
           const stationRaw = autoCorrectText((stInp?.value || '').trim()).replace(/:+$/, '').trim();
@@ -5098,7 +5102,7 @@
     const anaSub2Init = document.getElementById('analysen-submenu-2');
     if (ictSub2Init) ictSub2Init.classList.toggle('open', Boolean(ictSubmenuOpen2 && selectedTopicKey2 === 'ICT'));
     if (anaSub2Init) anaSub2Init.classList.toggle('open', Boolean(analysenSubmenuOpen2 && selectedTopicKey2 === 'Analysen'));
-    const isSonst2Active = selectedTopicKey2 === 'Sonstiges';
+    const isSonst2Active = isSonstigesTopic(selectedTopicKey2);
     const sub2Init = document.getElementById('sonstiges-submenu-2');
     const ta2Init = document.getElementById('entry-input-2');
     const arr2Init = document.getElementById('insert-arrow-btn-2');

@@ -64,6 +64,7 @@
       color: #0f172a;
     }
     .badge {
+      cursor: pointer;
       font-size: 0.74rem;
       background: rgba(255, 255, 255, 0.92);
       border: 1px solid rgba(0, 122, 255, 0.22);
@@ -7900,6 +7901,18 @@ MLFB: ${mlfbVal}`, 'MLFB kopiert!');
     if (sub) sub.classList.remove('open');
   });
 })();
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var verBadge = document.querySelector('header .badge');
+  if (verBadge) {
+    verBadge.style.cursor = 'pointer';
+    verBadge.title = 'Seite neu laden';
+    verBadge.addEventListener('click', function () {
+      window.location.reload();
+    });
+  }
+});
 </script>
 </body>
 </html>

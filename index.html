@@ -1495,7 +1495,7 @@
   <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
     <button type="button" class="secondary theme-toggle-btn" id="toggle-theme-btn" aria-label="Day oder Dark Modus umschalten">🌙 Dark</button>
     <button type="button" class="secondary" id="toggle-split-sz-btn" style="display:none; padding:5px 11px; font-size:0.78rem; border-radius:999px;">➕ 2. SZ daneben</button>
-    <span class="badge">V4.8</span>
+    <span class="badge">V4.9</span>
   </div>
 </header>
 
@@ -1944,10 +1944,10 @@
       <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>
       <div id="archive-version-bar-1" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">
         <div class="archive-version-bar-top">
-          <span>Version V4.8</span>
+          <span>Version V4.9</span>
           <span>Letztes Update</span>
         </div>
-        <div class="archive-version-changelog">Geändert seit V4.7: Unter Archiv einen Versions- &amp; Änderungsbalken ergänzt und die Versionsanzeige oben in 0,1-Schritten auf V4.8 erhöht.</div>
+        <div class="archive-version-changelog">Geändert seit V4.8: Bei Punkt 1 entsteht aus einer Eingabe stets genau ein Stichpunkt, mehrfache Einträge zum selben Thema werden gebündelt untereinander dargestellt und Enter fügt Zeilenumbrüche ein statt abzusenden.</div>
       </div>
       <div id="sz-archive-list"></div>
     </div>
@@ -2375,29 +2375,16 @@
       return;
     }
 
-    const lines = rawVal.split('\n').map(l => l.trim()).filter(Boolean);
-    let added = 0;
-    let skipped = 0;
-
-    for (const l of lines) {
-      const parsed = parseRawLine(l, selectedTopicKey);
-      if (parsed && parsed.text) {
-        state.entries.push({ id: Date.now() + Math.random(), ...parsed });
-        added++;
-      } else {
-        skipped++;
-      }
-    }
-
-    ta.value = '';
-    ta.focus();
-    saveState();
-    renderAll();
-
-    if (added > 0 && skipped === 0) {
-      showToast(`${added} Eintrag hinzugefügt`);
-    } else if (added > 0 && skipped > 0) {
-      showToast(`${added} übernommen, ${skipped} ignoriert`);
+    // Immer genau ein Stichpunkt pro Hinzufügen-Klick (Zeilenumbrüche innerhalb des Textes werden zu Leerzeichen verbunden)
+    const singleLineVal = rawVal.replace(/\s*\r?\n+\s*/g, ' ').trim();
+    const parsed = parseRawLine(singleLineVal, selectedTopicKey);
+    if (parsed && parsed.text) {
+      state.entries.push({ id: Date.now() + Math.random(), ...parsed });
+      ta.value = '';
+      ta.focus();
+      saveState();
+      renderAll();
+      showToast('1 Stichpunkt hinzugefügt');
     } else {
       showToast('Erst ein Thema wie ICT anklicken oder Text eingeben');
     }
@@ -3090,6 +3077,22 @@
   });
 
   document.getElementById('append-last-btn').addEventListener('click', appendToLastEntry);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    const t = e.target;
+    if (!t || !t.id) return;
+    if (
+      t.id === 'entry-input' ||
+      t.id === 'sonstiges-measure-input' ||
+      t.id === 'entry-input-2' ||
+      t.id === 'sonstiges-measure-input-2'
+    ) {
+      // Enter soll kein Abschicken sein, sondern normalen Zeilenumbruch erlauben
+      e.stopPropagation();
+    }
+  }, true);
+
   document.getElementById('add-entry-btn').addEventListener('click', addEntry);
   document.getElementById('delete-all-btn-1')?.addEventListener('click', () => {
     const hasNothing =
@@ -3866,24 +3869,17 @@
           showToast(`${meta.key} hinzugefügt`);
           return;
         }
-        const lines = rawVal.split('\n').map(l => l.trim()).filter(Boolean);
-        let added = 0;
-        let skipped = 0;
-        for (const l of lines) {
-          const parsed = parseRawLine(l, selectedTopicKey2);
-          if (parsed && parsed.text) {
-            state2.entries.push({ id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, ...parsed });
-            added++;
-          } else {
-            skipped++;
-          }
+        const singleLineVal2 = rawVal.replace(/\s*\r?\n+\s*/g, ' ').trim();
+        const parsed2 = parseRawLine(singleLineVal2, selectedTopicKey2);
+        if (parsed2 && parsed2.text) {
+          state2.entries.push({ id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, ...parsed2 });
+          if (ta) { ta.value = ''; ta.focus(); }
+          saveState2();
+          renderSecondPane();
+          showToast('1 Stichpunkt hinzugefügt');
+        } else {
+          showToast('Erst ein Thema wie ICT anklicken oder Text eingeben');
         }
-        if (ta) { ta.value = ''; ta.focus(); }
-        saveState2();
-        renderSecondPane();
-        if (added > 0 && skipped === 0) showToast(`${added} Eintrag hinzugefügt`);
-        else if (added > 0) showToast(`${added} übernommen, ${skipped} ignoriert`);
-        else showToast('Erst ein Thema wie ICT anklicken oder Text eingeben');
       });
 
       document.getElementById('delete-all-btn-2')?.addEventListener('click', () => {
@@ -4140,7 +4136,7 @@
     if (!contentEl) return;
 
     if (isArchiveTab) {
-      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="archive-version-bar-2" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">\n        <div class="archive-version-bar-top">\n          <span>Version V4.8</span>\n          <span>Letztes Update</span>\n        </div>\n        <div class="archive-version-changelog">Geändert seit V4.7: Unter Archiv einen Versions- &amp; Änderungsbalken ergänzt und die Versionsanzeige oben in 0,1-Schritten auf V4.8 erhöht.</div>\n      </div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
+      contentEl.innerHTML = `\n    <div class="card">\n      <div class="card-title">Gespeicherte Schichtzusammenfassungen</div>\n      <div id="archive-version-bar-2" class="archive-version-bar" role="region" aria-label="Versionsinfo und Änderungen">\n        <div class="archive-version-bar-top">\n          <span>Version V4.9</span>\n          <span>Letztes Update</span>\n        </div>\n        <div class="archive-version-changelog">Geändert seit V4.8: Bei Punkt 1 entsteht aus einer Eingabe stets genau ein Stichpunkt, mehrfache Einträge zum selben Thema werden gebündelt untereinander dargestellt und Enter fügt Zeilenumbrüche ein statt abzusenden.</div>\n      </div>\n      <div id="sz-archive-list-2">${renderArchiveItemsHtml(state2.archives, '-2')}</div>\n    </div>\n  `;
       document.getElementById('sz-archive-list-2')?.addEventListener('click', (e) => {
         const copyBtn = e.target.closest('[data-copy-arch-2]');
         if (copyBtn) {

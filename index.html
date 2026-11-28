@@ -2303,6 +2303,35 @@
           renderThirdPane();
           showToast(`${formatted3.length} Materialpunkt(e) aus Material Assistent übernommen`);
         });
+        function applyMaterialAgvSuggestion3(appendArrow = false) {
+          const ta = document.getElementById('entry-input-3');
+          if (!ta) return;
+          if (String(selectedTopicKey3 || '').toUpperCase() !== 'MATERIAL') {
+            selectedTopicKey3 = 'Material';
+            updateTopicChipUI3();
+            const sub3 = document.getElementById('sonstiges-submenu-3');
+            if (sub3) sub3.classList.remove('open');
+            ta.style.display = '';
+            const arr3 = document.getElementById('insert-arrow-btn-3');
+            if (arr3) arr3.style.display = '';
+          }
+          const suggestion = 'Via Material-Chat ; AGV-Team Eskaliert.';
+          const current = ta.value.trim();
+          if (appendArrow && current) {
+            const base = current.replace(/\s*(→|->)\s*$/, '');
+            ta.value = `${base} → ${suggestion}`;
+          } else if (!current) {
+            ta.value = suggestion;
+          } else if (!current.includes(suggestion)) {
+            const base = current.replace(/\s*(→|->)\s*$/, '');
+            ta.value = `${base} → ${suggestion}`;
+          }
+          ta.focus();
+          ta.setSelectionRange(ta.value.length, ta.value.length);
+          showToast('Vorschlag "Via Material-Chat ; AGV-Team Eskaliert." übernommen');
+        }
+        document.getElementById('material-suggest-agv-btn-3')?.addEventListener('click', () => applyMaterialAgvSuggestion3(false));
+        document.getElementById('material-append-agv-btn-3')?.addEventListener('click', () => applyMaterialAgvSuggestion3(true));
 
         document.getElementById('reset-topic-btn-3')?.addEventListener('click', () => {
           selectedTopicKey3 = null;
@@ -2732,6 +2761,8 @@
             </div>
             <div class="material-submenu-actions">
               <button type="button" class="material-suggestion-chip" id="material-import-btn-3">📥 vom Material Assistenten Übernehmen?</button>
+              <button type="button" class="material-suggestion-chip" id="material-suggest-agv-btn-3" data-suggestion="Via Material-Chat ; AGV-Team Eskaliert.">💡 Vorschlag: Via Material-Chat ; AGV-Team Eskaliert.</button>
+              <button type="button" class="material-suggestion-chip" id="material-append-agv-btn-3" data-append-suggestion="Via Material-Chat ; AGV-Team Eskaliert.">+ → Via Material-Chat ; AGV-Team Eskaliert.</button>
             </div>
           </div>
           <div class="active-topic-banner">
@@ -3385,6 +3416,8 @@
           </div>
           <div class="material-submenu-actions">
             <button type="button" class="material-suggestion-chip" id="material-import-btn">📥 vom Material Assistenten Übernehmen?</button>
+            <button type="button" class="material-suggestion-chip" id="material-suggest-agv-btn" data-suggestion="Via Material-Chat ; AGV-Team Eskaliert.">💡 Vorschlag: Via Material-Chat ; AGV-Team Eskaliert.</button>
+            <button type="button" class="material-suggestion-chip" id="material-append-agv-btn" data-append-suggestion="Via Material-Chat ; AGV-Team Eskaliert.">+ → Via Material-Chat ; AGV-Team Eskaliert.</button>
           </div>
         </div>
 
@@ -5254,6 +5287,31 @@
   document.getElementById('material-import-btn')?.addEventListener('click', () => {
     importFromMaterialAssistantToPane(1);
   });
+  function applyMaterialAgvSuggestion1(appendArrow = false) {
+    const ta = document.getElementById('entry-input');
+    if (!ta) return;
+    if (String(selectedTopicKey || '').toUpperCase() !== 'MATERIAL') {
+      selectedTopicKey = 'Material';
+      updateTopicChipUI();
+      syncSonstigesPanel1();
+    }
+    const suggestion = 'Via Material-Chat ; AGV-Team Eskaliert.';
+    const current = ta.value.trim();
+    if (appendArrow && current) {
+      const base = current.replace(/\s*(→|->)\s*$/, '');
+      ta.value = `${base} → ${suggestion}`;
+    } else if (!current) {
+      ta.value = suggestion;
+    } else if (!current.includes(suggestion)) {
+      const base = current.replace(/\s*(→|->)\s*$/, '');
+      ta.value = `${base} → ${suggestion}`;
+    }
+    ta.focus();
+    ta.setSelectionRange(ta.value.length, ta.value.length);
+    showToast('Vorschlag "Via Material-Chat ; AGV-Team Eskaliert." übernommen');
+  }
+  document.getElementById('material-suggest-agv-btn')?.addEventListener('click', () => applyMaterialAgvSuggestion1(false));
+  document.getElementById('material-append-agv-btn')?.addEventListener('click', () => applyMaterialAgvSuggestion1(true));
 
   document.getElementById('reset-topic-btn').addEventListener('click', () => {
     selectedTopicKey = null;
@@ -6041,6 +6099,35 @@
       document.getElementById('material-import-btn-2')?.addEventListener('click', () => {
         importFromMaterialAssistantToPane(2);
       });
+      function applyMaterialAgvSuggestion2(appendArrow = false) {
+        const ta = document.getElementById('entry-input-2');
+        if (!ta) return;
+        if (String(selectedTopicKey2 || '').toUpperCase() !== 'MATERIAL') {
+          selectedTopicKey2 = 'Material';
+          updateTopicChipUI2();
+          const sub2 = document.getElementById('sonstiges-submenu-2');
+          if (sub2) sub2.classList.remove('open');
+          ta.style.display = '';
+          const arr2 = document.getElementById('insert-arrow-btn-2');
+          if (arr2) arr2.style.display = '';
+        }
+        const suggestion = 'Via Material-Chat ; AGV-Team Eskaliert.';
+        const current = ta.value.trim();
+        if (appendArrow && current) {
+          const base = current.replace(/\s*(→|->)\s*$/, '');
+          ta.value = `${base} → ${suggestion}`;
+        } else if (!current) {
+          ta.value = suggestion;
+        } else if (!current.includes(suggestion)) {
+          const base = current.replace(/\s*(→|->)\s*$/, '');
+          ta.value = `${base} → ${suggestion}`;
+        }
+        ta.focus();
+        ta.setSelectionRange(ta.value.length, ta.value.length);
+        showToast('Vorschlag "Via Material-Chat ; AGV-Team Eskaliert." übernommen');
+      }
+      document.getElementById('material-suggest-agv-btn-2')?.addEventListener('click', () => applyMaterialAgvSuggestion2(false));
+      document.getElementById('material-append-agv-btn-2')?.addEventListener('click', () => applyMaterialAgvSuggestion2(true));
 
       document.getElementById('reset-topic-btn-2')?.addEventListener('click', () => {
         selectedTopicKey2 = null;
@@ -6474,6 +6561,8 @@
         </div>
         <div class="material-submenu-actions">
           <button type="button" class="material-suggestion-chip" id="material-import-btn-2">📥 vom Material Assistenten Übernehmen?</button>
+          <button type="button" class="material-suggestion-chip" id="material-suggest-agv-btn-2" data-suggestion="Via Material-Chat ; AGV-Team Eskaliert.">💡 Vorschlag: Via Material-Chat ; AGV-Team Eskaliert.</button>
+          <button type="button" class="material-suggestion-chip" id="material-append-agv-btn-2" data-append-suggestion="Via Material-Chat ; AGV-Team Eskaliert.">+ → Via Material-Chat ; AGV-Team Eskaliert.</button>
         </div>
       </div>
 

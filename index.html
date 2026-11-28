@@ -4850,16 +4850,26 @@
     if (!hasAnyData) {
       topicBlocks.push({ header: '🟢 KBV', bullets: [], topicKey: 'KBV' });
     } else {
-      for (const k of techKeys) {
+      const regularTechKeys = techKeys.filter(k => k !== 'Orga' && k !== 'KBV');
+      for (const k of regularTechKeys) {
         const g = techGroups[k];
-        if (k === 'KBV') {
-          const filtered = g.items.filter(item => item.toLowerCase() !== 'kbv');
-          const bullets = filtered.map((item) => formatTopicBullet(item));
-          topicBlocks.push({ header: `${g.emoji} KBV`, bullets, topicKey: k });
-        } else {
-          const bullets = g.items.map((item) => formatTopicBullet(item));
-          topicBlocks.push({ header: `${g.emoji} ${k} (${g.items.length})`, bullets, topicKey: k });
-        }
+        const bullets = g.items.map((item) => formatTopicBullet(item));
+        topicBlocks.push({ header: `${g.emoji} ${k} (${g.items.length})`, bullets, topicKey: k });
+      }
+    }
+
+    const bottomSpecialBlocks = [];
+    if (hasAnyData) {
+      if (techGroups['Orga']) {
+        const g = techGroups['Orga'];
+        const bullets = g.items.map((item) => formatTopicBullet(item));
+        bottomSpecialBlocks.push({ header: `${g.emoji} Orga (${g.items.length})`, bullets, topicKey: 'Orga' });
+      }
+      if (techGroups['KBV']) {
+        const g = techGroups['KBV'];
+        const filtered = g.items.filter(item => item.toLowerCase() !== 'kbv');
+        const bullets = filtered.map((item) => formatTopicBullet(item));
+        bottomSpecialBlocks.push({ header: `${g.emoji} KBV`, bullets, topicKey: 'KBV' });
       }
     }
 
@@ -4895,6 +4905,14 @@
     if (materialList.length > 0) {
       pushLine(`📦 Material (${materialList.length})`, { topicKey: 'Material' });
       pushLine(materialList.map((m) => `  • ${String(m || '').replace(/^\s*\d+\.\s*/, '').trim()}`).join('\n'), { topicKey: 'Material' });
+      pushSpacer();
+    }
+
+    for (const blk of bottomSpecialBlocks) {
+      pushLine(blk.header, { topicKey: blk.topicKey });
+      if (blk.bullets.length > 0) {
+        pushLine(blk.bullets.join('\n'), { topicKey: blk.topicKey });
+      }
       pushSpacer();
     }
 
